@@ -1,0 +1,10 @@
+﻿@model CompetitionStage
+@{
+    ViewData["Title"] = "Stage";
+}
+<h1>@Html.DisplayFor(modelItem => Model.Name)</h1>
+
+@foreach (var item in Model.Classes)
+{
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ClassResults" asp-route-id="x" asp-route-stageId="@Model.Id" asp-route-classId="@item.Id">@Html.DisplayFor(modelItem => item.ShortName)</a><br />
+}

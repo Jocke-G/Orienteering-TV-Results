@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>OrienteeringTvResults.OlaAdapter</RootNamespace>
+    <AssemblyName>OrienteeringTvResults.OlaAdapter</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataTypes\DataTypes.csproj" />
+    <ProjectReference Include="..\OlaDatabase\OlaDatabase.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orienteering-TV-Results", "Orienteering-TV-Results\Orienteering-TV-Results.csproj", "{AD4B9E17-A35C-4BBD-8C94-BF4328339860}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlaAdapter", "OlaAdapter\OlaAdapter.csproj", "{D7076797-D304-4783-8A49-98E33523A3B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OlaDatabase", "OlaDatabase\OlaDatabase.csproj", "{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTypes", "DataTypes\DataTypes.csproj", "{3E4B84D4-BE88-4623-99CD-547D786C5B16}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD4B9E17-A35C-4BBD-8C94-BF4328339860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD4B9E17-A35C-4BBD-8C94-BF4328339860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD4B9E17-A35C-4BBD-8C94-BF4328339860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD4B9E17-A35C-4BBD-8C94-BF4328339860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7076797-D304-4783-8A49-98E33523A3B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7076797-D304-4783-8A49-98E33523A3B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7076797-D304-4783-8A49-98E33523A3B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7076797-D304-4783-8A49-98E33523A3B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BEBFA7F7-36FC-4561-91DE-C2A2A529F6DB}
+	EndGlobalSection
+EndGlobal

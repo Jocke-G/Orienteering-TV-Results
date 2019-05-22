@@ -1,0 +1,23 @@
+﻿@model CompetitionClass
+@{
+    ViewData["Title"] = "Stage";
+}
+<h1>@Html.DisplayFor(modelItem => Model.ShortName)</h1>
+
+<table>
+
+    @foreach (var result in Model.Results)
+    {
+    <tr>
+        <td>
+            @result.FirstName @result.LastName
+        </td>
+        <td>
+            @result.Status
+        </td>
+        <td>
+            @result.TotalTime.ToString()
+        </td>
+    </tr>
+    }
+</table>

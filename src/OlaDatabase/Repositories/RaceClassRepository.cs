@@ -1,0 +1,32 @@
+﻿using OlaDatabase.Entities;
+using OlaDatabase.RepositoryInterfaces;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace OlaDatabase
+{
+    public class RaceClassRepository : IRaceClassRepository
+    {
+        public IList<RaceClassEntity> GetByEventRaceId(int eventRaceId)
+        {
+            var session = SessionFactoryHelper.OpenSession();
+            var raceClasses = session.Query<RaceClassEntity>()
+                .Where(
+                    x => x.EventRace.EventRaceId == eventRaceId
+                ).ToList();
+            return raceClasses;
+
+        }
+
+        public RaceClassEntity GetByEventRaceIdAndId(int eventRaceId, int classId)
+        {
+            var session = SessionFactoryHelper.OpenSession();
+            var raceClass = session.Query<RaceClassEntity>()
+                .Where(
+                    x => x.EventRace.EventRaceId == eventRaceId
+                    && x.EventClass.EventClassId == classId
+                ).First();
+            return raceClass;
+        }
+    }
+}
