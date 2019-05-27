@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using OrienteeringTvResults.OlaAdapter;
-using Orienteering_TV_Results.Models;
+using Microsoft.Extensions.Options;
+using OrienteeringTvResults.DataTypes;
+using OrienteeringTvResults.Models;
 
 namespace Orienteering_TV_Results.Controllers
 {
@@ -10,22 +12,20 @@ namespace Orienteering_TV_Results.Controllers
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(HomeController));
 
-
         public ResultsProcessor ResultsProcessor { get; }
 
-        public HomeController()
+        public HomeController(IOptions<DatabaseConfiguration> configuration)
         {
-            ResultsProcessor = new ResultsProcessor();
+            ResultsProcessor = new ResultsProcessor(configuration.Value);
         }
 
         [HttpGet("/", Name = "Index")]
         public IActionResult Competitions()
         {
-            return Redirect("/competition/2/2/58");
-            //log.Info("______ Begin Home");
-            //var model = ResultsProcessor.GetCompetitions();
-            //log.Info("______ End Home");
-            //return View(model);
+            log.Info("______ Begin Home");
+            var model = ResultsProcessor.GetCompetitions();
+            log.Info("______ End Home");
+            return View(model);
         }
 
         [HttpGet("/competition/{id}", Name = "Competition")]

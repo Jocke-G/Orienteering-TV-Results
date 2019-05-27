@@ -1,4 +1,4 @@
-namespace Orienteering_TV_Results.Models
+namespace OrienteeringTvResults.Models
 {
     public class ErrorViewModel
     {

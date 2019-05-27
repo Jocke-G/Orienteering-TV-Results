@@ -9,7 +9,7 @@ namespace OlaDatabase.Repositories
     {
         public IList<ResultEntity> GetBy(int eventRaceId, int eventClassId)
         {
-            var session = SessionFactoryHelper.OpenSession();
+            var session = SessionFactoryHelper.GetSession();
             var preferences = new List<string> {
                 "passed",
                 "finished",

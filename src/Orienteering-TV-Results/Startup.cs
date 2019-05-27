@@ -4,13 +4,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OrienteeringTvResults.DataTypes;
 
 namespace Orienteering_TV_Results
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup()
         {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
+
             Configuration = configuration;
         }
 
@@ -24,6 +30,8 @@ namespace Orienteering_TV_Results
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.Configure<DatabaseConfiguration>(Configuration);
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

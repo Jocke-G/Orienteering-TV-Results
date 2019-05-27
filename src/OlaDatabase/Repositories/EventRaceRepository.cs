@@ -8,7 +8,7 @@ namespace OlaDatabase
     {
         public EventRaceEntity GetById(int eventRaceId)
         {
-            var session = SessionFactoryHelper.OpenSession();
+            var session = SessionFactoryHelper.GetSession();
             var eventRace = session.Query<EventRaceEntity>().Where(x => x.EventRaceId == eventRaceId).First();
             return eventRace;
         }

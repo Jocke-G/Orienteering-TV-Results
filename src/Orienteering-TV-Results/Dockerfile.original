@@ -6,9 +6,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
 WORKDIR /src
 COPY ["Orienteering-TV-Results/Orienteering-TV-Results.csproj", "Orienteering-TV-Results/"]
-COPY ["OlaAdapter/OlaAdapter.csproj", "OlaAdapter/"]
-COPY ["DataTypes/DataTypes.csproj", "DataTypes/"]
-COPY ["OlaDatabase/OlaDatabase.csproj", "OlaDatabase/"]
 RUN dotnet restore "Orienteering-TV-Results/Orienteering-TV-Results.csproj"
 COPY . .
 WORKDIR "/src/Orienteering-TV-Results"

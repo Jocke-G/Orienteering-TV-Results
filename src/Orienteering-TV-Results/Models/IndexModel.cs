@@ -1,7 +1,7 @@
 ﻿using OlaDatabase;
 using System.Collections.Generic;
 
-namespace Orienteering_TV_Results.Models
+namespace OrienteeringTvResults.Models
 {
     public class IndexModel
     {

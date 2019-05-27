@@ -9,7 +9,7 @@ namespace OlaDatabase
     {
         public IList<RaceClassEntity> GetByEventRaceId(int eventRaceId)
         {
-            var session = SessionFactoryHelper.OpenSession();
+            var session = SessionFactoryHelper.GetSession();
             var raceClasses = session.Query<RaceClassEntity>()
                 .Where(
                     x => x.EventRace.EventRaceId == eventRaceId
@@ -20,7 +20,7 @@ namespace OlaDatabase
 
         public RaceClassEntity GetByEventRaceIdAndId(int eventRaceId, int classId)
         {
-            var session = SessionFactoryHelper.OpenSession();
+            var session = SessionFactoryHelper.GetSession();
             var raceClass = session.Query<RaceClassEntity>()
                 .Where(
                     x => x.EventRace.EventRaceId == eventRaceId
