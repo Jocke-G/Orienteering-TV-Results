@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using OrienteeringTvResults.OlaAdapter;
 using Microsoft.Extensions.Options;
-using OrienteeringTvResults.DataTypes;
 using OrienteeringTvResults.Models;
+using OrienteeringTvResults.Model.Configuration;
 
-namespace Orienteering_TV_Results.Controllers
+namespace OrienteeringTvResults.Controllers
 {
     [Route("Home")]
     public class HomeController : Controller
@@ -14,9 +14,9 @@ namespace Orienteering_TV_Results.Controllers
 
         public ResultsProcessor ResultsProcessor { get; }
 
-        public HomeController(IOptions<DatabaseConfiguration> configuration)
+        public HomeController(IOptions<DatabaseConfiguration> configuration, ResultsAdapter adapter)
         {
-            ResultsProcessor = new ResultsProcessor(configuration.Value);
+            ResultsProcessor = adapter.Processor;
         }
 
         [HttpGet("/", Name = "Index")]

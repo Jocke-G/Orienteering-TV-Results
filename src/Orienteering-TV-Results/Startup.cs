@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OrienteeringTvResults.DataTypes;
+using Microsoft.Extensions.Hosting;
+using OrienteeringTvResults.Model.Configuration;
 
-namespace Orienteering_TV_Results
+namespace OrienteeringTvResults
 {
-    public class Startup
+    internal class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup()
         {
             var configuration = new ConfigurationBuilder()
@@ -20,8 +22,6 @@ namespace Orienteering_TV_Results
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
@@ -31,8 +31,11 @@ namespace Orienteering_TV_Results
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.Configure<DatabaseConfiguration>(Configuration);
+            services.Configure<ApplicationConfiguration>(Configuration);
 
+            services.AddSingleton<MqttHostedService>();
+            services.AddSingleton<ResultsAdapter>();
+            services.AddSingleton<IHostedService, PollHostedService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

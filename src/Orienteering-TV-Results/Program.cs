@@ -1,21 +1,26 @@
-﻿using log4net;
-using log4net.Config;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using System.IO;
-using System.Reflection;
+using System;
+using System.Threading.Tasks;
 
-namespace Orienteering_TV_Results
+namespace OrienteeringTvResults
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+            Logger.Initialize();
 
             var host = CreateWebHostBuilder(args).Build();
-            host.Run();
+
+            try
+            {
+                await host.RunAsync();
+            }
+            catch (Exception exception)
+            {
+                Logger.LogFatal("Failed to start application", exception);
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

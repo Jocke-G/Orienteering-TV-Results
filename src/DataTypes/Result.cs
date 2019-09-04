@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OrienteeringTvResults.DataTypes
+namespace OrienteeringTvResults.Model
 {
     public class Result
     {

@@ -1,6 +1,6 @@
 ﻿using OlaDatabase;
 using OlaDatabase.Entities;
-using OrienteeringTvResults.DataTypes;
+using OrienteeringTvResults.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,29 +9,13 @@ namespace OrienteeringTvResults.OlaAdapter
 {
     public class ResultsProcessor
     {
-        private DatabaseConfiguration _conf;
-
-        public ResultsProcessor(DatabaseConfiguration configuration)
+        public ResultsProcessor()
         {
-            _conf = configuration;
-        }
-
-        private OlaConfiguration GetOlaConfiguration()
-        {
-            var olaConf = new OlaConfiguration
-            {
-                Server = _conf.DatabaseServer,
-                Username = _conf.DatabaseUser,
-                Password = _conf.DatabasePassword,
-                Database = _conf.DatabaseSchema
-            };
-
-            return olaConf;
         }
 
         public IList<Competition> GetCompetitions()
         {
-            using (SessionFactoryHelper.OpenSession(GetOlaConfiguration()))
+            using (var session = SessionFactoryHelper.GetSession())
             {
                 var eventEntities = RepositoryContainer.EventRepository.GetAll();
                 var competitions = new List<Competition>();
@@ -46,7 +30,7 @@ namespace OrienteeringTvResults.OlaAdapter
 
         public Competition GetCompetition(int id)
         {
-            using (SessionFactoryHelper.OpenSession(GetOlaConfiguration()))
+            using (var session = SessionFactoryHelper.GetSession())
             {
                 var eventEntity = RepositoryContainer.EventRepository.GetById(id);
                 var competition = ToCompetition(eventEntity);
@@ -58,7 +42,7 @@ namespace OrienteeringTvResults.OlaAdapter
 
         public CompetitionStage GetStage(int id, int stageId)
         {
-            using (SessionFactoryHelper.OpenSession(GetOlaConfiguration()))
+            using (var session = SessionFactoryHelper.GetSession())
             {
                 var eventRace = RepositoryContainer.EventRaceRepository.GetById(stageId);
                 var stage = ToStage(eventRace);
@@ -70,7 +54,7 @@ namespace OrienteeringTvResults.OlaAdapter
 
         public CompetitionClass GetClass(int id, int stageId, int classId)
         {
-            using (SessionFactoryHelper.OpenSession(GetOlaConfiguration()))
+            using (var session = SessionFactoryHelper.GetSession())
             {
                 var raceClass = RepositoryContainer.RaceClassRepository.GetByEventRaceIdAndId(stageId, classId);
                 var results = RepositoryContainer.ResultRepository.GetBy(stageId, classId);

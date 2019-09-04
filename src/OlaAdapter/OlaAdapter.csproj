@@ -4,10 +4,11 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>OrienteeringTvResults.OlaAdapter</RootNamespace>
     <AssemblyName>OrienteeringTvResults.OlaAdapter</AssemblyName>
+    <OutputPath>$(SolutionDir)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTypes\DataTypes.csproj" />
+    <ProjectReference Include="..\DataTypes\Model.csproj" />
     <ProjectReference Include="..\OlaDatabase\OlaDatabase.csproj" />
   </ItemGroup>
 

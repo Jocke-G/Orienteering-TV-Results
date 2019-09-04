@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OrienteeringTvResults.DataTypes
+namespace OrienteeringTvResults.Model
 {
     public class Competition
     {

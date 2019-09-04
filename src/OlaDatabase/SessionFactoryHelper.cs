@@ -2,17 +2,23 @@
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using OlaDatabase.Entities;
+using OrienteeringTvResults.Model.Configuration;
 
 namespace OlaDatabase
 {
     public class SessionFactoryHelper
     {
-        private static OlaConfiguration _configuration;
         private static ISessionFactory _sessionFactory;
+        private static DatabaseConfiguration _configuration;
 
-        public static ISession OpenSession(OlaConfiguration configuration)
+        public static void Initialize(DatabaseConfiguration conf)
         {
-            _configuration = configuration;
+            _configuration = conf;
+            _sessionFactory = CreateSessionFactory();
+        }
+
+        public static ISession OpenSession()
+        {
             return SessionFactory.OpenSession();
         }
 
@@ -25,16 +31,17 @@ namespace OlaDatabase
 
         private static ISessionFactory CreateSessionFactory()
         {
-            return Fluently.Configure().Database(
+            var session = Fluently.Configure().Database(
             MySQLConfiguration.Standard.ConnectionString(
             c => c.Server(_configuration.Server)
                 .Username(_configuration.Username)
                 .Password(_configuration.Password)
                 .Database(_configuration.Database))
             )
-            .ExposeConfiguration(x => x.SetInterceptor(new SqlStatementInterceptor()))
             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<EventEntity>())
             .BuildSessionFactory();
+
+            return session;
         }
     }
 }
