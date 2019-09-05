@@ -8,6 +8,7 @@ using OrienteeringTvResults.Model.Configuration;
 namespace OrienteeringTvResults.Controllers
 {
     [Route("Home")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(HomeController));
@@ -28,7 +29,7 @@ namespace OrienteeringTvResults.Controllers
             return View(model);
         }
 
-        [HttpGet("/competition/{id}", Name = "Competition")]
+        [HttpGet("/competitions/{id}", Name = "Competition")]
         public IActionResult Competition(int id)
         {
             log.Info("______ Begin Competition");
@@ -52,7 +53,7 @@ namespace OrienteeringTvResults.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        protected IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
