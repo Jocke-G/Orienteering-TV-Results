@@ -1,4 +1,7 @@
+import { MiddlewareAPI } from 'redux';
 import { Client, Message } from 'paho-mqtt';
+import { classResultsReceived } from '../actions/classResultsReceived';
+import { ClassResults } from '../actions/types';
 
 interface Configuration {
   mqtt_host: string;
@@ -6,7 +9,7 @@ interface Configuration {
   mqtt_clientId: string;
 }
 
-export const reduxMqttMiddleware = () => () => {
+export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   let client :Client;
 
   console.log("Fetching MQTT configuration");
@@ -32,7 +35,11 @@ export const reduxMqttMiddleware = () => () => {
     client = new Client(config.mqtt_host, Number(config.mqtt_port), config.mqtt_clientId);
 
     client.onMessageArrived = (msg) => {
-      handleMessage(msg)
+      try {
+        handleMessage(msg)
+      } catch (exception) {
+        console.log("Failed to handle message " + exception)
+      }
     };
 
     client.onConnectionLost = (error) => {
@@ -52,7 +59,7 @@ export const reduxMqttMiddleware = () => () => {
   };
 
   let startSubscriptions = () => {
-    client.subscribe("messages");
+    client.subscribe("Results/Class/H21");
   }
 
   let setReconnectTimer = () => {
@@ -64,8 +71,11 @@ export const reduxMqttMiddleware = () => () => {
 
   let handleMessage = (msg:Message) => {
     switch(msg.destinationName) { 
-      case 'messages': {
+      case 'Results/Class/H21': {
         console.log(msg.payloadString);
+        let obj: ClassResults = JSON.parse(msg.payloadString);
+        console.log(obj.Id);
+        dispatch(classResultsReceived(obj))
         break;
       }
       default: {

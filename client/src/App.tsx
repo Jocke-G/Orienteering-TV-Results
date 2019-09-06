@@ -3,10 +3,9 @@ import { connect } from "react-redux";
 import { AppState } from "./store";
 import './App.css';
 
-import { sendMessage } from "./actions/sendMessage";
+import ClassResult from './components/ClassResultView';
 
 interface AppProps {
-  sendMessage: typeof sendMessage;
 }
 
 class App extends React.Component<AppProps> {
@@ -14,19 +13,10 @@ class App extends React.Component<AppProps> {
     message: ""
   };
 
-  handleAddMessage = () => {
-    this.props.sendMessage("Sample message");
-    this.setState({ input: "" });
-  };
-
-  sendMessage = (message: string) => {
-    this.props.sendMessage(message,);
-    this.setState({ message: "" });
-  };
-
   render() {
     return (
       <div className="App">
+        <ClassResult />
       </div>
     );
   }
@@ -37,5 +27,5 @@ const mapStateToProps = (state: AppState) => ({
 
 export default connect(
   mapStateToProps,
-  {sendMessage}
+  {}
 )(App);
