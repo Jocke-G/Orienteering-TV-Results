@@ -14,6 +14,7 @@ namespace OrienteeringTvResults
 
         public PollHostedService(IOptions<DatabaseConfiguration> conf, MqttHostedService mqtt, ResultsAdapter results)
         {
+            Logger.LogInfo("Constructing PollHostedService");
             _conf = conf.Value;
             _results = results;
         }
@@ -27,6 +28,16 @@ namespace OrienteeringTvResults
                     Logger.LogInfo("Poll database...");
                     var results = _results.Processor.GetClass(3, 3, 118);
                     await MqttPublisher.PublishAsync(results);
+                    var memoryUsed = GC.GetTotalMemory(false);
+
+                    Logger.LogInfo("Memory usage: " + memoryUsed);
+                    if(memoryUsed >= 70 * 1024 * 1024)
+                    {
+                        Logger.LogInfo("Forcing garbage collect");
+                        GC.Collect();
+                        Logger.LogInfo("Memory usage after collect: " + GC.GetTotalMemory(true));
+
+                    }
                 }
                 catch (Exception exception)
                 {

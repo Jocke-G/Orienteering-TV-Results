@@ -25,7 +25,6 @@ namespace OrienteeringTvResults.Mqtt
         internal static async Task PublishAsync(CompetitionClass results)
         {
             var strMessages = JsonConvert.SerializeObject(results);
-
             await PublishAsync($"Results/Class/{results.ShortName}", strMessages);
         }
     }

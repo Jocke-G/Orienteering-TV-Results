@@ -11,11 +11,19 @@ namespace OlaDatabase.Repositories
         {
             var session = SessionFactoryHelper.GetSession();
             var preferences = new List<string> {
-                "passed",
-                "finished",
-                "notValid",
-                "notStarted"
-            };
+            "passed",
+            "finished",
+            "notValid",
+            "finishedTimeOk",
+            "finishedPunchOk",
+            "disqualified",
+            "movedUp",
+            "walkOver",
+            "started",
+            "notActivated",
+            "notParticipating",
+            "notStarted"
+        };
 
             var results = session.Query<ResultEntity>().Where(
                 x => x.RaceClass.EventRace.EventRaceId == eventRaceId

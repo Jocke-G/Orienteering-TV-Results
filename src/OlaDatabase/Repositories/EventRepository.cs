@@ -10,6 +10,7 @@ namespace OlaDatabase.Repositories
         public IList<EventEntity> GetAll()
         {
             var session = SessionFactoryHelper.GetSession();
+            
             return session.Query<EventEntity>().ToList();
         }
 

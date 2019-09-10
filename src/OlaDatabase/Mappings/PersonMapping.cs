@@ -13,6 +13,8 @@ namespace OlaDatabase.Mappings
 
             Map(x => x.FamilyName).Column("familyName").Not.Nullable();
             Map(x => x.FirstName).Column("firstName").Not.Nullable();
+
+            References(x => x.Organisation).Column("defaultOrganisationId").Nullable();
         }
     }
 }

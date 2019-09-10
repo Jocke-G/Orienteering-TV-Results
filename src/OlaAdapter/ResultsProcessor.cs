@@ -7,15 +7,11 @@ using System.Linq;
 
 namespace OrienteeringTvResults.OlaAdapter
 {
-    public class ResultsProcessor
+    public class ResultsProcessor: IResultsProcessor
     {
-        public ResultsProcessor()
-        {
-        }
-
         public IList<Competition> GetCompetitions()
         {
-            using (var session = SessionFactoryHelper.GetSession())
+            using (var session = new SessionFactoryHelper())
             {
                 var eventEntities = RepositoryContainer.EventRepository.GetAll();
                 var competitions = new List<Competition>();
@@ -30,7 +26,7 @@ namespace OrienteeringTvResults.OlaAdapter
 
         public Competition GetCompetition(int id)
         {
-            using (var session = SessionFactoryHelper.GetSession())
+            using (var session = new SessionFactoryHelper())
             {
                 var eventEntity = RepositoryContainer.EventRepository.GetById(id);
                 var competition = ToCompetition(eventEntity);
@@ -42,7 +38,7 @@ namespace OrienteeringTvResults.OlaAdapter
 
         public CompetitionStage GetStage(int id, int stageId)
         {
-            using (var session = SessionFactoryHelper.GetSession())
+            using (var session = new SessionFactoryHelper())
             {
                 var eventRace = RepositoryContainer.EventRaceRepository.GetById(stageId);
                 var stage = ToStage(eventRace);
@@ -54,11 +50,11 @@ namespace OrienteeringTvResults.OlaAdapter
 
         public CompetitionClass GetClass(int id, int stageId, int classId)
         {
-            using (var session = SessionFactoryHelper.GetSession())
+            using (var session = new SessionFactoryHelper())
             {
                 var raceClass = RepositoryContainer.RaceClassRepository.GetByEventRaceIdAndId(stageId, classId);
                 var results = RepositoryContainer.ResultRepository.GetBy(stageId, classId);
-                //raceClass.Results = results;
+                raceClass.Results = results;
                 var clazz = ToClass(raceClass);
                 clazz.Results = ToResults(results);
                 return clazz;
@@ -134,7 +130,8 @@ namespace OrienteeringTvResults.OlaAdapter
                 FirstName = resultEntity.Entry.Person.FirstName,
                 LastName = resultEntity.Entry.Person.FamilyName,
                 Status = resultEntity.RunnerStatus,
-                TotalTime = TimeSpan.FromSeconds(resultEntity.TotalTime / 100)
+                TotalTime = TimeSpan.FromSeconds(resultEntity.TotalTime / 100),
+                Club = resultEntity.Entry.Person.Organisation.Name,
             };
         }
     }

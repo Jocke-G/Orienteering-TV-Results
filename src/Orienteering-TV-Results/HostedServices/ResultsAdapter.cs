@@ -13,7 +13,7 @@ namespace OrienteeringTvResults
 
         public ResultsAdapter(IOptions<ApplicationConfiguration> conf)
         {
-            SessionFactoryHelper.Initialize(conf.Value.Database);
+            SessionFactoryHelper.Initialize(new MySqlSessionFactoryCreator(conf.Value.Database));
            _processor = new ResultsProcessor();
         }
     }

@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OlaAdapter.Tests", "OlaAdapter.Tests\OlaAdapter.Tests.csproj", "{935618EA-53CB-4DAA-82CD-12E694DE6385}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
