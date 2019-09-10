@@ -9,8 +9,10 @@ export interface ClassResults {
 export interface ClassResult {
   FirstName: string,
   LastName: string,
+  Club: string,
   Status: string,
   TotalTime: Date,
+  Ordinal: number,
 }
 
 interface classResultsReceivedAction {

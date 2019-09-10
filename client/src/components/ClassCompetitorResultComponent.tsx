@@ -12,7 +12,7 @@ class ClassResultsView extends Component<AppProps> {
     return (
       <tr className= { this.props.index % 2 === 0 ? "trDark" : ""}>
         <td>{ this.props.result.FirstName } { this.props.result.LastName }</td>
-        <td>Klubb saknas från servern :(</td>
+        <td>{ this.props.result.Club }</td>
           {(() => {
           switch(this.props.result.Status) {
             case 'notValid':
@@ -25,14 +25,14 @@ class ClassResultsView extends Component<AppProps> {
             case 'passed':
               return (
                 <Fragment>
-                  <td align='right'>?</td>
+                  <td align='right'>{ this.props.result.Ordinal }</td>
                   <td align='right'>{ this.props.result.TotalTime }</td>
                 </Fragment>
               );
             case 'resultPrel':
               return (
                 <Fragment>
-                  <td align='right'>(?)</td>
+                  <td align='right'>({ this.props.result.Ordinal })</td>
                   <td align='right'>{ this.props.result.TotalTime }</td>
                 </Fragment>
               );

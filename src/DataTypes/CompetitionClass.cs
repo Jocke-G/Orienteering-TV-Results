@@ -6,6 +6,7 @@ namespace OrienteeringTvResults.Model
     {
         public int Id { get; set; }
         public string ShortName { get; set; }
+        public bool NoTimePresentation { get; set; }
         public IList<Result> Results { get; set; }
     }
 }

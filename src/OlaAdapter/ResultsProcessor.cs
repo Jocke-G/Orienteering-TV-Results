@@ -36,6 +36,15 @@ namespace OrienteeringTvResults.OlaAdapter
             }
         }
 
+        public IList<CompetitionClass> GetClasses(int eventId, int eventRaceId)
+        {
+            using (var session = new SessionFactoryHelper())
+            {
+                var olaClasses = RepositoryContainer.RaceClassRepository.GetByEventRaceId(eventRaceId);
+                return ToClasses(olaClasses);
+            }
+        }
+
         public CompetitionStage GetStage(int id, int stageId)
         {
             using (var session = new SessionFactoryHelper())
@@ -57,6 +66,14 @@ namespace OrienteeringTvResults.OlaAdapter
                 raceClass.Results = results;
                 var clazz = ToClass(raceClass);
                 clazz.Results = ToResults(results);
+                if (clazz.NoTimePresentation)
+                {
+                    clazz.Results = RemoveTime(clazz.Results.ToList());
+                }
+                else
+                {
+                    clazz.Results = AddOrdinal(clazz.Results.ToList());
+                }
                 return clazz;
             }
         }
@@ -107,7 +124,8 @@ namespace OrienteeringTvResults.OlaAdapter
             var clazz = new CompetitionClass
             {
                 Id = raceClass.EventClass.EventClassId,
-                ShortName = raceClass.EventClass?.ShortName
+                ShortName = raceClass.EventClass.ShortName,
+                NoTimePresentation = raceClass.EventClass.NoTimePresentation,
             };
 
             return clazz;
@@ -120,7 +138,43 @@ namespace OrienteeringTvResults.OlaAdapter
             {
                 results.Add(ToResult(resultEntity));
             }
+
             return results;
+        }
+
+        private IList<Result> AddOrdinal(List<Result> results)
+        {
+
+            var ordinal = 1;
+            for (int i = 0; i < results.Count; i++)
+            {
+                var result = results[i];
+                if (result.Status != "passed" && result.Status != "finished")
+                    break;
+
+                result.Ordinal = ordinal;
+
+                if (results.LastIndexOf(result) != i && results[i + 1].TotalTime > result.TotalTime)
+                {
+                    ordinal++;
+                }
+                else if (i > 0 && results[i - 1].TotalTime != result.TotalTime)
+                {
+                    ordinal = i + 1;
+                }
+                result.Ordinal = ordinal;
+            }
+
+            return results;
+        }
+
+        private IList<Result> RemoveTime(List<Result> results)
+        {
+            results.ForEach(x =>
+            {
+                x.TotalTime = null;
+            });
+            return results.OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
         }
 
         private Result ToResult(ResultEntity resultEntity)

@@ -26,8 +26,13 @@ namespace OrienteeringTvResults
                 try
                 {
                     Logger.LogInfo("Poll database...");
-                    var results = _results.Processor.GetClass(3, 3, 118);
-                    await MqttPublisher.PublishAsync(results);
+                    var classes = _results.Processor.GetClasses(3, 3);
+                    foreach(var raceClass in classes)
+                    {
+                        Logger.LogInfo($"Fetching results for {raceClass.ShortName}");
+                        var results = _results.Processor.GetClass(3, 3, raceClass.Id);
+                        await MqttPublisher.PublishAsync(results);
+                    }
                     var memoryUsed = GC.GetTotalMemory(false);
 
                     Logger.LogInfo("Memory usage: " + memoryUsed);
