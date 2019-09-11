@@ -1,7 +1,8 @@
 import { MiddlewareAPI } from 'redux';
 import { Client, Message } from 'paho-mqtt';
 import { classResultsReceived } from '../actions/classResultsReceived';
-import { ClassResults } from '../actions/types';
+import { ClassResults, SELECT_CLASS } from '../actions/types';
+import { selectClass } from '../actions/selectClass';
 
 interface Configuration {
   mqtt_host: string;
@@ -11,6 +12,7 @@ interface Configuration {
 
 export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   let client :Client;
+  let selectedClass: string;
 
   console.log("Fetching MQTT configuration");
   fetch('/config.json')
@@ -59,7 +61,27 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   };
 
   let startSubscriptions = () => {
-    client.subscribe("Results/Class/H21");
+    client.subscribe(`Clients/TV1`);
+
+    if(selectedClass !== undefined){
+      let topic = `Results/Class/${selectedClass}`;
+      console.log(`Subscribing to topic: '${topic}'`)
+      client.subscribe(`Results/Class/${selectedClass}`);
+    }
+  }
+
+  let updateSelectedClass = (className:string) => {
+    if(client !== undefined) {
+      if(selectedClass !== undefined) {
+        let oldTopic = `Results/Class/${selectedClass}`;
+        console.log(`Unsubscribing to topic: '${oldTopic}'`);
+        client.unsubscribe(oldTopic);
+      }
+      let newTopic = `Results/Class/${className}`;
+      console.log(`Subscribing to topic: '${newTopic}'`)
+      client.subscribe(newTopic);
+    }
+    selectedClass = className;
   }
 
   let setReconnectTimer = () => {
@@ -70,39 +92,32 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   }
 
   let handleMessage = (msg:Message) => {
-    switch(msg.destinationName) { 
-      case 'Results/Class/H21': {
-        console.log(msg.payloadString);
-        let obj: ClassResults = JSON.parse(msg.payloadString);
-        console.log(obj.Id);
-        dispatch(classResultsReceived(obj))
-        break;
-      }
-      default: {
-        console.log(`Message received on unhandled topic: ${msg.destinationName}`)
-      }
+    var gi = /^Results\/Class\/[^/]+$/gi;
+    if (msg.destinationName.match(gi)) {
+      let obj: ClassResults = JSON.parse(msg.payloadString);
+      dispatch(classResultsReceived(obj))
+    } else if(msg.destinationName === `Clients/TV1`) {
+      dispatch(selectClass(msg.payloadString));
+    } else {
+      console.log(`Message received on unhandled topic: ${msg.destinationName}`)
     }
   }
 
   return (next: (arg0: any) => void) => (action: any) => {
-    /*
     try {
       switch(action.type) {
-        case REQUEST_MESSAGES:
-          client.publish("messages/getAll", "")
-          break;
-        case SEND_MESSAGE:
+        case SELECT_CLASS:
+          updateSelectedClass(action.className);
+          return next(action);
+/*        case SEND_MESSAGE:
           client.publish("messages/add", action.message)
-          break;
+          break;*/
         default:
-          */
          console.log('Nextaction', action);
           return next(action)
-          /*
       }
     } catch(error) {
       console.error(error);
     }
-    */
   };
 }

@@ -1,13 +1,15 @@
-import { CLASS_RESULTS_RECEIVED, ResultsActionTypes, ClassResults } from "../actions/types";
+import { CLASS_RESULTS_RECEIVED, ResultsActionTypes, ClassResults, SELECT_CLASS } from "../actions/types";
 
 export interface ResultsState {
   classResults?: ClassResults
   ShortName?: string
+  selectedClass?: string
 }
 
 const initialState: ResultsState = {
   classResults: undefined,
   ShortName: undefined,
+  selectedClass: undefined,
 }
 
 export function resultsReducer (
@@ -20,8 +22,13 @@ export function resultsReducer (
           ...state,
           classResults: action.results,
           ShortName: action.results.ShortName
+        };
+    case SELECT_CLASS:
+      return {
+        ...state,
+        selectedClass: action.className
       };
-    default:
+  default:
       return state
   }
 }

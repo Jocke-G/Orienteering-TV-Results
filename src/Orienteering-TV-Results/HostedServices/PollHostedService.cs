@@ -35,13 +35,12 @@ namespace OrienteeringTvResults
                     }
                     var memoryUsed = GC.GetTotalMemory(false);
 
-                    Logger.LogInfo("Memory usage: " + memoryUsed);
+                    Logger.LogInfo($"Memory usage: { + memoryUsed / 1024 / 1024 } MB");
                     if(memoryUsed >= 70 * 1024 * 1024)
                     {
                         Logger.LogInfo("Forcing garbage collect");
                         GC.Collect();
-                        Logger.LogInfo("Memory usage after collect: " + GC.GetTotalMemory(true));
-
+                        Logger.LogInfo($"Memory usage after collect: { GC.GetTotalMemory(true) / 1024 / 1024 } MB");
                     }
                 }
                 catch (Exception exception)
