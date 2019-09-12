@@ -33,12 +33,9 @@ class App extends React.Component<Props, State> {
 
   constructor(props:Props) {
     super(props);
-    console.log("Search: " + this.props.location.search)
     let parsed = queryString.parse(this.props.location.search);
     let className = parsed['Class'];
-    console.log("Class: " + className);
     if(typeof className === "string") {
-      console.log("dispatching selectClass");
       this.props.selectClass(className);
     }
   }

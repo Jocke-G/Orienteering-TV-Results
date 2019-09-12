@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-
+    <OutputPath>$(SolutionDir)\$(Configuration)\</OutputPath>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

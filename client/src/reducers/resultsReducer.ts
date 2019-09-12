@@ -7,9 +7,6 @@ export interface ResultsState {
 }
 
 const initialState: ResultsState = {
-  classResults: undefined,
-  ShortName: undefined,
-  selectedClass: undefined,
 }
 
 export function resultsReducer (
@@ -33,4 +30,4 @@ export function resultsReducer (
   }
 }
 
-//export const getResults:MyObj = state => state.classResults;
+export const getResults = (state:ResultsState):ClassResults|undefined => state.classResults;

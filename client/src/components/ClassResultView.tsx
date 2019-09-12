@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect , } from "react-redux";
 import { AppState } from "../store";
 
-//import { getResults } from '../reducers/resultsReducer';
+import { getResults } from '../reducers/resultsReducer';
 import { ClassResults } from '../actions/types';
 import ClassCompetitorResultComponent from './ClassCompetitorResultComponent';
 
@@ -48,8 +48,7 @@ class ClassResultsView extends Component<AppProps> {
 }
 
 const mapStateToProps = (state: AppState) => ({
-  //results: getResults(state.resultsReducer),
-  results: state.resultsReducer.classResults,
+  results: getResults(state.resultsReducer),
 });
   
 export default connect(

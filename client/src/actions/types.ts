@@ -16,7 +16,7 @@ export interface ClassResult {
   Ordinal: number,
 }
 
-interface classResultsReceivedAction {
+export interface classResultsReceivedAction {
   type: typeof CLASS_RESULTS_RECEIVED,
   results: ClassResults,
 }

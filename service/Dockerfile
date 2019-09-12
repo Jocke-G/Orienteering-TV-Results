@@ -3,7 +3,7 @@ WORKDIR /app
 
 # copy csproj and restore as distinct layers
 COPY *.sln .
-COPY DataTypes/*.csproj ./DataTypes/
+COPY Model/*.csproj ./Model/
 COPY OlaDatabase/*.csproj ./OlaDatabase/
 COPY OlaAdapter/*.csproj ./OlaAdapter/
 COPY Orienteering-TV-Results/*.csproj ./Orienteering-TV-Results/
@@ -12,7 +12,7 @@ RUN dotnet restore
 
 # copy and publish app and libraries
 WORKDIR /app/
-COPY DataTypes/. ./DataTypes/
+COPY Model/. ./Model/
 COPY OlaDatabase/. ./OlaDatabase/
 COPY OlaAdapter/. ./OlaAdapter/
 COPY Orienteering-TV-Results/. ./Orienteering-TV-Results/

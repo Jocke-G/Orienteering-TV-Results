@@ -27,7 +27,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\DataTypes\Model.csproj" />
     <ProjectReference Include="..\OlaAdapter\OlaAdapter.csproj" />
   </ItemGroup>
 

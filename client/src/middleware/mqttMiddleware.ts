@@ -113,7 +113,6 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
           client.publish("messages/add", action.message)
           break;*/
         default:
-         console.log('Nextaction', action);
           return next(action)
       }
     } catch(error) {
