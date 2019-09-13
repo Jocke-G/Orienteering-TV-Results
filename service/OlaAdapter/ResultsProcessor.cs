@@ -1,6 +1,7 @@
 ﻿using OlaDatabase;
 using OlaDatabase.Entities;
 using OrienteeringTvResults.Model;
+using OrienteeringTvResults.Model.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,16 @@ namespace OrienteeringTvResults.OlaAdapter
 {
     public class ResultsProcessor: IResultsProcessor
     {
+        private int _stageId;
+        private int _competitionId;
+        private DatabaseConfiguration _configuration;
+
+        public ResultsProcessor(DatabaseConfiguration databaseConfiguration)
+        {
+            _stageId = databaseConfiguration.Stage;
+            _competitionId = databaseConfiguration.Competition;
+        }
+
         public IList<Competition> GetCompetitions()
         {
             using (var session = new SessionFactoryHelper())
@@ -36,6 +47,27 @@ namespace OrienteeringTvResults.OlaAdapter
             }
         }
 
+        public object GetClasses()
+        {
+            using (var session = new SessionFactoryHelper())
+            {
+                var olaClasses = RepositoryContainer.RaceClassRepository.GetByEventRaceId(_stageId);
+                return ToClasses(olaClasses);
+            }
+        }
+
+        public CompetitionClass GetClass(string shortName)
+        {
+            using (var session = new SessionFactoryHelper())
+            {
+                var olaClass = RepositoryContainer.RaceClassRepository.GetByShortName(_stageId, shortName);
+                var olaResults = RepositoryContainer.ResultRepository.GetBy(_competitionId, olaClass.EventClass.EventClassId);
+                var competitionClass = ToClass(olaClass);
+                competitionClass.Results = ToResults(olaResults);
+                return competitionClass;
+            }
+        }
+
         public IList<CompetitionClass> GetClasses(int eventId, int eventRaceId)
         {
             using (var session = new SessionFactoryHelper())
@@ -43,6 +75,16 @@ namespace OrienteeringTvResults.OlaAdapter
                 var olaClasses = RepositoryContainer.RaceClassRepository.GetByEventRaceId(eventRaceId);
                 return ToClasses(olaClasses);
             }
+        }
+
+        public bool ClassHasNewResults(int eventId, int eventRaceId, int raceClassId, DateTime lastCheckTime)
+        {
+            using(var session = new SessionFactoryHelper())
+            {
+                bool newResults = RepositoryContainer.ResultRepository.HasNewResults(eventId, eventRaceId, raceClassId, lastCheckTime);
+                return newResults;
+            }
+
         }
 
         public CompetitionStage GetStage(int id, int stageId)
@@ -186,6 +228,7 @@ namespace OrienteeringTvResults.OlaAdapter
                 Status = resultEntity.RunnerStatus,
                 TotalTime = TimeSpan.FromSeconds(resultEntity.TotalTime / 100),
                 Club = resultEntity.Entry.Person.Organisation.Name,
+                ModifyDate = resultEntity.ModifyDate,
             };
         }
     }

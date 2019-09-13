@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using OrienteeringTvResults.OlaAdapter;
 
 namespace OrienteeringTvResults.Rest
 {
     [Route("api")]
+    [EnableCors("MyPolicy")]
     [ApiController]
     public class CompetitionsController : Controller
     {
@@ -12,6 +14,20 @@ namespace OrienteeringTvResults.Rest
         public CompetitionsController(ResultsAdapter adapter)
         {
             _results = adapter.Processor;
+        }
+
+        [HttpGet("classes")]
+        public JsonResult GetClasses()
+        {
+            var classes = _results.GetClasses();
+            return new JsonResult(classes);
+        }
+
+        [HttpGet("classes/{shortName}")]
+        public JsonResult GetClasses(string shortName)
+        {
+            var competitionClass = _results.GetClass(shortName);
+            return new JsonResult(competitionClass);
         }
 
         [HttpGet("competitions")]

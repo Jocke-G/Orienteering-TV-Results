@@ -5,6 +5,7 @@ using OlaDatabase;
 using OlaDatabase.Entities;
 using OlaDatabase.RepositoryInterfaces;
 using OrienteeringTvResults.Model;
+using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
 using System.Collections.Generic;
 
@@ -40,7 +41,7 @@ namespace OlaAdapter.Tests.UnitTests
             mockResultRepository.Setup(x => x.GetBy(It.IsAny<int>(), It.IsAny<int>())).Returns<int, int>((i1, i2) => new List<ResultEntity>());
             RepositoryContainer.ResultRepository = mockResultRepository.Object;
 
-            IResultsProcessor target = new ResultsProcessor();
+            IResultsProcessor target = new ResultsProcessor(new DatabaseConfiguration());
             var actual = target.GetClass(1, 1, 1);
 
             Assert.AreEqual("H21", actual.ShortName);

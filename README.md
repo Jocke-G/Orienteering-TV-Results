@@ -1,12 +1,16 @@
 # Orienteering-TV-Results
 
-# Run on Raspberry Pi
+## Run on Raspberry Pi
 
-curl -fsSL https://get.docker.com -o get-docker.sh
+### Install docker
+https://docs.docker.com/v17.09/engine/installation/linux/docker-ce/debian/
 
-sudo sh get-docker.sh
-
+### Instyall git
 sudo apt-get install -y git
 
+###
 git clone https://github.com/Jocke-G/Orienteering-TV-Results.git
 
+cd Orienteering-TV-Results
+
+docker-compose -f docker-compose.rpi.yml --build up

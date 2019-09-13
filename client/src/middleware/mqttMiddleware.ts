@@ -7,7 +7,6 @@ import { selectClass } from '../actions/selectClass';
 interface Configuration {
   mqtt_host: string;
   mqtt_port: number;
-  mqtt_clientId: string;
 }
 
 export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
@@ -27,14 +26,15 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
       })
       .then(conf => {
         console.log(conf)
-        console.log("Connecting MQTT");
         createClient(conf);
         connect();
       });
   });
 
   let createClient = (config:Configuration) => {
-    client = new Client(config.mqtt_host, Number(config.mqtt_port), config.mqtt_clientId);
+    let clientId = "TV_" + Math.random().toString(16).substr(2, 8);
+    console.log(`Creating MQTT client with id: '${ clientId }' to host '${ config.mqtt_host }' with port ${ config.mqtt_port }`)
+    client = new Client(config.mqtt_host, Number(config.mqtt_port), clientId);
 
     client.onMessageArrived = (msg) => {
       try {
@@ -51,6 +51,7 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   }
 
   let connect = () => {
+    console.log("Connecting MQTT");
     client.connect({onSuccess: () => {
       console.log("MQTT Connected");
       startSubscriptions();

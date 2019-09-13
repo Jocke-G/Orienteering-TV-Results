@@ -1,5 +1,4 @@
 {
     "mqtt_host": "localhost",
-    "mqtt_port": "8000",
-    "mqtt_clientId": "TV1"
+    "mqtt_port": "8000"
 }

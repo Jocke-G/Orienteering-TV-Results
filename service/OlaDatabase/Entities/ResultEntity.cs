@@ -1,4 +1,6 @@
-﻿namespace OlaDatabase.Entities
+﻿using System;
+
+namespace OlaDatabase.Entities
 {
     public class ResultEntity
     {
@@ -7,5 +9,6 @@
         public virtual string RunnerStatus { get; set; }
         public virtual EntryEntity Entry { get; set; }
         public virtual RaceClassEntity RaceClass { get; set; }
+        public virtual DateTime ModifyDate { get; set; } 
     }
 }

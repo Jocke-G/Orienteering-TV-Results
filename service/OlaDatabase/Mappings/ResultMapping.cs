@@ -16,6 +16,7 @@ namespace OlaDatabase.Mappings
             Map(x => x.RunnerStatus).Column("runnerStatus").Not.Nullable();
             References(x => x.Entry).Column("entryId").Nullable();
             References(x => x.RaceClass).Column("raceClassId");
+            Map(x => x.ModifyDate).Column("modifyDate").Nullable();
         }
     }
 }

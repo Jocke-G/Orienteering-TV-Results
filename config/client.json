@@ -1,0 +1,4 @@
+{
+    "mqtt_host": "raspberrypi",
+    "mqtt_port": "8000"
+}

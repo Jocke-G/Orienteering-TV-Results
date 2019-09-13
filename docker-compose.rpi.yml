@@ -1,18 +1,5 @@
-version: '3.1'
+version: '3.6'
 services:
-  mysql:
-    image: mysql
-    command: '--default-authentication-plugin=mysql_native_password'
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: supersecret
-      MYSQL_DATABASE: OLA
-      MYSQL_USER: TV
-      MYSQL_PASSWORD: secret
-    ports:
-      - '3306:3306'
-    volumes:
-      - './sql-init:/docker-entrypoint-initdb.d'
   mosquitto:
     image: eclipse-mosquitto
     restart: always
@@ -27,17 +14,18 @@ services:
       dockerfile: Dockerfile
     restart: always
     depends_on:
-      - mysql
       - mosquitto
     environment:
       - 'mqtt:host=mosquitto'
       - 'mqtt:clientId=ResultsService'
-      - 'database:server=mysql'
+      - 'database:server=192.168.10.136'
       - 'database:database=tt2017'
       - 'database:username=TV'
       - 'database:password=secret'
       - 'database:competition=3'
       - 'database:stage=3'
+    ports:
+      - '5000:5000'
     volumes:
       - './service-logs:/app/logs'
   client:

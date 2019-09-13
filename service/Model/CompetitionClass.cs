@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace OrienteeringTvResults.Model
 {
@@ -6,7 +7,9 @@ namespace OrienteeringTvResults.Model
     {
         public int Id { get; set; }
         public string ShortName { get; set; }
+        [JsonIgnore]
         public bool NoTimePresentation { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public IList<Result> Results { get; set; }
     }
 }

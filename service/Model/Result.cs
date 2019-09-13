@@ -10,5 +10,6 @@ namespace OrienteeringTvResults.Model
         public string Status { get; set; }
         public TimeSpan? TotalTime { get; set; }
         public int? Ordinal { get; set; }
+        public DateTime ModifyDate { get; set; }
     }
 }

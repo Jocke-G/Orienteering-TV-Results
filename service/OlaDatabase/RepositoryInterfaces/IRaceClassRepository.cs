@@ -7,5 +7,6 @@ namespace OlaDatabase.RepositoryInterfaces
     {
         IList<RaceClassEntity> GetByEventRaceId(int eventRaceId);
         RaceClassEntity GetByEventRaceIdAndId(int eventRaceId, int classId);
+        RaceClassEntity GetByShortName(int eventRaceId, string shortName);
     }
 }

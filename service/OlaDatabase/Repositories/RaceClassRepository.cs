@@ -28,5 +28,16 @@ namespace OlaDatabase
                 ).First();
             return raceClass;
         }
+
+        public RaceClassEntity GetByShortName(int eventRaceId, string shortName)
+        {
+            var session = SessionFactoryHelper.GetSession();
+            var raceClass = session.Query<RaceClassEntity>()
+                .Where(
+                    x => x.EventRace.EventRaceId == eventRaceId
+                    && x.EventClass.ShortName == shortName
+                ).First();
+            return raceClass;
+        }
     }
 }

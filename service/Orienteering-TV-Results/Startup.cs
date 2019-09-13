@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using OrienteeringTvResults.Model.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -38,11 +39,21 @@ namespace OrienteeringTvResults
             services.AddSingleton<ResultsAdapter>();
             services.AddSingleton<IHostedService, PollHostedService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +77,7 @@ namespace OrienteeringTvResults
             });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCors("MyPolicy");
 
             app.UseMvc();
         }

@@ -13,8 +13,10 @@ namespace OrienteeringTvResults
 
         public ResultsAdapter(IOptions<ApplicationConfiguration> conf)
         {
-            SessionFactoryHelper.Initialize(new MySqlSessionFactoryCreator(conf.Value.Database));
-           _processor = new ResultsProcessor();
+            var dbConf = conf.Value.Database;
+            Logger.LogInfo($"Using database '{dbConf.Database}' at '{dbConf.Server}' as user '{dbConf.Username}'. Will publish competition: '{dbConf.Competition}' stage: '{dbConf.Stage}'");
+            SessionFactoryHelper.Initialize(new MySqlSessionFactoryCreator(dbConf));
+           _processor = new ResultsProcessor(conf.Value.Database);
         }
     }
 }

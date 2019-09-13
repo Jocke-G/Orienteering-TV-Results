@@ -2,6 +2,7 @@
 using NHibernate;
 using OlaDatabase;
 using OlaDatabase.Entities;
+using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
 using System;
 
@@ -57,7 +58,7 @@ namespace OlaAdapter.Tests.IntegrationTests
             _session.Flush();
 
 
-            var target = new ResultsProcessor();
+            var target = new ResultsProcessor(new DatabaseConfiguration());
             var actual = target.GetClasses(1, 1);
 
             Assert.AreEqual(2, actual.Count);
@@ -73,7 +74,7 @@ namespace OlaAdapter.Tests.IntegrationTests
             _dataHelper.SaveResult(raceClass, "MrWinner", "Winnersson", organisation, "passed", new TimeSpan(1, 2, 3));
             _session.Flush();
 
-            var target = new ResultsProcessor();
+            var target = new ResultsProcessor(new DatabaseConfiguration());
             var actual = target.GetClass(1, 1, 1);
 
             Assert.AreEqual("H21", actual.ShortName);
@@ -96,7 +97,7 @@ namespace OlaAdapter.Tests.IntegrationTests
             _dataHelper.SaveResult(raceClass, "gubbe3e", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 3));
             _session.Flush();
 
-            var target = new ResultsProcessor();
+            var target = new ResultsProcessor(new DatabaseConfiguration());
             var actual = target.GetClass(1, 1, 1);
 
             Assert.AreEqual("H21", actual.ShortName);
@@ -135,7 +136,7 @@ namespace OlaAdapter.Tests.IntegrationTests
             _dataHelper.SaveResult(raceClass, "gubbe3e", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 2));
             _session.Flush();
 
-            var target = new ResultsProcessor();
+            var target = new ResultsProcessor(new DatabaseConfiguration());
             var actual = target.GetClass(1, 1, 1);
 
             Assert.AreEqual("H21", actual.ShortName);
