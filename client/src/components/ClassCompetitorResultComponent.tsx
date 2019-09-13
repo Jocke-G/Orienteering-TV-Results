@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { ClassResult } from '../actions/types';
 import { connect , } from "react-redux";
+import { ClassResult } from '../store/results/reducers';
 
 type AppProps = {
   result: ClassResult

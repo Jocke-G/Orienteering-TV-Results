@@ -5,12 +5,14 @@
 ### Install docker
 https://docs.docker.com/v17.09/engine/installation/linux/docker-ce/debian/
 
-### Instyall git
+### Install git
 sudo apt-get install -y git
 
-###
+### Clone git repository
 git clone https://github.com/Jocke-G/Orienteering-TV-Results.git
 
+### Move inte folder
 cd Orienteering-TV-Results
 
-docker-compose -f docker-compose.rpi.yml --build up
+### Build and start docker containers
+docker-compose -f docker-compose.rpi.yml up --build

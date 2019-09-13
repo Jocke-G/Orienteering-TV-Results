@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux'
 import { Action, CONFIGURATION_RECEIVED } from "./actions"
+import { RootState } from '../../reducers/rootReducer'
 
 export interface Configuration {
+  isComplete: boolean;
   mqtt_host: string;
   mqtt_port: number;
   rest_host: string;
@@ -9,14 +11,15 @@ export interface Configuration {
 }
 
 export interface State {
-  configuration: Configuration
+  configuration: Configuration,
 }
 
-const initialState = {
+const initialState: Configuration = {
+  isComplete: false,
   mqtt_host : "",
   mqtt_port : 0,
   rest_host : "",
-  rest_port : 0
+  rest_port : 0,
 }
 
 const configuration = (state : Configuration = initialState, action: Action): Configuration => {
@@ -24,6 +27,7 @@ const configuration = (state : Configuration = initialState, action: Action): Co
     case CONFIGURATION_RECEIVED:
       return {
         ...state,
+        isComplete: true,
         mqtt_host: action.configuration.mqtt_host,
         mqtt_port: action.configuration.mqtt_port,
         rest_host: action.configuration.rest_host,
@@ -37,3 +41,5 @@ const configuration = (state : Configuration = initialState, action: Action): Co
 export default combineReducers<State>({
   configuration
 });
+
+export const hasConfiguration = (state:RootState):boolean => state.configuration.configuration.isComplete;

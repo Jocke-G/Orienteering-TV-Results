@@ -1,18 +1,16 @@
 import { combineReducers } from 'redux';
 import { routerReducer as router, RouterState } from "react-router-redux";
-import { resultsReducer, ResultsState } from './resultsReducer';
 import configuration, { State as ConfigurationState } from '../store/configuration/reducers'
+import results, { State as ResultsState } from '../store/results/reducers'
 
-interface StoreEnhancerState {}
-
-export interface RootState extends StoreEnhancerState {
+export interface RootState {
   router: RouterState;
-  resultsReducer: ResultsState;
+  results: ResultsState;
   configuration: ConfigurationState;
 }
 
 export default combineReducers<RootState>({
   router,
-  resultsReducer,
+  results,
   configuration,
 });

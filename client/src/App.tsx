@@ -2,16 +2,17 @@ import * as React from 'react'
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router";
-import queryString from 'query-string'
-import { ThunkDispatch } from 'redux-thunk'
+import queryString from 'query-string';
+import { ThunkDispatch } from 'redux-thunk';
 
 import './App.css';
 
 import ClassResult from './components/ClassResultView';
-import { ResultsActionTypes, ClassResults } from './actions/types';
-import { selectClass } from './actions/selectClass';
-import { fetchClass } from './actions/fetchClass';
 import { requestConfiguration } from './store/configuration/actions';
+import { ClassResults, getResults } from './store/results/reducers';
+import { fetchClass, selectClass, Action } from './store/results/actions';
+import SelectClass from './components/SelectClass';
+import { hasConfiguration } from './store/configuration/reducers';
 
 export interface OwnProps {
 //  propFromParent: number
@@ -19,7 +20,8 @@ export interface OwnProps {
 
 interface StateProps {
   results?: ClassResults,
-  selectedClass?: string
+  selectedClass: string|null,
+  hasConfiguration: boolean,
 }
 
 interface DispatchProps {
@@ -35,52 +37,65 @@ interface State {
 }
 
 class App extends React.Component<Props, State> {
-
-  constructor(props:Props) {
+  constructor(props:Props){
     super(props);
-
-    this.props.requestConfiguration()
-      .then(() => {
-        console.log("[UI] Conf received");
-      let parsed = queryString.parse(this.props.location.search);
-      let className = parsed['Class'];
-      if(typeof className === "string") {
-        this.props.fetchClass(className);
-        this.props.selectClass(className);
-      }
+    this.props.requestConfiguration().then(() => {
+      console.log("[UI] Conf received");
+      this.updateSelectedClass();
     });
   }
 
+  componentDidUpdate(props:Props) {
+    if(this.props.hasConfiguration) {
+      this.updateSelectedClass();
+    }
+  }
+
+  updateSelectedClass() {
+    console.log("[UI] updateSelectedClass");
+    let parsed = queryString.parse(this.props.location.search);
+    let className = parsed['Class'];
+    console.log(`[UI] className ${className}`);
+    if(typeof className === "string" && this.props.selectedClass !== className) {
+      console.log(`[UI] selecting class: ${className}`);
+      this.props.selectClass(className);
+      this.props.fetchClass(className);
+    }
+  }
+
   render() {
-    console.log("selectedClass:" + this.props.selectedClass)
-    if(this.props.selectedClass !== undefined) {
-      return (
-        <ClassResult />
-      );
+    if(this.props.hasConfiguration){
+      if(this.props.selectedClass !== null) {
+        console.log(`[UI/App] render ClassResult: ${this.props.selectedClass}`);
+        return (
+          <ClassResult />
+        );
+      } else {
+        console.log(`[UI/App] render SelectClass`);
+        return (
+          <SelectClass />
+        );
+      }
     } else {
-      return (
-        <div className="App">
-          <div>Select class</div>
-        </div>
-      );
+      console.log(`[UI/App] Rendering Loader`);
+      return (<div>Fetching configuration</div>)
     }
   }
 }
 
-const mapStateToProps = (state:any /* RootState? State? Nothing works */, ownProps: OwnProps): StateProps => {
+const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
   return {
-    results: state.resultsReducer.classResults,
-    selectedClass: state.resultsReducer.selectedClass,
+    hasConfiguration: hasConfiguration(state),
+    results: getResults(state),
+    selectedClass: state.results.selectedClass,
   }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<ResultsActionTypes>, ownProps: OwnProps): DispatchProps => {
-   return {
-     requestConfiguration: async () => {await dispatch(requestConfiguration())},
-      selectClass: (className: string) => dispatch(selectClass(className)),
-    fetchClass: async (className) => {
-      await dispatch(fetchClass(className))
-    }
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<Action>, ownProps: OwnProps): DispatchProps => {
+  return {
+    requestConfiguration: async () => {await dispatch(requestConfiguration())},
+    selectClass: (className: string) => dispatch(selectClass(className)),
+    fetchClass: async (className) => dispatch(fetchClass(className))
   }
 }
 

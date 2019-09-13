@@ -1,12 +1,9 @@
 import { MiddlewareAPI } from 'redux';
 import { Client, Message } from 'paho-mqtt';
-import { classResultsReceived } from '../actions/classResultsReceived';
-import { ClassResults, SELECT_CLASS } from '../actions/types';
-import { selectClass } from '../actions/selectClass';
 import { Configuration } from '../store/configuration/reducers';
-import { configurationReceived, CONFIGURATION_RECEIVED } from '../store/configuration/actions';
-
-
+import { CONFIGURATION_RECEIVED } from '../store/configuration/actions';
+import { ClassResults } from '../store/results/reducers';
+import { classResultsReceived, SELECT_CLASS, selectClass } from '../store/results/actions';
 
 export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   let client :Client;
@@ -97,9 +94,6 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
             console.log("MQTT: Class selected");
           updateSelectedClass(action.className);
           return next(action);
-/*        case SEND_MESSAGE:
-          client.publish("messages/add", action.message)
-          break;*/
         default:
           return next(action)
       }

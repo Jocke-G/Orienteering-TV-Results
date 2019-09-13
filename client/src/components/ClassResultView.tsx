@@ -1,16 +1,27 @@
-import React, { Component } from 'react';
-import { connect , } from "react-redux";
-import { AppState } from "../store";
-
-import { getResults } from '../reducers/resultsReducer';
-import { ClassResults } from '../actions/types';
+import React, { Component, Dispatch } from 'react';
+import { connect } from "react-redux";
+import queryString from 'query-string'
+import { getResults, ClassResults } from '../store/results/reducers';
 import ClassCompetitorResultComponent from './ClassCompetitorResultComponent';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { ThunkDispatch } from 'redux-thunk';
+import { Action, selectClass, fetchClass } from '../store/results/actions';
 
-type AppProps = {
+export interface OwnProps {
+}
+
+type StateProps = {
   results?: ClassResults
 }
 
-class ClassResultsView extends Component<AppProps> {
+interface DispatchProps {
+  selectClass: (className:string) => void;
+  fetchClass: (className:string) => void;
+}
+
+type Props = RouteComponentProps<{}> & StateProps & DispatchProps & OwnProps
+
+class ClassResultsView extends Component<Props> {
   render() {
     return (
       <table id="header" className="result">
@@ -47,10 +58,19 @@ class ClassResultsView extends Component<AppProps> {
   }
 }
 
-const mapStateToProps = (state: AppState) => ({
-  results: getResults(state.resultsReducer),
-});
-  
-export default connect(
-  mapStateToProps
-)(ClassResultsView);
+const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
+  return {
+    results: getResults(state),
+  }
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<Action>, ownProps: OwnProps): DispatchProps => {
+  return {
+    selectClass: (className: string) => dispatch(selectClass(className)),
+    fetchClass: async (className) => dispatch(fetchClass(className))
+  }
+}
+
+export default withRouter(
+  connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ClassResultsView)
+);
