@@ -3,33 +3,14 @@ import { Client, Message } from 'paho-mqtt';
 import { classResultsReceived } from '../actions/classResultsReceived';
 import { ClassResults, SELECT_CLASS } from '../actions/types';
 import { selectClass } from '../actions/selectClass';
+import { Configuration } from '../store/configuration/reducers';
+import { configurationReceived, CONFIGURATION_RECEIVED } from '../store/configuration/actions';
 
-interface Configuration {
-  mqtt_host: string;
-  mqtt_port: number;
-}
+
 
 export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   let client :Client;
   let selectedClass: string;
-
-  console.log("Fetching MQTT configuration");
-  fetch('/config.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
-      response
-        .json()
-        .then(data => {
-          return data as Configuration;
-      })
-      .then(conf => {
-        console.log(conf)
-        createClient(conf);
-        connect();
-      });
-  });
 
   let createClient = (config:Configuration) => {
     let clientId = "TV_" + Math.random().toString(16).substr(2, 8);
@@ -72,7 +53,7 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   }
 
   let updateSelectedClass = (className:string) => {
-    if(client !== undefined) {
+    if(client !== undefined && client.isConnected()) {
       if(selectedClass !== undefined) {
         let oldTopic = `Results/Class/${selectedClass}`;
         console.log(`Unsubscribing to topic: '${oldTopic}'`);
@@ -107,7 +88,13 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   return (next: (arg0: any) => void) => (action: any) => {
     try {
       switch(action.type) {
+        case CONFIGURATION_RECEIVED:
+          console.log("MQTT: Conf received");
+          createClient(action.configuration);
+          connect();
+          return next(action);
         case SELECT_CLASS:
+            console.log("MQTT: Class selected");
           updateSelectedClass(action.className);
           return next(action);
 /*        case SEND_MESSAGE:

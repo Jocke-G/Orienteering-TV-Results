@@ -11,6 +11,7 @@ import ClassResult from './components/ClassResultView';
 import { ResultsActionTypes, ClassResults } from './actions/types';
 import { selectClass } from './actions/selectClass';
 import { fetchClass } from './actions/fetchClass';
+import { requestConfiguration } from './store/configuration/actions';
 
 export interface OwnProps {
 //  propFromParent: number
@@ -22,8 +23,9 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  selectClass: (className:string) => void
-  fetchClass: (className:string) => void
+  requestConfiguration: () => Promise<void>;
+  selectClass: (className:string) => void;
+  fetchClass: (className:string) => void;
 }
 
 type Props = RouteComponentProps<{}> & StateProps & DispatchProps & OwnProps
@@ -36,12 +38,17 @@ class App extends React.Component<Props, State> {
 
   constructor(props:Props) {
     super(props);
-    let parsed = queryString.parse(this.props.location.search);
-    let className = parsed['Class'];
-    if(typeof className === "string") {
-      this.props.fetchClass(className);
-      this.props.selectClass(className);
-    }
+
+    this.props.requestConfiguration()
+      .then(() => {
+        console.log("[UI] Conf received");
+      let parsed = queryString.parse(this.props.location.search);
+      let className = parsed['Class'];
+      if(typeof className === "string") {
+        this.props.fetchClass(className);
+        this.props.selectClass(className);
+      }
+    });
   }
 
   render() {
@@ -69,7 +76,8 @@ const mapStateToProps = (state:any /* RootState? State? Nothing works */, ownPro
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<ResultsActionTypes>, ownProps: OwnProps): DispatchProps => {
    return {
-    selectClass: (className: string) => dispatch(selectClass(className)),
+     requestConfiguration: async () => {await dispatch(requestConfiguration())},
+      selectClass: (className: string) => dispatch(selectClass(className)),
     fetchClass: async (className) => {
       await dispatch(fetchClass(className))
     }

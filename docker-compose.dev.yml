@@ -38,6 +38,8 @@ services:
       - 'database:password=secret'
       - 'database:competition=3'
       - 'database:stage=3'
+    ports:
+      - '8080:80'
     volumes:
       - './service-logs:/app/logs'
   client:
@@ -47,7 +49,5 @@ services:
     restart: always
     depends_on:
       - mosquitto
-    volumes:
-      - './config/client.json:/usr/share/nginx/html/config.json'
     ports:
       - '80:80'
