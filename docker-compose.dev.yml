@@ -2,12 +2,12 @@ version: '3.1'
 services:
   mysql:
     image: mysql
-    command: '--default-authentication-plugin=mysql_native_password'
+    command: '--default-authentication-plugin=mysql_native_password --lower_case_table_names=1'
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: supersecret
       MYSQL_DATABASE: OLA
-      MYSQL_USER: TV
+      MYSQL_USER: TvService
       MYSQL_PASSWORD: secret
     ports:
       - '3306:3306'
@@ -34,7 +34,7 @@ services:
       - 'mqtt:clientId=ResultsService'
       - 'database:server=mysql'
       - 'database:database=tt2017'
-      - 'database:username=TV'
+      - 'database:username=TvService'
       - 'database:password=secret'
       - 'database:competition=3'
       - 'database:stage=3'

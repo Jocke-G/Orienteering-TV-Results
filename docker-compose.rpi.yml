@@ -20,7 +20,7 @@ services:
       - 'mqtt:clientId=ResultsService'
       - 'database:server=192.168.10.136'
       - 'database:database=tt2017'
-      - 'database:username=TV'
+      - 'database:username=TvService'
       - 'database:password=secret'
       - 'database:competition=3'
       - 'database:stage=3'
