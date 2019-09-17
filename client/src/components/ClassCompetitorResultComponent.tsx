@@ -13,6 +13,13 @@ class ClassResultsView extends Component<AppProps> {
       <tr className= { this.props.index % 2 === 0 ? "trDark" : ""}>
         <td>{ this.props.result.FirstName } { this.props.result.LastName }</td>
         <td>{ this.props.result.Club }</td>
+        <td>{ this.props.result.StartTime }</td>
+        {this.props.result.SplitTimes.map((item, key) => 
+          <Fragment key={key}>
+            <td>{item.Ordinal}</td>
+            <td>{item.Time}</td>
+          </Fragment>
+        )}
           {(() => {
           switch(this.props.result.Status) {
             case 'notValid':

@@ -5,15 +5,27 @@ import { Action, CLASS_RESULTS_RECEIVED, SELECT_CLASS, CLASSES_RECEIVED } from '
 export interface ClassResults {
   Id: number,
   ShortName: string,
+  SplitControls: SplitControl[],
   Results: ClassResult[],
+}
+
+export interface SplitControl {
+  Name: string,
 }
 
 export interface ClassResult {
   FirstName: string,
   LastName: string,
   Club: string,
+  StartTime: Date,
   Status: string,
   TotalTime: Date,
+  Ordinal: number,
+  SplitTimes: SplitTime[],
+}
+
+export interface SplitTime {
+  Time: number,
   Ordinal: number,
 }
 
@@ -27,6 +39,7 @@ const initialState: ClassResults = {
   Id: 0,
   ShortName: "",
   Results: [],
+  SplitControls: [],
 }
 
 const results = (state : ClassResults = initialState, action: Action): ClassResults => {
@@ -35,7 +48,8 @@ const results = (state : ClassResults = initialState, action: Action): ClassResu
       return {
           ...state,
           Results: action.results.Results,
-          ShortName: action.results.ShortName
+          ShortName: action.results.ShortName,
+          SplitControls: action.results.SplitControls,
         };
         default:
             return state

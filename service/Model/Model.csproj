@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RootNamespace>OrienteeringTvResults.DataTypes</RootNamespace>
+    <RootNamespace>OrienteeringTvResults.Model</RootNamespace>
     <AssemblyName>OrienteeringTvResults.Model</AssemblyName>
     <OutputPath>$(SolutionDir)\$(Configuration)\</OutputPath>
   </PropertyGroup>

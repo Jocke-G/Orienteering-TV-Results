@@ -12,7 +12,6 @@ namespace OrienteeringTvResults.OlaAdapter
     {
         private int _stageId;
         private int _competitionId;
-        private DatabaseConfiguration _configuration;
 
         public ResultsProcessor(DatabaseConfiguration databaseConfiguration)
         {
@@ -35,6 +34,15 @@ namespace OrienteeringTvResults.OlaAdapter
             }
         }
 
+        public IList<SplitTimeControlEntity> GetSplitTimeControls(int competitionId, int stageId)
+        {
+            using (var session = new SessionFactoryHelper())
+            {
+                var splitTimeControls = RepositoryContainer.SplitTimeControlRepository.GetForEventRace(competitionId, stageId);
+                return splitTimeControls;
+            }
+        }
+
         public Competition GetCompetition(int id)
         {
             using (var session = new SessionFactoryHelper())
@@ -53,18 +61,6 @@ namespace OrienteeringTvResults.OlaAdapter
             {
                 var olaClasses = RepositoryContainer.RaceClassRepository.GetByEventRaceId(_stageId);
                 return ToClasses(olaClasses);
-            }
-        }
-
-        public CompetitionClass GetClass(string shortName)
-        {
-            using (var session = new SessionFactoryHelper())
-            {
-                var olaClass = RepositoryContainer.RaceClassRepository.GetByShortName(_stageId, shortName);
-                var olaResults = RepositoryContainer.ResultRepository.GetBy(_competitionId, olaClass.EventClass.EventClassId);
-                var competitionClass = ToClass(olaClass);
-                competitionClass.Results = ToResults(olaResults);
-                return competitionClass;
             }
         }
 
@@ -99,24 +95,39 @@ namespace OrienteeringTvResults.OlaAdapter
             }
         }
 
+        public CompetitionClass GetClass(string shortName)
+        {
+            using (var session = new SessionFactoryHelper())
+            {
+                var olaClass = RepositoryContainer.RaceClassRepository.GetByShortName(_stageId, shortName);
+                var competitionClass = ToClass(olaClass);
+                if (olaClass.EventClass.NoTimePresentation)
+                {
+                    competitionClass.Results = RemoveTime(ToResults(olaClass.Results).ToList());
+                }
+                else
+                {
+                    competitionClass.Results = AddOrdinal(ToResults(olaClass.Results).ToList());
+                }
+                return competitionClass;
+            }
+        }
+
         public CompetitionClass GetClass(int id, int stageId, int classId)
         {
             using (var session = new SessionFactoryHelper())
             {
-                var raceClass = RepositoryContainer.RaceClassRepository.GetByEventRaceIdAndId(stageId, classId);
-                var results = RepositoryContainer.ResultRepository.GetBy(stageId, classId);
-                raceClass.Results = results;
-                var clazz = ToClass(raceClass);
-                clazz.Results = ToResults(results);
-                if (clazz.NoTimePresentation)
+                var olaClass = RepositoryContainer.RaceClassRepository.GetByEventRaceIdAndId(stageId, classId);
+                var competitionClass = ToClass(olaClass);
+                if (olaClass.EventClass.NoTimePresentation)
                 {
-                    clazz.Results = RemoveTime(clazz.Results.ToList());
+                    competitionClass.Results = RemoveTime(ToResults(olaClass.Results).ToList());
                 }
                 else
                 {
-                    clazz.Results = AddOrdinal(clazz.Results.ToList());
+                    competitionClass.Results = AddOrdinal(ToResults(olaClass.Results).ToList());
                 }
-                return clazz;
+                return competitionClass;
             }
         }
 
@@ -168,12 +179,27 @@ namespace OrienteeringTvResults.OlaAdapter
                 Id = raceClass.EventClass.EventClassId,
                 ShortName = raceClass.EventClass.ShortName,
                 NoTimePresentation = raceClass.EventClass.NoTimePresentation,
+                SplitControls = ToSplitControls(raceClass)
             };
 
             return clazz;
         }
 
-        private IList<Result> ToResults(IList<ResultEntity> resultEntities)
+        private IList<SplitControl> ToSplitControls(RaceClassEntity raceClass)
+        {
+            var splitControls = new List<SplitControl>();
+            foreach (var splitControl in raceClass.RaceClassSplitTimeControls.OrderBy(x => x.Ordered))
+            {
+                splitControls.Add(new SplitControl
+                {
+                    Name = splitControl.Id.SplitTimeControl.Name,
+                });
+            }
+
+            return splitControls;
+        }
+
+        private IList<Result> ToResults(IEnumerable<ResultEntity> resultEntities)
         {
             var results = new List<Result>();
             foreach (var resultEntity in resultEntities)
@@ -186,6 +212,22 @@ namespace OrienteeringTvResults.OlaAdapter
 
         private IList<Result> AddOrdinal(List<Result> results)
         {
+            var preferences = new List<string> {
+            "passed",
+            "finished",
+            "notValid",
+            "finishedTimeOk",
+            "finishedPunchOk",
+            "disqualified",
+            "movedUp",
+            "walkOver",
+            "started",
+            "notActivated",
+            "notParticipating",
+            "notStarted"
+        };
+
+            results = results.OrderBy(item => preferences.IndexOf(item.Status)).ThenBy(x => x.TotalTime).ToList();
 
             var ordinal = 1;
             for (int i = 0; i < results.Count; i++)
@@ -225,11 +267,40 @@ namespace OrienteeringTvResults.OlaAdapter
             {
                 FirstName = resultEntity.Entry.Person.FirstName,
                 LastName = resultEntity.Entry.Person.FamilyName,
+                StartTime = resultEntity.StartTime,
                 Status = resultEntity.RunnerStatus,
                 TotalTime = TimeSpan.FromSeconds(resultEntity.TotalTime / 100),
                 Club = resultEntity.Entry.Person.Organisation.Name,
                 ModifyDate = resultEntity.ModifyDate,
+                SplitTimes = ToSplitTimes(resultEntity),
             };
+        }
+
+        private IList<SplitTime> ToSplitTimes(ResultEntity resultEntity)
+        {
+            var splitTimes = new List<SplitTime>();
+            var raceClassSplitTimeControls = resultEntity.RaceClass.RaceClassSplitTimeControls;
+            foreach(var raceClassSplitTimeControl in raceClassSplitTimeControls)
+            {
+                var splitTime = resultEntity.SplitTimes.Where(x => x.Id.SplitTimeControl == raceClassSplitTimeControl.Id.SplitTimeControl).FirstOrDefault();
+                if(splitTime == null)
+                {
+                    splitTimes.Add(new SplitTime
+                    {
+                        Number = raceClassSplitTimeControl.Id.SplitTimeControl.TimingControl.Id
+                    });
+                }
+                else
+                {
+                    splitTimes.Add(new SplitTime {
+                        Time = splitTime.SplitTime,
+                        Number = splitTime.Id.SplitTimeControl.TimingControl.Id,
+                        PassedCount = splitTime.Id.PassedCount,
+                        Ordinal = 1 + raceClassSplitTimeControl.Id.RaceClass.Results.Where(x => x.SplitTimes.Any(y => y.Id.SplitTimeControl.RaceClassSplitTimeControls.Any(z => z.Id.SplitTimeControl == raceClassSplitTimeControl.Id.SplitTimeControl && y.SplitTime < splitTime.SplitTime))).Count(),
+                    });
+                }
+            }
+            return splitTimes;
         }
     }
 }

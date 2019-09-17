@@ -30,6 +30,14 @@ namespace OrienteeringTvResults.Rest
             return new JsonResult(competitionClass);
         }
 
+        [HttpGet("splittimecontrols/{competitionId}/{stageId}")]
+        public JsonResult GetSplitTimeControls(int competitionId, int stageId)
+        {
+            var splitTimeControls = _results.GetSplitTimeControls(competitionId, stageId);
+            var result = new JsonResult(splitTimeControls);
+            return result;
+        }
+
         [HttpGet("competitions")]
         public JsonResult GetCompetitions()
         {
@@ -37,26 +45,25 @@ namespace OrienteeringTvResults.Rest
             return new JsonResult(competitions);
         }
 
-        [HttpGet("competitions/{id}")]
-        public JsonResult Competition(int id)
+        [HttpGet("competitions/{competitionId}")]
+        public JsonResult Competition(int competitionId)
         {
-            Logger.LogInfo("REST: ");
-            var competition = _results.GetCompetition(id);
+            var competition = _results.GetCompetition(competitionId);
             return new JsonResult(competition);
         }
 
-        [HttpGet("competitions/{id}/{stageId}")]
-        public JsonResult Stage(int id, int stageId)
+        [HttpGet("competitions/{competitionId}/{stageId}")]
+        public JsonResult Stage(int competitionId, int stageId)
         {
-            var stage = _results.GetStage(id, stageId);
+            var stage = _results.GetStage(competitionId, stageId);
             return new JsonResult(stage);
         }
 
-        [HttpGet("competitions/{id}/{stageId}/{classId}")]
-        public IActionResult ClassResults(int id, int stageId, int classId)
+        [HttpGet("competitions/{competitionId}/{stageId}/{classId}")]
+        public IActionResult ClassResults(int competitionId, int stageId, int classId)
         {
-            var @class = _results.GetClass(id, stageId, classId);
-            return new JsonResult(@class);
+            var competitionClass = _results.GetClass(competitionId, stageId, classId);
+            return new JsonResult(competitionClass);
         }
     }
 }

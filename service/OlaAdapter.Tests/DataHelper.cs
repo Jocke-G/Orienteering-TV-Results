@@ -37,6 +37,7 @@ namespace OlaAdapter.Tests
             var entry = new EntryEntity
             {
                 Person = person,
+                Type = "single",
             };
             _session.Save(entry);
 
@@ -47,7 +48,9 @@ namespace OlaAdapter.Tests
                 Entry = entry,
                 TotalTime = (int)totalTime.TotalSeconds * 100,
             };
+            raceClass.Results.Add(result);
             _session.Save(result);
+            
         }
     }
 }

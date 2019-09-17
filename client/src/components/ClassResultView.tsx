@@ -1,6 +1,5 @@
-import React, { Component, Dispatch } from 'react';
+import React, { Component, Dispatch, Fragment } from 'react';
 import { connect } from "react-redux";
-import queryString from 'query-string'
 import { getResults, ClassResults } from '../store/results/reducers';
 import ClassCompetitorResultComponent from './ClassCompetitorResultComponent';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -28,17 +27,43 @@ class ClassResultsView extends Component<Props> {
 	      <colgroup>
           <col className="name" />
 	        <col className="club" />
+		      <col className="time" />
+          {this.props.results? this.props.results.SplitControls.map((item, key) => 
+          <Fragment key={key}>
+            <col className="place" />
+            {/* <col class=""time""> */}
+            <col className="splitTime" />
+          </Fragment>
+            ):<Fragment />
+            }
 	        <col className="place" />
 		      <col className="time" />
         </colgroup>
         <thead>
           <tr className="thead_1">
-	          <th colSpan={4}>Preliminära Liveresultat { this.props.results ? this.props.results.ShortName : '' }</th>
+	          <th colSpan={3}>Preliminära Liveresultat { this.props.results ? this.props.results.ShortName : '' }</th>
+            {this.props.results? this.props.results.SplitControls.map((item, key) => 
+              <th key={key} colSpan={2}>{item.Name}</th>
+            ):
+              <Fragment />
+            }
+            <th colSpan={2}>Mål</th>
           </tr>
           <tr className="thead_2">
             <th align="left">Namn</th>
             <th align="left">Klubb</th>
+            <th align="left">Starttid</th>
+            {this.props.results? this.props.results.SplitControls.map((item, key) => 
+              <Fragment key={key}>
+                <th>#</th>
+                {/* <th align="right">Passertid</th> */}
+                <th>Tid</th>
+              </Fragment>
+            ):
+              <Fragment />
+            }
             <th align="right">#</th>
+            {/* <th align="right">Passertid</th> */}
             <th align="right">Tid</th>
           </tr>
         </thead>

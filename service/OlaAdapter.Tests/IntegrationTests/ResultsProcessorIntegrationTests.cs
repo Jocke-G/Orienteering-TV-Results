@@ -186,6 +186,10 @@ namespace OlaAdapter.Tests.IntegrationTests
                 RaceClassName = Name,
                 EventClass = eventClass,
                 EventRace = _eventRace,
+                RaceClassStatus = "started",
+                AllocationMethod = "sNormalDraw",
+                ViewWhichOrganisation = "club",
+                StartMethod = "allocatedStart",
             };
             _session.Save(raceClass);
             return raceClass;

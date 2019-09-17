@@ -1,4 +1,5 @@
-﻿using OlaDatabase.Repositories;
+﻿using OlaDatabase.Entities;
+using OlaDatabase.Repositories;
 using OlaDatabase.RepositoryInterfaces;
 
 namespace OlaDatabase
@@ -9,6 +10,7 @@ namespace OlaDatabase
         public static IEventRaceRepository EventRaceRepository { get; set; }
         public static IRaceClassRepository RaceClassRepository { get; set; }
         public static IResultRepository ResultRepository { get; set; }
+        public static ISplitTimeControlRepository SplitTimeControlRepository { get; set; }
 
         static RepositoryContainer()
         {
@@ -21,6 +23,7 @@ namespace OlaDatabase
             EventRaceRepository = new EventRaceRepository();
             RaceClassRepository = new RaceClassRepository();
             ResultRepository = new ResultRepository();
+            SplitTimeControlRepository = new SplitTimeControlRepository();
         }
     }
 }

@@ -8,7 +8,6 @@ namespace OlaDatabase.Entities
         public virtual int EventRaceId { get; set; }
         public virtual string ExternalId { get; set; }
         public virtual string Name { get; set; }
-        //public virtual int EventId { get; set; }
         public virtual EventEntity Event { get; set; }
         public virtual DateTime RaceDate { get; set; }
         public virtual string RaceStatus { get; set; }
@@ -20,6 +19,8 @@ namespace OlaDatabase.Entities
         public virtual string ModifyDate { get; set; }
         public virtual int ModifiedBy { get; set; }
         public virtual List<RaceClassEntity> RaceClasses { get; set; }
+        public virtual IEnumerable<ControlEntity> Controls { get; set; }
+        public virtual IEnumerable<SplitTimeControlEntity> SplitTimeControls { get; set; }
 
         public EventRaceEntity()
         {

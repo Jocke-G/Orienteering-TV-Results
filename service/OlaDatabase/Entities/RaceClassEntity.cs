@@ -8,9 +8,7 @@ namespace OlaDatabase.Entities
         public virtual int RaceClassId { get; set; }
         public virtual string RaceClassName { get; set; }
         public virtual string RaceClassLength { get; set; }
-        //public virtual int EventClassId { get; set; }
         public virtual EventClassEntity EventClass { get; set; }
-        //public virtual int EventRaceId { get; set; }
         public virtual EventRaceEntity EventRace { get; set; }
         public virtual DateTime FirstStartTime { get; set; }
         public virtual int StartInterval { get; set; }
@@ -49,5 +47,12 @@ namespace OlaDatabase.Entities
         public virtual DateTime ModifyDate { get; set; }
         public virtual int ModifiedBy { get; set; }
         public virtual IList<ResultEntity> Results { get; set; }
+        public virtual IEnumerable<RaceClassSplitTimeControlEntity> RaceClassSplitTimeControls { get;set;}
+
+        public RaceClassEntity()
+        {
+            Results = new List<ResultEntity>();
+            RaceClassSplitTimeControls = new List<RaceClassSplitTimeControlEntity>();
+        }
     }
 }
