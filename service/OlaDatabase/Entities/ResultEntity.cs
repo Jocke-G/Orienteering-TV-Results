@@ -30,7 +30,7 @@ namespace OlaDatabase.Entities
         public virtual int RelayPersonOrder { get; set; }
         public virtual DateTime CreateDate { get; set; }
         public virtual DateTime ModifyDate { get; set; }
-        public virtual int ModifiedBy { get; set; }
+        public virtual PersonEntity ModifiedBy { get; set; }
         public virtual bool TakenCareOf { get; set; }
         public virtual string Comment { get; set; }
         public virtual IEnumerable<SplitTimeEntity> SplitTimes { get;  set; }

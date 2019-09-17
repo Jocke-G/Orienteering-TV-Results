@@ -1,7 +1,7 @@
 ﻿using System;
 using NHibernate;
 
-namespace OlaDatabase
+namespace OlaDatabase.Session
 {
     public class SessionFactoryHelper: IDisposable
     {

@@ -3,13 +3,14 @@ using OlaDatabase.Entities;
 
 namespace OlaDatabase.Mappings
 {
-    class ResultMapping: ClassMap<ResultEntity>
+    class ResultMapping : ClassMap<ResultEntity>
     {
-        public ResultMapping()
+        ResultMapping()
         {
             Table("results");
 
             Id(x => x.ResultId, "resultId").GeneratedBy.Increment();
+
             Map(x => x.BibNumber).Column("bibNumber").Nullable();
             Map(x => x.RaceStartNumber).Column("raceStartNumber").Nullable();
             Map(x => x.AllocatedStartTime).Column("allocatedStartTime").Nullable();
@@ -23,9 +24,9 @@ namespace OlaDatabase.Mappings
             Map(x => x.OverallTimeAfter).Column("overallTimeAfter").Nullable();
             Map(x => x.OverallPosition).Column("overallPosition").Nullable();
             Map(x => x.OverallRunnerStatus).Column("overallRunnerStatus").Nullable();
-            References(x => x.Entry).Column("entryId").Nullable();
-            Map(x => x.ElectronicPunchingCardId).Column("electronicPunchingCardId").Nullable();
-            Map(x => x.IndividualCourseId).Column("individualCourseId").Nullable();
+            References(x => x.Entry).Column("entryId").ForeignKey("Results_FK02").Nullable();
+            Map(x => x.ElectronicPunchingCardId).Column("electronicPunchingCardId").Nullable(); // Foreign Key - electronicpunchingcards - Results_FK01
+            Map(x => x.IndividualCourseId).Column("individualCourseId").Nullable(); // Foreign Key - courses - Results_FK00
             Map(x => x.ForkedCourseId).Column("forkedCourseId").Nullable();
             Map(x => x.ForkedCourseOrder).Column("forkedCourseOrder").Nullable();
             References(x => x.RaceClass).Column("raceClassId").ForeignKey("Results_FK03").Nullable();
@@ -34,7 +35,7 @@ namespace OlaDatabase.Mappings
             Map(x => x.RelayPersonOrder).Column("relayPersonOrder").Nullable();
             Map(x => x.CreateDate).Column("createDate").Nullable();
             Map(x => x.ModifyDate).Column("modifyDate").Nullable();
-            Map(x => x.ModifiedBy).Column("modifiedBy").Nullable();
+            References(x => x.ModifiedBy).Column("modifiedBy").ForeignKey("Results_FK05").Nullable();
             Map(x => x.TakenCareOf).Column("takenCareOf").Nullable();
             Map(x => x.Comment).Column("comment").Nullable();
 

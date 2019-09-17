@@ -2,6 +2,7 @@
 using NHibernate;
 using OlaDatabase;
 using OlaDatabase.Entities;
+using OlaDatabase.Session;
 using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
 using System;
@@ -11,10 +12,11 @@ namespace OlaAdapter.Tests.IntegrationTests
     [TestClass]
     public class ResultsProcessorIntegrationTests
     {
-        private ISession _session;
         private ISessionFactoryCreator _sessionFactoryCreator;
-        private EventRaceEntity _eventRace;
+        private ISession _session;
         private DataHelper _dataHelper;
+        private EventEntity _eventEntity;
+        private EventRaceEntity _eventRace;
 
         [TestInitialize]
         public void TestInitialize()
@@ -23,25 +25,10 @@ namespace OlaAdapter.Tests.IntegrationTests
             SessionFactoryHelper.Initialize(_sessionFactoryCreator);
             _sessionFactoryCreator.OpenSession();
             _session = _sessionFactoryCreator.GetSession();
-
-            var eventEntity = new EventEntity
-            {
-                Name = "TestTävling",
-                EventForm = "IndSingleDay",
-            };
-            _session.Save(eventEntity);
-
-            _eventRace = new EventRaceEntity
-            {
-                EventRaceId = 1,
-                RaceStatus = "notActivated",
-                RaceLightCondition = "Day",
-                RaceDistance = "Middle",
-                Event = eventEntity,
-            };
-            _session.Save(_eventRace);
-
             _dataHelper = new DataHelper(_session);
+
+            _eventEntity = _dataHelper.CreateEvent("TestTävling");
+            _eventRace = _dataHelper.CreateEventRace(_eventEntity);
         }
 
         [TestCleanup]
@@ -53,8 +40,9 @@ namespace OlaAdapter.Tests.IntegrationTests
         [TestMethod]
         public void TestGetClasses()
         {
-            SaveRaceClass("H21");
-            SaveRaceClass("D21");
+            
+            _dataHelper.CreateEventClassAndRaceClass(_eventEntity, _eventRace, "H21");
+            _dataHelper.CreateEventClassAndRaceClass(_eventEntity, _eventRace, "D21");
             _session.Flush();
 
 
@@ -69,9 +57,9 @@ namespace OlaAdapter.Tests.IntegrationTests
         [TestMethod]
         public void TestGetClassResults()
         {
-            var raceClass = SaveRaceClass("H21");
+            var raceClass = _dataHelper.CreateEventClassAndRaceClass(_eventEntity, _eventRace, "H21");
             var organisation = _dataHelper.CreateOrganisation("The Club");
-            _dataHelper.SaveResult(raceClass, "MrWinner", "Winnersson", organisation, "passed", new TimeSpan(1, 2, 3));
+            _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "MrWinner", "Winnersson", organisation, "passed", new TimeSpan(1, 2, 3));
             _session.Flush();
 
             var target = new ResultsProcessor(new DatabaseConfiguration());
@@ -90,11 +78,11 @@ namespace OlaAdapter.Tests.IntegrationTests
         [TestMethod]
         public void TestGetClassResultsCorrectOrdinalByTotalTime()
         {
-            var raceClass = SaveRaceClass("H21");
+            var raceClass = _dataHelper.CreateEventClassAndRaceClass(_eventEntity, _eventRace, "H21");
             var organisation = _dataHelper.CreateOrganisation("The Club");
-            _dataHelper.SaveResult(raceClass, "gubbeAndra", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 2));
-            _dataHelper.SaveResult(raceClass, "gubbe1", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 1));
-            _dataHelper.SaveResult(raceClass, "gubbe3e", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 3));
+            _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "gubbeAndra", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 2));
+            _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "gubbe1", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 1));
+            _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "gubbe3e", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 3));
             _session.Flush();
 
             var target = new ResultsProcessor(new DatabaseConfiguration());
@@ -128,12 +116,12 @@ namespace OlaAdapter.Tests.IntegrationTests
         [TestMethod]
         public void TestGetClassResultsCorrectOrdinalByTotalTimeWhenEqual()
         {
-            var raceClass = SaveRaceClass("H21");
+            var raceClass = _dataHelper.CreateEventClassAndRaceClass(_eventEntity, _eventRace, "H21");
             var organisation = _dataHelper.CreateOrganisation("The Club");
-            _dataHelper.SaveResult(raceClass, "gubbeAndra", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 2));
-            _dataHelper.SaveResult(raceClass, "gubbe1", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 1));
-            _dataHelper.SaveResult(raceClass, "gubbe4", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 3));
-            _dataHelper.SaveResult(raceClass, "gubbe3e", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 2));
+            _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "gubbeAndra", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 2));
+            _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "gubbe1", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 1));
+            _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "gubbe4", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 3));
+            _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "gubbe3e", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 2));
             _session.Flush();
 
             var target = new ResultsProcessor(new DatabaseConfiguration());
@@ -169,30 +157,6 @@ namespace OlaAdapter.Tests.IntegrationTests
             Assert.AreEqual(new TimeSpan(1, 0, 3), actual.Results[3].TotalTime);
             Assert.AreEqual("passed", actual.Results[3].Status);
             Assert.AreEqual(4, actual.Results[3].Ordinal);
-        }
-
-        private RaceClassEntity SaveRaceClass(string Name)
-        {
-            var eventClass = new EventClassEntity
-            {
-                ClassStatus = "enterable",
-                Name = Name,
-                ShortName = Name,
-                Sex = "M",
-            };
-            _session.Save(eventClass);
-            var raceClass = new RaceClassEntity
-            {
-                RaceClassName = Name,
-                EventClass = eventClass,
-                EventRace = _eventRace,
-                RaceClassStatus = "started",
-                AllocationMethod = "sNormalDraw",
-                ViewWhichOrganisation = "club",
-                StartMethod = "allocatedStart",
-            };
-            _session.Save(raceClass);
-            return raceClass;
         }
     }
 }

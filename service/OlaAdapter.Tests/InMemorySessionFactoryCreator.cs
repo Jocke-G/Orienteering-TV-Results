@@ -4,8 +4,8 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
-using OlaDatabase;
 using OlaDatabase.Entities;
+using OlaDatabase.Session;
 
 namespace OlaAdapter.Tests
 {

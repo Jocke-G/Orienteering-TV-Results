@@ -3,7 +3,7 @@ using OlaDatabase.Entities;
 
 namespace OlaDatabase.Mappings
 {
-    class EventRaceMapping: ClassMap<EventRaceEntity>
+    class EventRaceMapping : ClassMap<EventRaceEntity>
     {
         EventRaceMapping()
         {
@@ -27,17 +27,20 @@ namespace OlaDatabase.Mappings
             HasMany(x => x.Controls)
                 .KeyColumn("eventRaceId")
                 .ForeignKeyConstraintName("Controls_FK01")
+                .ExtraLazyLoad()
                 .Inverse();
 
             HasMany(x => x.SplitTimeControls)
                 .KeyColumn("eventRaceId")
                 .ForeignKeyConstraintName("SplitTimeControls_FK01")
+                .ExtraLazyLoad()
                 .Inverse();
 
-            //HasMany(x => x.RaceClasses)
-            //.KeyColumn("eventRaceId")
-            //.ForeignKeyConstraintName("RaceClassesEventRaceId")
-            //.Inverse();
+            HasMany(x => x.RaceClasses)
+                .KeyColumn("eventRaceId")
+                .ForeignKeyConstraintName("RaceClasses_FK02")
+                .ExtraLazyLoad()
+                .Inverse();
         }
     }
 }

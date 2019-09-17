@@ -1,5 +1,6 @@
 ﻿using NHibernate;
 using OlaDatabase.RepositoryInterfaces;
+using OlaDatabase.Session;
 using System.Collections.Generic;
 using System.Linq;
 

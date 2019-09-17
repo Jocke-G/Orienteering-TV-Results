@@ -5,7 +5,7 @@ namespace OlaDatabase.Mappings
 {
     class RaceClassSplitTimeControlMapping : ClassMap<RaceClassSplitTimeControlEntity>
     {
-        public RaceClassSplitTimeControlMapping()
+        RaceClassSplitTimeControlMapping()
         {
             Table("raceclasssplittimecontrols");
 

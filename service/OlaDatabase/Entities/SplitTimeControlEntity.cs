@@ -10,7 +10,7 @@ namespace OlaDatabase.Entities
         public virtual ControlEntity TimingControl { get; set; }
         public virtual EventRaceEntity EventRace { get; set; }
         public virtual DateTime ModifyDate { get; set; }
-        public virtual int ModifiedBy { get; set; }
+        public virtual PersonEntity ModifiedBy { get; set; }
         public virtual IEnumerable<SplitTimeEntity> SplitTime { get; set; }
         public virtual IEnumerable<RaceClassSplitTimeControlEntity> RaceClassSplitTimeControls { get; set; }
     }

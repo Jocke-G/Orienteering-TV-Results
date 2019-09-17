@@ -1,9 +1,11 @@
-﻿namespace OlaDatabase.Entities
+﻿using System.Collections.Generic;
+
+namespace OlaDatabase.Entities
 {
     public class EventClassEntity
     {
         public virtual int EventClassId { get; set; }
-        public virtual int EventId { get; set; }
+        public virtual EventEntity Event { get; set; }
         public virtual string ClassStatus { get; set; }
         public virtual int CollectedTo { get; set; }
         public virtual int DividedFrom { get; set; }
@@ -35,10 +37,18 @@
         public virtual bool AllowEventRaceEntry { get; set; }
         public virtual bool AllowCardReusage { get; set; }
         public virtual string ModifyDate { get; set; }
-        public virtual int ModifiedBy { get; set; }
+        public virtual PersonEntity ModifiedBy { get; set; }
         public virtual int BaseClassId { get; set; }
         public virtual int Sequence { get; set; }
         public virtual int NoOfStarts { get; set; }
         public virtual int NoOfEntries { get; set; }
+        public virtual IEnumerable<EntryEntity> AcceptedEntries { get; set; }
+        public virtual IEnumerable<RaceClassEntity> RaceClasses { get;  set; }
+
+        public EventClassEntity()
+        {
+            AcceptedEntries = new List<EntryEntity>();
+            RaceClasses = new List<RaceClassEntity>();
+        }
     }
 }

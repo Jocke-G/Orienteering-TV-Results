@@ -4,6 +4,7 @@ using NHibernate;
 using OlaDatabase;
 using OlaDatabase.Entities;
 using OlaDatabase.RepositoryInterfaces;
+using OlaDatabase.Session;
 using OrienteeringTvResults.Model;
 using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
@@ -18,16 +19,14 @@ namespace OlaAdapter.Tests.UnitTests
         public void TestGetClass()
         {
             var mockSession = new Mock<ISession>();
-//            var mockSessionFactory = new Mock<ISessionFactory>();
-//            mockSessionFactory.Setup(r => r.OpenSession()).Returns(mockSession.Object);
             var mockSessionFactoryCreator = new Mock<ISessionFactoryCreator>();
             mockSessionFactoryCreator.Setup(x => x.GetSession()).Returns(mockSession.Object);
 
             SessionFactoryHelper.Initialize(mockSessionFactoryCreator.Object);
 
             var mockResultsRepository = new Mock<IRaceClassRepository>();
-            mockResultsRepository.Setup(x => x.GetByEventRaceIdAndId(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns<int, int>((i1, i2) =>
+            mockResultsRepository.Setup(x => x.GetByEventClassId(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns<int, int, int>((i1, i2, i3) =>
                 new RaceClassEntity {
                     EventClass = new EventClassEntity
                     {
@@ -38,7 +37,7 @@ namespace OlaAdapter.Tests.UnitTests
             RepositoryContainer.RaceClassRepository = mockResultsRepository.Object;
 
             var mockResultRepository = new Mock<IResultRepository>();
-            mockResultRepository.Setup(x => x.GetBy(It.IsAny<int>(), It.IsAny<int>())).Returns<int, int>((i1, i2) => new List<ResultEntity>());
+            mockResultRepository.Setup(x => x.GetByEventClassId(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).Returns<int, int, int>((i1, i2, i3) => new List<ResultEntity>());
             RepositoryContainer.ResultRepository = mockResultRepository.Object;
 
             IResultsProcessor target = new ResultsProcessor(new DatabaseConfiguration());

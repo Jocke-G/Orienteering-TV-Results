@@ -25,12 +25,16 @@ namespace OlaDatabase.Entities
         public virtual string ClassTypeComment { get; set; }
         public virtual int ParentEventId { get; set; }
         public virtual string ModifyDate { get; set; }
-        public virtual int ModifiedBy { get; set; }
+        public virtual PersonEntity ModifiedBy { get; set; }
         public virtual IList<EventRaceEntity> EventRaces { get; set; }
+        public virtual IEnumerable<EventClassEntity> EventClasses { get; set; }
+        public virtual IEnumerable<EntryEntity> Entries { get; set; }
 
         public EventEntity()
         {
             EventRaces = new List<EventRaceEntity>();
+            EventClasses = new List<EventClassEntity>();
+            Entries = new List<EntryEntity>();
         }
     }
 }

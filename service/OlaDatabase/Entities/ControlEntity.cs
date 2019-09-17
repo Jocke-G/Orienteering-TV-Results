@@ -19,7 +19,12 @@ namespace OlaDatabase.Entities
         public virtual double XPos { get; set; }
         public virtual double YPos { get; set; }
         public virtual DateTime ModifyDate { get; set; }
-        public virtual int ModifiedBy { get; set; }
+        public virtual PersonEntity ModifiedBy { get; set; }
         public virtual IEnumerable<SplitTimeControlEntity> SplitTimeControls { get; set; }
+
+        public ControlEntity()
+        {
+            SplitTimeControls = new List<SplitTimeControlEntity>();
+        }
     }
 }

@@ -18,13 +18,15 @@ namespace OlaDatabase.Entities
         public virtual long YPos { get; set; }
         public virtual string ModifyDate { get; set; }
         public virtual int ModifiedBy { get; set; }
-        public virtual List<RaceClassEntity> RaceClasses { get; set; }
+        public virtual IEnumerable<RaceClassEntity> RaceClasses { get; set; }
         public virtual IEnumerable<ControlEntity> Controls { get; set; }
         public virtual IEnumerable<SplitTimeControlEntity> SplitTimeControls { get; set; }
 
         public EventRaceEntity()
         {
             RaceClasses = new List<RaceClassEntity>();
+            Controls = new List<ControlEntity>();
+            SplitTimeControls = new List<SplitTimeControlEntity>();
         }
     }
 }

@@ -3,15 +3,15 @@ using OlaDatabase.Entities;
 
 namespace OlaDatabase.Mappings
 {
-    class EventClassMapping: ClassMap<EventClassEntity>
+    class EventClassMapping : ClassMap<EventClassEntity>
     {
-        public EventClassMapping()
+        EventClassMapping()
         {
             Table("eventclasses");
 
             Id(x => x.EventClassId, "eventClassId").GeneratedBy.Increment();
 
-            Map(x => x.EventId).Column("eventId").Not.Nullable();
+            References(x => x.Event).Column("eventId").ForeignKey("EventClasses_FK01").Not.Nullable();
             Map(x => x.ClassStatus).Column("classStatus").Not.Nullable();
             Map(x => x.CollectedTo).Column("collectedTo").Nullable();
             Map(x => x.DividedFrom).Column("dividedFrom").Nullable();
@@ -34,20 +34,30 @@ namespace OlaDatabase.Mappings
             Map(x => x.NoTimePresentation).Column("noTimePresentation").Not.Nullable();
             Map(x => x.SubstituteClassId).Column("substituteClassId").Nullable();
             Map(x => x.NotQualifiedSubstitutionClassId).Column("notQualifiedSubstitutionClassId").Nullable();
-            Map(x => x.ClassTypeId).Column("classTypeId").Not.Nullable();
+            Map(x => x.ClassTypeId).Column("classTypeId").Not.Nullable(); //Foreign Key - classtypes - EventClasses_FK00
             Map(x => x.NormalizedClass).Column("normalizedClass").Not.Nullable();
-            Map(x => x.BadgeGroupId).Column("badgeGroupId").Nullable();
+            Map(x => x.BadgeGroupId).Column("badgeGroupId").Nullable(); //Foreign Key - badgegroups - EventClasses_FK03
             Map(x => x.NumberOfPrizesTotal).Column("numberOfPrizesTotal").Nullable();
             Map(x => x.NoTotalResult).Column("noTotalResult").Not.Nullable();
             Map(x => x.AllowEntryInAdvance).Column("allowEntryInAdvance").Not.Nullable();
             Map(x => x.AllowEventRaceEntry).Column("allowEventRaceEntry").Nullable();
             Map(x => x.AllowCardReusage).Column("allowCardReusage").Nullable();
             Map(x => x.ModifyDate).Column("modifyDate").Nullable();
-            Map(x => x.ModifiedBy).Column("modifiedBy").Nullable();
+            References(x => x.ModifiedBy).Column("modifiedBy").ForeignKey("EventClasses_FK02").Nullable();
             Map(x => x.BaseClassId).Column("baseClassId").Nullable();
             Map(x => x.Sequence).Column("sequence").Nullable();
             Map(x => x.NoOfStarts).Column("noOfStarts").Nullable();
             Map(x => x.NoOfEntries).Column("noOfEntries").Nullable();
+
+            HasMany(x => x.AcceptedEntries)
+                .KeyColumn("acceptedEventClassId")
+                .ForeignKeyConstraintName("Entries_FK01")
+                .Inverse();
+
+            HasMany(x => x.RaceClasses)
+                .KeyColumn("eventClassId")
+                .ForeignKeyConstraintName("RaceClasses_FK01")
+                .Inverse();
         }
     }
 }

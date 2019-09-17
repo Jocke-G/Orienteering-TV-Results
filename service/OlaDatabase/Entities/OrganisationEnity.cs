@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OlaDatabase.Entities
 {
@@ -16,6 +17,12 @@ namespace OlaDatabase.Entities
         public virtual DateTime MemberToDate { get; set; }
         public virtual string MediaName { get; set; }
         public virtual string ModifyDate { get; set; }
-        public virtual int ModifiedBy { get; set; }
+        public virtual PersonEntity ModifiedBy { get; set; }
+        public virtual IEnumerable<EntryEntity> Entries { get; set; }
+
+        public OrganisationEnity()
+        {
+            Entries = new List<EntryEntity>();
+        }
     }
 }

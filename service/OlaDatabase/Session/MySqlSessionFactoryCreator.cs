@@ -5,7 +5,7 @@ using NHibernate.Context;
 using OlaDatabase.Entities;
 using OrienteeringTvResults.Model.Configuration;
 
-namespace OlaDatabase
+namespace OlaDatabase.Session
 {
     public class MySqlSessionFactoryCreator: ISessionFactoryCreator
     {

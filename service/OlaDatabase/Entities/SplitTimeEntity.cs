@@ -9,7 +9,7 @@ namespace OlaDatabase.Entities
         public virtual DateTime PassedTime { get; set; }
         public virtual int SplitTime { get; set; }
         public virtual DateTime ModifyDate { get; set; }
-        public virtual int ModifiedBy { get; set; }
+        public virtual PersonEntity ModifiedBy { get; set; }
     }
 
     public class SplitTimeEntityKey : IEquatable<SplitTimeEntityKey>

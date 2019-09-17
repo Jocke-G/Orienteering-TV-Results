@@ -3,41 +3,31 @@ using OlaDatabase.RepositoryInterfaces;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OlaDatabase
+namespace OlaDatabase.Repositories
 {
-    public class RaceClassRepository : IRaceClassRepository
+    public class RaceClassRepository : RepositoryWithTypedId<RaceClassEntity, int>, IRaceClassRepository
     {
-        public IList<RaceClassEntity> GetByEventRaceId(int eventRaceId)
+        public IEnumerable<RaceClassEntity> GetByEventIdAndEventRaceId(int eventId, int eventRaceId)
         {
-            var session = SessionFactoryHelper.GetSession();
-            var raceClasses = session.Query<RaceClassEntity>()
-                .Where(
-                    x => x.EventRace.EventRaceId == eventRaceId
-                ).ToList();
-            return raceClasses;
-
+            return Repository.Where(x => x.EventRace.Event.EventId == eventId && x.EventRace.EventRaceId == eventRaceId);
         }
 
-        public RaceClassEntity GetByEventRaceIdAndId(int eventRaceId, int classId)
+        public RaceClassEntity GetById(int eventId, int eventRaceId, int id)
         {
-            var session = SessionFactoryHelper.GetSession();
-            var raceClass = session.Query<RaceClassEntity>()
-                .Where(
-                    x => x.EventRace.EventRaceId == eventRaceId
-                    && x.EventClass.EventClassId == classId
-                ).First();
-            return raceClass;
+            return GetByEventIdAndEventRaceId(eventId, eventRaceId)
+                .SingleOrDefault(x => x.RaceClassId == id);
         }
 
-        public RaceClassEntity GetByShortName(int eventRaceId, string shortName)
+        public RaceClassEntity GetByEventClassId(int eventId, int eventRaceId, int eventClassId)
         {
-            var session = SessionFactoryHelper.GetSession();
-            var raceClass = session.Query<RaceClassEntity>()
-                .Where(
-                    x => x.EventRace.EventRaceId == eventRaceId
-                    && x.EventClass.ShortName == shortName
-                ).First();
-            return raceClass;
+            return GetByEventIdAndEventRaceId(eventId, eventRaceId)
+                .SingleOrDefault(x => x.EventClass.EventClassId == eventClassId);
+        }
+
+        public RaceClassEntity GetByShortName(int eventId, int eventRaceId, string shortName)
+        {
+            return GetByEventIdAndEventRaceId(eventId, eventRaceId)
+                .SingleOrDefault(x => x.EventClass.ShortName == shortName);
         }
     }
 }

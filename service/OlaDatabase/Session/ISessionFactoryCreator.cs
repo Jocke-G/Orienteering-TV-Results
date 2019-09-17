@@ -1,6 +1,6 @@
 ﻿using NHibernate;
 
-namespace OlaDatabase
+namespace OlaDatabase.Session
 {
     public interface ISessionFactoryCreator
     {

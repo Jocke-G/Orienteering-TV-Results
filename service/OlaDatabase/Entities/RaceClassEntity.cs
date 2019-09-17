@@ -45,7 +45,7 @@ namespace OlaDatabase.Entities
         public virtual int StartsPerInterval { get; set; }
         public virtual int MaxNumberInRaceClass { get; set; }
         public virtual DateTime ModifyDate { get; set; }
-        public virtual int ModifiedBy { get; set; }
+        public virtual PersonEntity ModifiedBy { get; set; }
         public virtual IList<ResultEntity> Results { get; set; }
         public virtual IEnumerable<RaceClassSplitTimeControlEntity> RaceClassSplitTimeControls { get;set;}
 

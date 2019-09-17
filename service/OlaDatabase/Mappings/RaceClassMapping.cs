@@ -13,10 +13,8 @@ namespace OlaDatabase.Mappings
 
             Map(x => x.RaceClassName).Column("raceClassName").Not.Nullable();
             Map(x => x.RaceClassLength).Column("raceClassLength").Nullable();
-            //Map(x => x.EventClassId).Column("eventClassId").Nullable();
-            References(x => x.EventClass).Column("eventClassId").ForeignKey("RaceClassesEventClassId").Not.Nullable();
-            //Map(x => x.EventRaceId).Column("eventRaceId").Nullable();
-            References(x => x.EventRace).Column("eventRaceId").ForeignKey("RaceClassesEventRaceId").Nullable();
+            References(x => x.EventClass).Column("eventClassId").ForeignKey("RaceClasses_FK01").Not.Nullable();
+            References(x => x.EventRace).Column("eventRaceId").ForeignKey("RaceClasses_FK02").Nullable();
             Map(x => x.FirstStartTime).Column("firstStartTime").Nullable();
             Map(x => x.StartInterval).Column("startInterval").Nullable();
             Map(x => x.StartUnit).Column("startUnit").Nullable();
@@ -31,7 +29,7 @@ namespace OlaDatabase.Mappings
             Map(x => x.StartNumberBase).Column("startNumberBase").Nullable();
             Map(x => x.StartNumberInherit).Column("startNumberInherit").Nullable();
             Map(x => x.FinishChute).Column("finishChute").Nullable();
-            Map(x => x.BadgeGroupId).Column("badgeGroupId").Nullable();
+            Map(x => x.BadgeGroupId).Column("badgeGroupId").Nullable(); // Foreign Key - badgegroups - RaceClasses_FK00
             Map(x => x.RaceClassStatus).Column("raceClassStatus").Not.Nullable();
             Map(x => x.AllocationMethod).Column("allocationMethod").Not.Nullable();
             Map(x => x.ViewWhichOrganisation).Column("viewWhichOrganisation").Not.Nullable();
@@ -52,7 +50,7 @@ namespace OlaDatabase.Mappings
             Map(x => x.StartsPerInterval).Column("startsPerInterval").Nullable();
             Map(x => x.MaxNumberInRaceClass).Column("maxNumberInRaceClass").Nullable();
             Map(x => x.ModifyDate).Column("modifyDate").Nullable();
-            Map(x => x.ModifiedBy).Column("modifiedBy").Nullable();
+            References(x => x.ModifiedBy).Column("modifiedBy").ForeignKey("RaceClasses_FK03").Nullable();
 
             HasMany(x => x.Results)
                 .KeyColumn("raceClassId")

@@ -6,50 +6,29 @@ using OlaDatabase.RepositoryInterfaces;
 
 namespace OlaDatabase.Repositories
 {
-    public class ResultRepository : IResultRepository
+    public class ResultRepository : RepositoryWithTypedId<ResultEntity, int>, IResultRepository
     {
-        public IList<ResultEntity> GetBy(int eventRaceId, int eventClassId)
+        public IEnumerable<ResultEntity> GetByEventIdAndEventRaceId(int eventId, int eventRaceId)
         {
-            var session = SessionFactoryHelper.GetSession();
-            var preferences = new List<string> {
-            "passed",
-            "finished",
-            "notValid",
-            "finishedTimeOk",
-            "finishedPunchOk",
-            "disqualified",
-            "movedUp",
-            "walkOver",
-            "started",
-            "notActivated",
-            "notParticipating",
-            "notStarted"
-        };
+            return Repository.Where(x => x.RaceClass.EventRace.Event.EventId == eventId && x.RaceClass.EventRace.EventRaceId == eventRaceId);
+        }
 
-            var results = session.Query<ResultEntity>().Where(
-                x => x.RaceClass.EventRace.EventRaceId == eventRaceId
-                    && x.RaceClass.EventClass.EventClassId == eventClassId
-                ).ToList();
-            var orderedResults = results.OrderBy(item => preferences.IndexOf(item.RunnerStatus)).ThenBy(x => x.TotalTime).ToList();
+        public ResultEntity GetById(int eventId, int eventRaceId, int id)
+        {
+            return GetByEventIdAndEventRaceId(eventId, eventRaceId)
+                .SingleOrDefault(x => x.ResultId == id);
+        }
 
-            return orderedResults;
+        public IEnumerable<ResultEntity> GetByEventClassId(int eventId, int eventRaceId, int eventClassId)
+        {
+            return GetByEventIdAndEventRaceId(eventId, eventRaceId)
+                .Where(x => x.RaceClass.EventClass.EventClassId == eventClassId);
         }
 
         public bool HasNewResults(int eventId, int eventRaceId, int eventClassId, DateTime lastCheckTime)
         {
-            var results = GetResults(eventId, eventRaceId, eventClassId);
-            return results.Any(x => x.ModifyDate > lastCheckTime);
-        }
-
-        private IEnumerable<ResultEntity> GetResults(int eventId, int eventRaceId, int eventClassId)
-        {
-            var session = SessionFactoryHelper.GetSession();
-
-            var results = session.Query<ResultEntity>()
-                .Where(x => x.RaceClass.EventRace.EventRaceId == eventRaceId
-                   && x.RaceClass.EventClass.EventClassId == eventClassId);
-
-            return results;
+            return GetByEventClassId(eventId, eventRaceId, eventClassId)
+                .Any(x => x.ModifyDate > lastCheckTime);
         }
     }
 }

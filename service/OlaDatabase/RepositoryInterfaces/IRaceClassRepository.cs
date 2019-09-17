@@ -1,12 +1,10 @@
 ﻿using OlaDatabase.Entities;
-using System.Collections.Generic;
 
 namespace OlaDatabase.RepositoryInterfaces
 {
-    public interface IRaceClassRepository
+    public interface IRaceClassRepository : IRepositoryWithEventIdAndEventRaceIdAndTypedId<RaceClassEntity, int>
     {
-        IList<RaceClassEntity> GetByEventRaceId(int eventRaceId);
-        RaceClassEntity GetByEventRaceIdAndId(int eventRaceId, int classId);
-        RaceClassEntity GetByShortName(int eventRaceId, string shortName);
+        RaceClassEntity GetByEventClassId(int eventId, int eventRaceId, int eventClassId);
+        RaceClassEntity GetByShortName(int eventId, int eventRaceId, string shortName);
     }
 }

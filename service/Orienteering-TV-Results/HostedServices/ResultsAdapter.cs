@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using OlaDatabase;
+using OlaDatabase.Session;
 using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
 

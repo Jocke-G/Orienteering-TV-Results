@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace OlaDatabase.RepositoryInterfaces
 {
-    public interface IResultRepository
+    public interface IResultRepository : IRepositoryWithEventIdAndEventRaceIdAndTypedId<ResultEntity, int>
     {
-        IList<ResultEntity> GetBy(int eventRaceId, int eventClassId);
+        IEnumerable<ResultEntity> GetByEventClassId(int eventId, int eventRaceId, int eventClassId);
         bool HasNewResults(int eventId, int eventRaceId, int raceClassId, DateTime lastCheckTime);
     }
 }
