@@ -46,8 +46,8 @@ namespace OlaAdapter.Tests.IntegrationTests
             _session.Flush();
 
 
-            var target = new ResultsProcessor(new DatabaseConfiguration());
-            var actual = target.GetClasses(1, 1);
+            var target = new ResultsProcessor(new DatabaseConfiguration { Competition = 1, Stage = 1 });
+            var actual = target.GetClasses();
 
             Assert.AreEqual(2, actual.Count);
             Assert.AreEqual("H21", actual[0].ShortName);
@@ -62,8 +62,8 @@ namespace OlaAdapter.Tests.IntegrationTests
             _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "MrWinner", "Winnersson", organisation, "passed", new TimeSpan(1, 2, 3));
             _session.Flush();
 
-            var target = new ResultsProcessor(new DatabaseConfiguration());
-            var actual = target.GetClass(1, 1, 1);
+            var target = new ResultsProcessor(new DatabaseConfiguration { Competition = 1, Stage = 1 });
+            var actual = target.GetClass(1);
 
             Assert.AreEqual("H21", actual.ShortName);
             Assert.AreEqual(1, actual.Results.Count);
@@ -85,8 +85,8 @@ namespace OlaAdapter.Tests.IntegrationTests
             _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "gubbe3e", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 3));
             _session.Flush();
 
-            var target = new ResultsProcessor(new DatabaseConfiguration());
-            var actual = target.GetClass(1, 1, 1);
+            var target = new ResultsProcessor(new DatabaseConfiguration { Competition = 1, Stage = 1 });
+            var actual = target.GetClass(1);
 
             Assert.AreEqual("H21", actual.ShortName);
             Assert.AreEqual(3, actual.Results.Count);
@@ -124,8 +124,8 @@ namespace OlaAdapter.Tests.IntegrationTests
             _dataHelper.CreatePersonAndEntryAndResult(_eventEntity, raceClass, "gubbe3e", "Winnersson", organisation, "passed", new TimeSpan(1, 0, 2));
             _session.Flush();
 
-            var target = new ResultsProcessor(new DatabaseConfiguration());
-            var actual = target.GetClass(1, 1, 1);
+            var target = new ResultsProcessor(new DatabaseConfiguration { Competition = 1, Stage = 1 });
+            var actual = target.GetClass(1);
 
             Assert.AreEqual("H21", actual.ShortName);
             Assert.AreEqual(4, actual.Results.Count);

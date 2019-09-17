@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using OlaDatabase.Session;
+using OrienteeringTvResults.Model;
 using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
 
@@ -7,9 +8,9 @@ namespace OrienteeringTvResults
 {
     public class ResultsAdapter
     {
-        private ResultsProcessor _processor;
+        private IResultsProcessor _processor;
 
-        public ResultsProcessor Processor { get { return _processor; } }
+        public IResultsProcessor Processor { get { return _processor; } }
 
         public ResultsAdapter(IOptions<ApplicationConfiguration> conf)
         {

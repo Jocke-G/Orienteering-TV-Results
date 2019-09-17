@@ -8,7 +8,6 @@ using OlaDatabase.Session;
 using OrienteeringTvResults.Model;
 using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
-using System.Collections.Generic;
 
 namespace OlaAdapter.Tests.UnitTests
 {
@@ -25,7 +24,7 @@ namespace OlaAdapter.Tests.UnitTests
             SessionFactoryHelper.Initialize(mockSessionFactoryCreator.Object);
 
             var mockResultsRepository = new Mock<IRaceClassRepository>();
-            mockResultsRepository.Setup(x => x.GetByEventClassId(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+            mockResultsRepository.Setup(x => x.GetById(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns<int, int, int>((i1, i2, i3) =>
                 new RaceClassEntity {
                     EventClass = new EventClassEntity
@@ -36,12 +35,8 @@ namespace OlaAdapter.Tests.UnitTests
                 });
             RepositoryContainer.RaceClassRepository = mockResultsRepository.Object;
 
-            var mockResultRepository = new Mock<IResultRepository>();
-            mockResultRepository.Setup(x => x.GetByEventClassId(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).Returns<int, int, int>((i1, i2, i3) => new List<ResultEntity>());
-            RepositoryContainer.ResultRepository = mockResultRepository.Object;
-
-            IResultsProcessor target = new ResultsProcessor(new DatabaseConfiguration());
-            var actual = target.GetClass(1, 1, 1);
+            IResultsProcessor target = new ResultsProcessor(new DatabaseConfiguration { Competition = 1, Stage = 1 });
+            var actual = target.GetClass(1);
 
             Assert.AreEqual("H21", actual.ShortName);
         }

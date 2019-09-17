@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using OrienteeringTvResults.OlaAdapter;
+using OrienteeringTvResults.Model;
 
 namespace OrienteeringTvResults.Rest
 {
@@ -9,33 +9,11 @@ namespace OrienteeringTvResults.Rest
     [ApiController]
     public class CompetitionsController : Controller
     {
-        private ResultsProcessor _results;
+        private IResultsProcessor _results;
 
         public CompetitionsController(ResultsAdapter adapter)
         {
             _results = adapter.Processor;
-        }
-
-        [HttpGet("classes")]
-        public JsonResult GetClasses()
-        {
-            var classes = _results.GetClasses();
-            return new JsonResult(classes);
-        }
-
-        [HttpGet("classes/{shortName}")]
-        public JsonResult GetClasses(string shortName)
-        {
-            var competitionClass = _results.GetClass(shortName);
-            return new JsonResult(competitionClass);
-        }
-
-        [HttpGet("splittimecontrols/{competitionId}/{stageId}")]
-        public JsonResult GetSplitTimeControls(int competitionId, int stageId)
-        {
-            var splitTimeControls = _results.GetSplitTimeControls(competitionId, stageId);
-            var result = new JsonResult(splitTimeControls);
-            return result;
         }
 
         [HttpGet("competitions")]
@@ -52,17 +30,17 @@ namespace OrienteeringTvResults.Rest
             return new JsonResult(competition);
         }
 
-        [HttpGet("competitions/{competitionId}/{stageId}")]
-        public JsonResult Stage(int competitionId, int stageId)
+        [HttpGet("classes")]
+        public JsonResult GetClasses()
         {
-            var stage = _results.GetStage(competitionId, stageId);
-            return new JsonResult(stage);
+            var competitionClasses = _results.GetClasses();
+            return new JsonResult(competitionClasses);
         }
 
-        [HttpGet("competitions/{competitionId}/{stageId}/{classId}")]
-        public IActionResult ClassResults(int competitionId, int stageId, int classId)
+        [HttpGet("classes/{shortName}")]
+        public JsonResult GetClasses(string shortName)
         {
-            var competitionClass = _results.GetClass(competitionId, stageId, classId);
+            var competitionClass = _results.GetClass(shortName);
             return new JsonResult(competitionClass);
         }
     }
