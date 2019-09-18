@@ -10,8 +10,8 @@ namespace OlaDatabase.Mappings
             Table("raceclasssplittimecontrols");
 
             CompositeId(x => x.Id)
-                .KeyReference(x => x.RaceClass, "raceClassId")
-                .KeyReference(x => x.SplitTimeControl, "splitTimeControlId");
+                .KeyReference(x => x.RaceClass, x => x.ForeignKey("RaceClassSplitTimeControl_FK00"), "raceClassId")
+                .KeyReference(x => x.SplitTimeControl, x => x.ForeignKey("RaceClassSplitTimeControl_FK01"), "splitTimeControlId");
 
             Map(x => x.Ordered).Column("ordered").Not.Nullable();
             Map(x => x.EstimatedBestTime).Column("estimatedBestTime").Nullable();

@@ -1,21 +1,28 @@
-﻿using OlaDatabase.Entities;
+﻿using NHibernate.Linq;
+using OlaDatabase.Entities;
 using OlaDatabase.RepositoryInterfaces;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace OlaDatabase.Repositories
 {
     public class RaceClassRepository : RepositoryWithTypedId<RaceClassEntity, int>, IRaceClassRepository
     {
-        public IEnumerable<RaceClassEntity> GetByEventIdAndEventRaceId(int eventId, int eventRaceId)
+        public IQueryable<RaceClassEntity> GetByEventIdAndEventRaceId(int eventId, int eventRaceId)
         {
-            return Repository.Where(x => x.EventRace.Event.EventId == eventId && x.EventRace.EventRaceId == eventRaceId);
+            return Repository
+                .Where(x => x.EventRace.Event.EventId == eventId 
+                && x.EventRace.EventRaceId == eventRaceId);
         }
 
         public RaceClassEntity GetById(int eventId, int eventRaceId, int id)
         {
             return GetByEventIdAndEventRaceId(eventId, eventRaceId)
-                .SingleOrDefault(x => x.RaceClassId == id);
+                .Where(x => x.RaceClassId == id)
+                .FetchMany(x => x.RaceClassSplitTimeControls)
+                .ThenFetch(x => x.Id)
+                .ThenFetch(x => x.SplitTimeControl)
+                .SingleOrDefault();
+            ;
         }
 
         public RaceClassEntity GetByEventClassId(int eventId, int eventRaceId, int eventClassId)
@@ -27,7 +34,11 @@ namespace OlaDatabase.Repositories
         public RaceClassEntity GetByShortName(int eventId, int eventRaceId, string shortName)
         {
             return GetByEventIdAndEventRaceId(eventId, eventRaceId)
-                .SingleOrDefault(x => x.EventClass.ShortName == shortName);
+                .Where(x => x.EventClass.ShortName == shortName)
+                .FetchMany(x => x.RaceClassSplitTimeControls)
+                .ThenFetch(x => x.Id)
+                .ThenFetch(x => x.SplitTimeControl)
+                .SingleOrDefault();
         }
     }
 }

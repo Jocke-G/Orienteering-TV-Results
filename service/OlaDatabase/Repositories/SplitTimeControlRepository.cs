@@ -7,7 +7,7 @@ namespace OlaDatabase.Repositories
 {
     public class SplitTimeControlRepository : RepositoryWithTypedId<SplitTimeControlEntity, int>, IRepositoryWithEventIdAndEventRaceIdAndTypedId<SplitTimeControlEntity, int>
     {
-        public IEnumerable<SplitTimeControlEntity> GetByEventIdAndEventRaceId(int eventId, int eventRaceId)
+        public IQueryable<SplitTimeControlEntity> GetByEventIdAndEventRaceId(int eventId, int eventRaceId)
         {
             return Repository.Where(x => x.EventRace.Event.EventId == eventId && x.EventRace.EventRaceId == eventRaceId);
         }

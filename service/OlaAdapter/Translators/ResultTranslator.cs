@@ -8,7 +8,7 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
 {
     static class ResultTranslator
     {
-        internal static IList<Result> ToResultsWithoutTime(IList<ResultEntity> resultEntitiess)
+        internal static IList<Result> ToResultsWithoutTime(IEnumerable<ResultEntity> resultEntitiess)
         {
             var results = new List<Result>();
 
@@ -79,12 +79,13 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
                 }
                 else
                 {
+                    var ordinal = 1 + raceClassSplitTimeControl.Id.RaceClass.Results.Where(x => x.SplitTimes.Any(y => y.Id.SplitTimeControl.RaceClassSplitTimeControls.Any(z => z.Id.SplitTimeControl == raceClassSplitTimeControl.Id.SplitTimeControl && y.SplitTime < splitTime.SplitTime))).Count();
                     splitTimes.Add(new SplitTime
                     {
                         Time = TimeSpan.FromSeconds(splitTime.SplitTime / 100),
                         Number = splitTime.Id.SplitTimeControl.TimingControl.Id,
                         PassedCount = splitTime.Id.PassedCount,
-                        Ordinal = 1 + raceClassSplitTimeControl.Id.RaceClass.Results.Where(x => x.SplitTimes.Any(y => y.Id.SplitTimeControl.RaceClassSplitTimeControls.Any(z => z.Id.SplitTimeControl == raceClassSplitTimeControl.Id.SplitTimeControl && y.SplitTime < splitTime.SplitTime))).Count(),
+                        Ordinal = ordinal,
                     });
                 }
             }

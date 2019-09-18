@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using OrienteeringTvResults.Model;
+using System;
 
 namespace OrienteeringTvResults.Rest
 {
@@ -41,6 +42,20 @@ namespace OrienteeringTvResults.Rest
         public JsonResult GetClasses(string shortName)
         {
             var competitionClass = _results.GetClass(shortName);
+            return new JsonResult(competitionClass);
+        }
+
+        [HttpGet("classById/{competitionClassId}")]
+        public JsonResult GetClasses(int competitionClassId)
+        {
+            var competitionClass = _results.GetClass(competitionClassId);
+            return new JsonResult(competitionClass);
+        }
+
+        [HttpGet("classhasnewresults/{competitionClassId}/{lastCheckTime}")]
+        public JsonResult ClassHasNewResults(int competitionClassId, DateTime lastCheckTime)
+        {
+            var competitionClass = _results.ClassHasNewResults(competitionClassId, lastCheckTime);
             return new JsonResult(competitionClass);
         }
     }

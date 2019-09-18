@@ -1,14 +1,13 @@
 ﻿using NHibernate;
 using OlaDatabase.RepositoryInterfaces;
 using OlaDatabase.Session;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace OlaDatabase.Repositories
 {
     public class RepositoryWithTypedId<T, TId> : IRepositoryWithTypedId<T, TId> where T : class
     {
-        public IEnumerable<T> Repository
+        public IQueryable<T> Repository
         {
             get
             {

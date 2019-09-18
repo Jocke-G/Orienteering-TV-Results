@@ -27,19 +27,16 @@ namespace OlaDatabase.Mappings
             HasMany(x => x.Controls)
                 .KeyColumn("eventRaceId")
                 .ForeignKeyConstraintName("Controls_FK01")
-                .ExtraLazyLoad()
                 .Inverse();
 
             HasMany(x => x.SplitTimeControls)
                 .KeyColumn("eventRaceId")
                 .ForeignKeyConstraintName("SplitTimeControls_FK01")
-                .ExtraLazyLoad()
                 .Inverse();
 
             HasMany(x => x.RaceClasses)
                 .KeyColumn("eventRaceId")
                 .ForeignKeyConstraintName("RaceClasses_FK02")
-                .ExtraLazyLoad()
                 .Inverse();
         }
     }

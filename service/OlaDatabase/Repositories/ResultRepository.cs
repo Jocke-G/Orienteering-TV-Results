@@ -8,7 +8,7 @@ namespace OlaDatabase.Repositories
 {
     public class ResultRepository : RepositoryWithTypedId<ResultEntity, int>, IResultRepository
     {
-        public IEnumerable<ResultEntity> GetByEventIdAndEventRaceId(int eventId, int eventRaceId)
+        public IQueryable<ResultEntity> GetByEventIdAndEventRaceId(int eventId, int eventRaceId)
         {
             return Repository.Where(x => x.RaceClass.EventRace.Event.EventId == eventId && x.RaceClass.EventRace.EventRaceId == eventRaceId);
         }
@@ -29,6 +29,12 @@ namespace OlaDatabase.Repositories
         {
             return GetByEventClassId(eventId, eventRaceId, eventClassId)
                 .Any(x => x.ModifyDate > lastCheckTime);
+        }
+
+        public IQueryable<ResultEntity> GetByRaceClassId(int eventId, int eventRaceId, int raceClassId)
+        {
+            return GetByEventIdAndEventRaceId(eventId, eventRaceId)
+                .Where(x => x.RaceClass.RaceClassId == raceClassId);
         }
     }
 }

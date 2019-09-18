@@ -100,7 +100,7 @@ namespace OlaAdapter.Tests
                 Entry = entry,
                 TotalTime = (int)totalTime.TotalSeconds * 100,
             };
-            raceClass.Results.Add(result);
+            //raceClass.Results.Add(result);
             _session.Save(result);
         }
     }

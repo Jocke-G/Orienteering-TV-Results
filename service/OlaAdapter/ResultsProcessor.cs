@@ -1,4 +1,5 @@
-﻿using OlaDatabase;
+﻿using NHibernate.Linq;
+using OlaDatabase;
 using OlaDatabase.Session;
 using OrienteeringTvResults.Model;
 using OrienteeringTvResults.Model.Configuration;
@@ -41,7 +42,12 @@ namespace OrienteeringTvResults.OlaAdapter
         {
             using (var session = new SessionFactoryHelper())
             {
-                var raceClasses = RepositoryContainer.RaceClassRepository.GetByEventIdAndEventRaceId(_competitionId, _stageId);
+                var raceClasses = RepositoryContainer.RaceClassRepository
+                    .GetByEventIdAndEventRaceId(_competitionId, _stageId)
+                    .Fetch(x => x.EventClass)
+                    .FetchMany(x => x.RaceClassSplitTimeControls)
+                    .ThenFetch(x => x.Id)
+                    .ThenFetch(x => x.SplitTimeControl);
                 return ClassTranslator.ToClasses(raceClasses);
             }
         }
@@ -50,7 +56,8 @@ namespace OrienteeringTvResults.OlaAdapter
         {
             using (var session = new SessionFactoryHelper())
             {
-                var raceClass = RepositoryContainer.RaceClassRepository.GetById(_competitionId, _stageId, raceClassId);
+                var raceClass = RepositoryContainer.RaceClassRepository
+                    .GetById(_competitionId, _stageId, raceClassId);
                 return ClassTranslator.ToClassWithResults(raceClass);
             }
         }
@@ -59,7 +66,8 @@ namespace OrienteeringTvResults.OlaAdapter
         {
             using (var session = new SessionFactoryHelper())
             {
-                var raceClass = RepositoryContainer.RaceClassRepository.GetByShortName(_competitionId, _stageId, shortName);
+                var raceClass = RepositoryContainer.RaceClassRepository
+                    .GetByShortName(_competitionId, _stageId, shortName);
                 return ClassTranslator.ToClassWithResults(raceClass);
             }
         }
