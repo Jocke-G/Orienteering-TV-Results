@@ -47,12 +47,14 @@ namespace OlaDatabase.Entities
         public virtual DateTime ModifyDate { get; set; }
         public virtual PersonEntity ModifiedBy { get; set; }
         public virtual IEnumerable<ResultEntity> Results { get; set; }
-        public virtual IEnumerable<RaceClassSplitTimeControlEntity> RaceClassSplitTimeControls { get;set;}
+        public virtual IEnumerable<RaceClassSplitTimeControlEntity> RaceClassSplitTimeControls { get; set; }
+        public virtual IEnumerable<RaceClassCourseEntity> RaceClassCourses { get; set; }
 
         public RaceClassEntity()
         {
             Results = new List<ResultEntity>();
             RaceClassSplitTimeControls = new List<RaceClassSplitTimeControlEntity>();
+            RaceClassCourses = new List<RaceClassCourseEntity>();
         }
     }
 }

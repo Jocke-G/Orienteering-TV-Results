@@ -22,27 +22,26 @@ class ClassResultsView extends Component<AppProps> {
         )}
           {(() => {
           switch(this.props.result.Status) {
-            case 'notValid':
-              return <td colSpan={2} align='right'><i>Ej Godkänd</i></td>;
-            case 'disqualified':
-              return <td colSpan={2} align='right'><i>Diskvalificerad</i></td>;
-            case 'notStarted':
-              return <td colSpan={2} align='right'><i>Ej start</i></td>;
-
-            case 'passed':
+            case 'Passed':
               return (
                 <Fragment>
                   <td align='right'>{ this.props.result.Ordinal }</td>
                   <td align='right'>{ this.props.result.TotalTime }</td>
                 </Fragment>
               );
-            case 'resultPrel':
+            case 'Finished':
               return (
                 <Fragment>
                   <td align='right'>({ this.props.result.Ordinal })</td>
                   <td align='right'>{ this.props.result.TotalTime }</td>
                 </Fragment>
               );
+            case 'NotFinishedYet':
+              return <td colSpan={2} align='right'></td>;
+            case 'NotPassed':
+              return <td colSpan={2} align='right'><i>Ej Godkänd</i></td>;
+            case 'NotStarted':
+              return <td colSpan={2} align='right'><i>Ej start</i></td>;
             default:
               return <td colSpan={2} align='right'><i>{ this.props.result.Status }</i></td>
               }

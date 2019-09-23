@@ -17,7 +17,7 @@ namespace OlaDatabase.Mappings
             Map(x => x.ModifyDate, "modifyDate").Nullable();
             References(x => x.ModifiedBy, "modifiedBy").ForeignKey("SplitTimeControls_FK02").Nullable();
 
-            HasMany(x => x.SplitTime)
+            HasMany(x => x.SplitTimes)
                 .KeyColumn("splitTimeControlId")
                 .ForeignKeyConstraintName("SplitTimes_FK01")
                 .Inverse();

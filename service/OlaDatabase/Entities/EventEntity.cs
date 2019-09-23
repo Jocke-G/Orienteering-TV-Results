@@ -36,5 +36,16 @@ namespace OlaDatabase.Entities
             EventClasses = new List<EventClassEntity>();
             Entries = new List<EntryEntity>();
         }
+
+        public EventEntity(string name, string eventForm = "IndSingleDay", bool punchingManual = false, bool punchingSportIdent = true, bool punchingEmit = false, int eventStatusId = 1)
+            : this()
+        {
+            Name = name;
+            EventForm = eventForm;
+            PunchingManual = punchingManual;
+            PunchingSportIdent = punchingSportIdent;
+            PunchingEmit = punchingEmit;
+            EventStatusId = eventStatusId;
+        }
     }
 }

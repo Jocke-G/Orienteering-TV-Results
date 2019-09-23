@@ -16,8 +16,8 @@ namespace OlaDatabase.Mappings
             References(x => x.Event).Column("eventId").ForeignKey("EventRaces_FK00").Not.Nullable();
             Map(x => x.RaceDate).Column("raceDate").Nullable();
             Map(x => x.RaceStatus).Column("raceStatus").Not.Nullable();
-            Map(x => x.RaceLightCondition).Column("raceLightCondition").Not.Nullable();
-            Map(x => x.RaceDistance).Column("raceDistance").Not.Nullable();
+            Map(x => x.RaceLightCondition, "raceLightCondition").Default("Day").Not.Nullable();
+            Map(x => x.RaceDistance, "raceDistance").Default("Middle").Not.Nullable();
             Map(x => x.AdministrationTime).Column("administrationTime").Nullable();
             Map(x => x.XPos).Column("xPos").Nullable();
             Map(x => x.YPos).Column("yPos").Nullable();
@@ -37,6 +37,11 @@ namespace OlaDatabase.Mappings
             HasMany(x => x.RaceClasses)
                 .KeyColumn("eventRaceId")
                 .ForeignKeyConstraintName("RaceClasses_FK02")
+                .Inverse();
+
+            HasMany(x => x.Courses)
+                .KeyColumn("eventRaceId")
+                .ForeignKeyConstraintName("Courses_FK00")
                 .Inverse();
         }
     }

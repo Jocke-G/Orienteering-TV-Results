@@ -26,5 +26,12 @@ namespace OlaDatabase.Entities
         {
             SplitTimeControls = new List<SplitTimeControlEntity>();
         }
+
+        public ControlEntity(EventRaceEntity eventRace, int id)
+            : this()
+        {
+            EventRace = eventRace;
+            Id = id;
+        }
     }
 }

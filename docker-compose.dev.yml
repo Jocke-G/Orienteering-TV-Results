@@ -33,11 +33,11 @@ services:
       - 'mqtt:host=mosquitto'
       - 'mqtt:clientId=ResultsService'
       - 'database:server=mysql'
-      - 'database:database=tt2017'
+      - 'database:database=ola'
       - 'database:username=TvService'
       - 'database:password=secret'
-      - 'database:competition=3'
-      - 'database:stage=3'
+      - 'database:competition=1'
+      - 'database:stage=1'
     ports:
       - '8080:80'
     volumes:

@@ -13,40 +13,30 @@ namespace OlaAdapter.Tests
             _session = session;
         }
 
+        internal void ClearAndFlush()
+        {
+            _session.Flush();
+            _session.Clear();
+        }
+
         internal EventEntity CreateEvent(string name)
         {
-            var eventEntity = new EventEntity
-            {
-                Name = name,
-                EventForm = "IndSingleDay",
-            };
-
+            var eventEntity = new EventEntity(name);
             _session.Save(eventEntity);
             return eventEntity;
         }
 
         internal EventRaceEntity CreateEventRace(EventEntity eventEntity)
         {
-            var eventRace = new EventRaceEntity
-            {
-                EventRaceId = 1,
-                RaceStatus = "notActivated",
-                RaceLightCondition = "Day",
-                RaceDistance = "Middle",
-                Event = eventEntity,
-            };
+            var eventRace = new EventRaceEntity(eventEntity);
             _session.Save(eventRace);
             return eventRace;
         }
 
         internal OrganisationEnity CreateOrganisation(string name)
         {
-            var organisation = new OrganisationEnity
-            {
-                Name = name,
-            };
+            var organisation = new OrganisationEnity(name, 3, 752);
             _session.Save(organisation);
-
             return organisation;
         }
 
@@ -75,9 +65,65 @@ namespace OlaAdapter.Tests
             return raceClass;
         }
 
-        internal void CreatePersonAndEntryAndResult(EventEntity eventEntity, RaceClassEntity raceClass, string firstName, string familyName, OrganisationEnity organisation, string status, TimeSpan totalTime)
+        internal ControlEntity CrateControl(EventRaceEntity eventRace, int id, string typeCode = "WC")
         {
-            PersonEntity person = new PersonEntity
+            var control = new ControlEntity(eventRace, id)
+            {
+                TypeCode = typeCode,
+            };
+            _session.Save(control);
+            return control;
+        }
+
+        internal SplitTimeControlEntity CreateSplitTimeControl(EventRaceEntity eventRace, ControlEntity control, string name)
+        {
+            var splitTimeControl = new SplitTimeControlEntity(eventRace)
+            {
+                TimingControl = control,
+                Name = name,
+            };
+            _session.Save(splitTimeControl);
+            return splitTimeControl;
+        }
+
+        internal RaceClassSplitTimeControlEntity CreateRaceClassSplitTimeControl(RaceClassEntity raceClass, SplitTimeControlEntity splitTimeControl)
+        {
+            var raceClassSplitTimeControl = new RaceClassSplitTimeControlEntity
+            {
+                Id = new RaceClassSplitTimeControlKey
+                {
+                    RaceClass = raceClass,
+                    SplitTimeControl = splitTimeControl,
+                }
+            };
+            _session.Save(raceClassSplitTimeControl);
+            return raceClassSplitTimeControl;
+        }
+
+        internal CourseEntity CreateCourse(EventRaceEntity eventRace, string name)
+        {
+            var course = new CourseEntity(eventRace, name);
+            _session.Save(course);
+            return course;
+        }
+
+        internal RaceClassCourseEntity CreateRaceClassCourse(RaceClassEntity raceClass, CourseEntity course)
+        {
+            var raceClassCourse = new RaceClassCourseEntity(raceClass, course);
+            _session.Save(raceClassCourse);
+            return raceClassCourse;
+        }
+
+        internal CoursesWaypointControlEntity CreateCourseWaypointControl(CourseEntity course, ControlEntity control, int ordered)
+        {
+            var coursesWaypointControl = new CoursesWaypointControlEntity(course, control, ordered);
+            _session.Save(coursesWaypointControl);
+            return coursesWaypointControl;
+        }
+
+        internal EntryEntity CreatePersonAndEntry(EventEntity eventEntity, string firstName, string familyName, OrganisationEnity organisation)
+        {
+            var person = new PersonEntity
             {
                 FirstName = firstName,
                 FamilyName = familyName,
@@ -92,6 +138,12 @@ namespace OlaAdapter.Tests
                 Event = eventEntity,
             };
             _session.Save(entry);
+            return entry;
+        }
+
+        internal void CreatePersonAndEntryAndResult(EventEntity eventEntity, RaceClassEntity raceClass, string firstName, string familyName, OrganisationEnity organisation, string status, TimeSpan totalTime)
+        {
+            var entry = CreatePersonAndEntry(eventEntity, firstName, familyName, organisation);
 
             var result = new ResultEntity
             {
@@ -100,7 +152,6 @@ namespace OlaAdapter.Tests
                 Entry = entry,
                 TotalTime = (int)totalTime.TotalSeconds * 100,
             };
-            //raceClass.Results.Add(result);
             _session.Save(result);
         }
     }

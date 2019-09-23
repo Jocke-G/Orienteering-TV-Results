@@ -2,8 +2,8 @@
 using OlaDatabase;
 using OlaDatabase.Entities;
 using OrienteeringTvResults.Model;
+using OrienteeringTvResults.OlaAdapter.EagerFetchers;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace OrienteeringTvResults.OlaAdapter.Translators
 {
@@ -26,7 +26,7 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
                 Id = raceClass.EventClass.EventClassId,
                 ShortName = raceClass.EventClass.ShortName,
                 NoTimePresentation = raceClass.EventClass.NoTimePresentation,
-                SplitControls = ToSplitControls(raceClass),
+                SplitControls = SplitTranslator.ToSplitControls(raceClass),
             };
 
             return competitionClass;
@@ -38,13 +38,13 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
 
             var results = RepositoryContainer.ResultRepository
                 .GetByRaceClassId(raceClass.EventRace.Event.EventId, raceClass.EventRace.EventRaceId, raceClass.RaceClassId)
-                .Fetch(x => x.Entry)
-                .ThenFetch(x => x.Competitor)
-                .ThenFetch(x => x.DefaultOrganisation)
-                .FetchMany(x => x.SplitTimes)
-                .ThenFetch(x => x.Id)
-                .ThenFetch(x => x.SplitTimeControl)
-                .ThenFetch(x => x.TimingControl);
+                .EagerlyFetch(x => x.Entry)
+                .ThenEagerlyFetch(x => x.Competitor)
+                .ThenEagerlyFetch(x => x.DefaultOrganisation)
+                .EagerlyFetchMany(x => x.SplitTimes)
+                .ThenEagerlyFetch(x => x.Id)
+                .ThenEagerlyFetch(x => x.SplitTimeControl)
+                .ThenEagerlyFetch(x => x.TimingControl);
 
             if (raceClass.EventClass.NoTimePresentation)
             {
@@ -55,19 +55,6 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
                 competitionClass.Results = ResultTranslator.ToResultsWithTimes(results);
             }
             return competitionClass;
-        }
-
-        internal static IList<SplitControl> ToSplitControls(RaceClassEntity raceClass)
-        {
-            var splitControls = new List<SplitControl>();
-            foreach (var splitControl in raceClass.RaceClassSplitTimeControls.OrderBy(x => x.Ordered))
-            {
-                splitControls.Add(new SplitControl
-                {
-                    Name = splitControl.Id.SplitTimeControl.Name,
-                });
-            }
-            return splitControls;
         }
     }
 }

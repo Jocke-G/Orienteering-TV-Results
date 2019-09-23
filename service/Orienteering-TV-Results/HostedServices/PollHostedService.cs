@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.Mqtt;
 using System;
@@ -70,7 +70,7 @@ namespace OrienteeringTvResults
                     Logger.LogError("Failed poll database", exception);
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+                await Task.Delay(TimeSpan.FromMilliseconds(_conf.PollWaitTime), cancellationToken);
             }
         }
     }

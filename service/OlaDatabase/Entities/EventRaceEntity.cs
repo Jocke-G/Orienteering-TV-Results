@@ -11,8 +11,8 @@ namespace OlaDatabase.Entities
         public virtual EventEntity Event { get; set; }
         public virtual DateTime RaceDate { get; set; }
         public virtual string RaceStatus { get; set; }
-        public virtual string RaceLightCondition { get; set; }
-        public virtual string RaceDistance { get; set; }
+        public virtual string RaceLightCondition { get; set; } = "Day";
+        public virtual string RaceDistance { get; set; } = "Middle";
         public virtual int AdministrationTime { get; set; }
         public virtual long XPos { get; set; }
         public virtual long YPos { get; set; }
@@ -21,12 +21,21 @@ namespace OlaDatabase.Entities
         public virtual IEnumerable<RaceClassEntity> RaceClasses { get; set; }
         public virtual IEnumerable<ControlEntity> Controls { get; set; }
         public virtual IEnumerable<SplitTimeControlEntity> SplitTimeControls { get; set; }
+        public virtual IEnumerable<CourseEntity> Courses { get; set; }
 
         public EventRaceEntity()
         {
             RaceClasses = new List<RaceClassEntity>();
             Controls = new List<ControlEntity>();
             SplitTimeControls = new List<SplitTimeControlEntity>();
+            Courses = new List<CourseEntity>();
+        }
+
+        public EventRaceEntity(EventEntity @event, string raceStatus = "notActivated")
+            : this()
+        {
+            Event = @event;
+            RaceStatus = raceStatus;
         }
     }
 }

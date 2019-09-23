@@ -28,7 +28,8 @@ namespace OlaDatabase.Repositories
         public bool HasNewResults(int eventId, int eventRaceId, int eventClassId, DateTime lastCheckTime)
         {
             return GetByEventClassId(eventId, eventRaceId, eventClassId)
-                .Any(x => x.ModifyDate > lastCheckTime);
+                .Any(result => result.ModifyDate > lastCheckTime
+                    || result.SplitTimes.Any(splitTime => splitTime.ModifyDate > lastCheckTime));
         }
 
         public IQueryable<ResultEntity> GetByRaceClassId(int eventId, int eventRaceId, int raceClassId)

@@ -61,6 +61,11 @@ namespace OlaDatabase.Mappings
                 .KeyColumn("raceClassId")
                 .ForeignKeyConstraintName("RaceClassSplitTimeControl_FK00")
                 .Inverse();
+
+            HasMany(x => x.RaceClassCourses)
+                .KeyColumn("raceClassId")
+                .ForeignKeyConstraintName("RaceClassCourses_FK01")
+                .Inverse();
         }
     }
 }

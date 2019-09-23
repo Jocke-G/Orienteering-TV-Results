@@ -18,7 +18,7 @@ namespace OlaDatabase.Mappings
             Map(x => x.TypeCode, "typeCode").Nullable();
             Map(x => x.ControlAreaName, "controlAreaName").Nullable();
             Map(x => x.Status, "status").Nullable();
-            References(x => x.EventRace, "eventRaceId").ForeignKey("Controls_FK01").Nullable();
+            References(x => x.EventRace, "eventRaceId").ForeignKey("Controls_FK01").Not.Nullable();
             Map(x => x.MaxFreeTime, "maxFreeTime").Default("0").Not.Nullable();
             Map(x => x.ControlAsFinish, "controlAsFinish").Not.Nullable();
             Map(x => x.XPos, "xPos").Nullable();

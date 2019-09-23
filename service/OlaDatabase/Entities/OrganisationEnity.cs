@@ -24,5 +24,13 @@ namespace OlaDatabase.Entities
         {
             Entries = new List<EntryEntity>();
         }
+
+        public OrganisationEnity(string name, int organisationTypeId, int countryId)
+            :this()
+        {
+            Name = name;
+            OrganisationTypeId = organisationTypeId;
+            CountryId = countryId;
+        }
     }
 }

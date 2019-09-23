@@ -11,7 +11,19 @@ namespace OlaDatabase.Entities
         public virtual EventRaceEntity EventRace { get; set; }
         public virtual DateTime ModifyDate { get; set; }
         public virtual PersonEntity ModifiedBy { get; set; }
-        public virtual IEnumerable<SplitTimeEntity> SplitTime { get; set; }
+        public virtual IEnumerable<SplitTimeEntity> SplitTimes { get; set; }
         public virtual IEnumerable<RaceClassSplitTimeControlEntity> RaceClassSplitTimeControls { get; set; }
+
+        public SplitTimeControlEntity()
+        {
+            SplitTimes = new List<SplitTimeEntity>();
+            RaceClassSplitTimeControls = new List<RaceClassSplitTimeControlEntity>();
+        }
+
+        public SplitTimeControlEntity(EventRaceEntity eventRace)
+            : this()
+        {
+            EventRace = eventRace;
+        }
     }
 }

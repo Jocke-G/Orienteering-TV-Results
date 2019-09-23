@@ -16,7 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OlaAdapter.Tests", "OlaAdapter.Tests\OlaAdapter.Tests.csproj", "{935618EA-53CB-4DAA-82CD-12E694DE6385}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlaAdapter.Tests", "OlaAdapter.Tests\OlaAdapter.Tests.csproj", "{935618EA-53CB-4DAA-82CD-12E694DE6385}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orienteering-TV-Results.Tests", "Orienteering-TV-Results.Tests\Orienteering-TV-Results.Tests.csproj", "{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

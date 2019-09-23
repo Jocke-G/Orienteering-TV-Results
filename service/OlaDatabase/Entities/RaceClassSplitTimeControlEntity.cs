@@ -32,5 +32,15 @@ namespace OlaDatabase.Entities
         {
             return HashCode.Combine(RaceClass, SplitTimeControl);
         }
+
+        public static bool operator ==(RaceClassSplitTimeControlKey left, RaceClassSplitTimeControlKey right)
+        {
+            return EqualityComparer<RaceClassSplitTimeControlKey>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(RaceClassSplitTimeControlKey left, RaceClassSplitTimeControlKey right)
+        {
+            return !(left == right);
+        }
     }
 }

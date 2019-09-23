@@ -1,6 +1,7 @@
 ﻿using NHibernate.Linq;
 using OlaDatabase.Entities;
 using OlaDatabase.RepositoryInterfaces;
+using System;
 using System.Linq;
 
 namespace OlaDatabase.Repositories
@@ -12,6 +13,12 @@ namespace OlaDatabase.Repositories
             return Repository
                 .Where(x => x.EventRace.Event.EventId == eventId 
                 && x.EventRace.EventRaceId == eventRaceId);
+        }
+
+        public IQueryable<RaceClassEntity> GetByEventIdAndEventRaceIdChangedSince(int eventId, int eventRaceId, DateTime lastModified)
+        {
+            return GetByEventIdAndEventRaceId(eventId, eventRaceId)
+                .Where(x => x.ModifyDate > lastModified);
         }
 
         public RaceClassEntity GetById(int eventId, int eventRaceId, int id)

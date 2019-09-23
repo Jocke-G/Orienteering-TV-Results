@@ -34,5 +34,16 @@ namespace OlaDatabase.Entities
         public virtual bool TakenCareOf { get; set; }
         public virtual string Comment { get; set; }
         public virtual IEnumerable<SplitTimeEntity> SplitTimes { get;  set; }
+
+        public ResultEntity()
+        {
+            SplitTimes = new List<SplitTimeEntity>();
+        }
+
+        public ResultEntity(string runnerStatus)
+            : this()
+        {
+            RunnerStatus = runnerStatus;
+        }
     }
 }

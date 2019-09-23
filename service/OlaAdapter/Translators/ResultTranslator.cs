@@ -30,24 +30,67 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
 
             results = OrderByStatusAndTime(results);
             results = AddOrdinal(results);
+            results.Sort();
 
             return results;
         }
 
+        private static ResultStatus ToResultStatus(string status)
+        {
+            switch (status)
+            {
+                case "passed":
+                    return ResultStatus.Passed;
+                case "finished":
+                    return ResultStatus.Finished;
+                case "notValid":
+                case "disqualified":
+                    return ResultStatus.NotPassed;
+                case "notStarted":
+                    return ResultStatus.NotStarted;
+                default:
+                    /*
+                     *finishedTimeOk
+                     * finishedPunchOk
+                     * movedUp
+                     * walkOver
+                     * started
+                     * notActivated
+                     * notParticipating
+                     */
+                    return ResultStatus.NotFinishedYet;
+            }
+        }
+
         private static Result ToResultWithTimes(ResultEntity resultEntity)
         {
+            TimeSpan? totalTime = null;
+            if(resultEntity.TotalTime != 0)
+            {
+                totalTime = TimeSpan.FromSeconds(resultEntity.TotalTime / 100);
+            }
+
             return new Result
             {
+
                 FirstName = resultEntity.Entry.Competitor.FirstName,
                 LastName = resultEntity.Entry.Competitor.FamilyName,
                 StartTime = resultEntity.StartTime,
-                Status = resultEntity.RunnerStatus,
+                Status = ToResultStatus(resultEntity.RunnerStatus),
                 Club = resultEntity.Entry.Competitor.DefaultOrganisation.Name,
-                ModifyDate = resultEntity.ModifyDate,
-
-                TotalTime = TimeSpan.FromSeconds(resultEntity.TotalTime / 100),
-                SplitTimes = ToSplitTimes(resultEntity),
+                ModifyDate = CalculateModifyDateIncludingSplitTimes(resultEntity),
+                TotalTime = totalTime,
+                SplitTimes = SplitTranslator.ToSplitTimes(resultEntity),
             };
+        }
+
+        private static DateTime CalculateModifyDateIncludingSplitTimes(ResultEntity resultEntity)
+        {
+            if (!resultEntity.SplitTimes.Any())
+            {
+                return resultEntity.ModifyDate;
+            }
+            return new DateTime(Math.Max(resultEntity.ModifyDate.Ticks, resultEntity.SplitTimes.Max(x => x.ModifyDate).Ticks));
         }
 
         private static Result ToResultWithoutTime(ResultEntity resultEntity)
@@ -57,59 +100,23 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
                 FirstName = resultEntity.Entry.Competitor.FirstName,
                 LastName = resultEntity.Entry.Competitor.FamilyName,
                 StartTime = resultEntity.StartTime,
-                Status = resultEntity.RunnerStatus,
+                Status = ToResultStatus(resultEntity.RunnerStatus),
                 Club = resultEntity.Entry.Competitor.DefaultOrganisation.Name,
                 ModifyDate = resultEntity.ModifyDate,
             };
         }
 
-        private static IList<SplitTime> ToSplitTimes(ResultEntity resultEntity)
-        {
-            var splitTimes = new List<SplitTime>();
-            var raceClassSplitTimeControls = resultEntity.RaceClass.RaceClassSplitTimeControls;
-            foreach (var raceClassSplitTimeControl in raceClassSplitTimeControls)
-            {
-                var splitTime = resultEntity.SplitTimes.Where(x => x.Id.SplitTimeControl == raceClassSplitTimeControl.Id.SplitTimeControl).FirstOrDefault();
-                if (splitTime == null)
-                {
-                    splitTimes.Add(new SplitTime
-                    {
-                        Number = raceClassSplitTimeControl.Id.SplitTimeControl.TimingControl.Id
-                    });
-                }
-                else
-                {
-                    var ordinal = 1 + raceClassSplitTimeControl.Id.RaceClass.Results.Where(x => x.SplitTimes.Any(y => y.Id.SplitTimeControl.RaceClassSplitTimeControls.Any(z => z.Id.SplitTimeControl == raceClassSplitTimeControl.Id.SplitTimeControl && y.SplitTime < splitTime.SplitTime))).Count();
-                    splitTimes.Add(new SplitTime
-                    {
-                        Time = TimeSpan.FromSeconds(splitTime.SplitTime / 100),
-                        Number = splitTime.Id.SplitTimeControl.TimingControl.Id,
-                        PassedCount = splitTime.Id.PassedCount,
-                        Ordinal = ordinal,
-                    });
-                }
-            }
-            return splitTimes;
-        }
-
         private static List<Result> OrderByStatusAndTime(List<Result> results)
         {
-            var preferences = new List<string> {
-                "passed",
-                "finished",
-                "notValid",
-                "finishedTimeOk",
-                "finishedPunchOk",
-                "disqualified",
-                "movedUp",
-                "walkOver",
-                "started",
-                "notActivated",
-                "notParticipating",
-                "notStarted"
+            var preferences = new Dictionary<ResultStatus, int> {
+                { ResultStatus.Finished, 1 },
+                { ResultStatus.Passed, 1 },
+                { ResultStatus.NotFinishedYet, 1 },
+                { ResultStatus.NotPassed, 2 },
+                { ResultStatus.NotStarted, 3 },
             };
 
-            return results.OrderBy(item => preferences.IndexOf(item.Status)).ThenBy(x => x.TotalTime).ToList();
+            return results.OrderBy(item => preferences.GetValueOrDefault(item.Status)).ThenBy(x => x.TotalTime).ToList();
         }
 
         private static List<Result> AddOrdinal(List<Result> results)
@@ -118,8 +125,10 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
             for (int i = 0; i < results.Count; i++)
             {
                 var result = results[i];
-                if (result.Status != "passed" && result.Status != "finished")
+                if (result.Status != ResultStatus.Passed && result.Status != ResultStatus.Finished)
+                {
                     break;
+                }
 
                 result.Ordinal = ordinal;
 

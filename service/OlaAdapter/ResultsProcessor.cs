@@ -1,8 +1,8 @@
-﻿using NHibernate.Linq;
-using OlaDatabase;
+﻿using OlaDatabase;
 using OlaDatabase.Session;
 using OrienteeringTvResults.Model;
 using OrienteeringTvResults.Model.Configuration;
+using OrienteeringTvResults.OlaAdapter.EagerFetchers;
 using OrienteeringTvResults.OlaAdapter.Translators;
 using System;
 using System.Collections.Generic;
@@ -44,10 +44,19 @@ namespace OrienteeringTvResults.OlaAdapter
             {
                 var raceClasses = RepositoryContainer.RaceClassRepository
                     .GetByEventIdAndEventRaceId(_competitionId, _stageId)
-                    .Fetch(x => x.EventClass)
-                    .FetchMany(x => x.RaceClassSplitTimeControls)
-                    .ThenFetch(x => x.Id)
-                    .ThenFetch(x => x.SplitTimeControl);
+                    .EagerFetchSplitControls();
+                return ClassTranslator.ToClasses(raceClasses);
+            }
+        }
+
+        public IList<CompetitionClass> GetClassesChangedSince(DateTime since)
+        {
+            using (var session = new SessionFactoryHelper())
+            {
+                var raceClasses = RepositoryContainer.RaceClassRepository
+                    .GetByEventIdAndEventRaceIdChangedSince(_competitionId, _stageId, since)
+                    .EagerFetchSplitControls();
+
                 return ClassTranslator.ToClasses(raceClasses);
             }
         }

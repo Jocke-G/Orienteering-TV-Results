@@ -26,14 +26,22 @@ namespace OlaAdapter.Tests.UnitTests
             var mockResultsRepository = new Mock<IRaceClassRepository>();
             mockResultsRepository.Setup(x => x.GetById(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns<int, int, int>((i1, i2, i3) =>
-                new RaceClassEntity {
-                    EventClass = new EventClassEntity
+                {
+                    var @event = new EventEntity();
+                    var eventRace = new EventRaceEntity(@event);
+                    @event.EventRaces.Add(eventRace);
+                    return new RaceClassEntity
                     {
-                        EventClassId = 1,
-                        ShortName = "H21",
-                    }
-                });
-            RepositoryContainer.RaceClassRepository = mockResultsRepository.Object;
+                        EventRace = eventRace,
+                        EventClass = new EventClassEntity
+                        {
+                            EventClassId = 1,
+                            ShortName = "H21",
+                        },
+                    };
+                }
+            );
+        RepositoryContainer.RaceClassRepository = mockResultsRepository.Object;
 
             IResultsProcessor target = new ResultsProcessor(new DatabaseConfiguration { Competition = 1, Stage = 1 });
             var actual = target.GetClass(1);
