@@ -1,5 +1,4 @@
-﻿using NHibernate.Linq;
-using OlaDatabase;
+﻿using OlaDatabase;
 using OlaDatabase.Entities;
 using OrienteeringTvResults.Model;
 using OrienteeringTvResults.OlaAdapter.EagerFetchers;
@@ -26,7 +25,6 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
                 Id = raceClass.EventClass.EventClassId,
                 ShortName = raceClass.EventClass.ShortName,
                 NoTimePresentation = raceClass.EventClass.NoTimePresentation,
-                SplitControls = SplitTranslator.ToSplitControls(raceClass),
             };
 
             return competitionClass;
@@ -34,7 +32,7 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
 
         internal static CompetitionClass ToClassWithResults(RaceClassEntity raceClass)
         {
-            var competitionClass = ToClass(raceClass);
+            var competitionClass = ToClass(raceClass).AddSplitControls(raceClass);
 
             var results = RepositoryContainer.ResultRepository
                 .GetByRaceClassId(raceClass.EventRace.Event.EventId, raceClass.EventRace.EventRaceId, raceClass.RaceClassId)

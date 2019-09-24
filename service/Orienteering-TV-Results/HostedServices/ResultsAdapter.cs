@@ -1,23 +1,33 @@
 ﻿using Microsoft.Extensions.Options;
-using OlaDatabase.Session;
+using OrienteeringTvResults.Configuration;
+using OrienteeringTvResults.MeosAdapter;
 using OrienteeringTvResults.Model;
-using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
+using System;
 
 namespace OrienteeringTvResults
 {
     public class ResultsAdapter
     {
-        private IResultsProcessor _processor;
-
-        public IResultsProcessor Processor { get { return _processor; } }
+        public IResultsProvider Processor { get; }
 
         public ResultsAdapter(IOptions<ApplicationConfiguration> conf)
         {
-            var dbConf = conf.Value.Database;
-            Logger.LogInfo($"Using database '{dbConf.Database}' at '{dbConf.Server}' as user '{dbConf.Username}'. Will publish competition: '{dbConf.Competition}' stage: '{dbConf.Stage}'");
-            SessionFactoryHelper.Initialize(new MySqlSessionFactoryCreator(dbConf));
-           _processor = new ResultsProcessor(conf.Value.Database);
+            switch (conf.Value.System)
+            {
+                case "ola":
+                    var olaConf = conf.Value.Ola;
+                    OlaSessionAdapter.Initialize(olaConf);
+                    Processor = new OlaResultsProvider(olaConf);
+                    break;
+                case "meos":
+                    var meosConf = conf.Value.Meos;
+                    MeosSessionAdapter.Initialize(meosConf);
+                    Processor = new MeosResultsProvider(meosConf);
+                    break;
+                default:
+                    throw new Exception($"Unknown System specified in configuration: '{conf.Value.System}'");
+            }
         }
     }
 }

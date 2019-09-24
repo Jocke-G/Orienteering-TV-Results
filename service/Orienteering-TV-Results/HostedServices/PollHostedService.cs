@@ -1,5 +1,6 @@
-using Microsoft.Extensions.Options;
-using OrienteeringTvResults.Model.Configuration;
+﻿using Microsoft.Extensions.Options;
+using OrienteeringTvResults.Configuration;
+using OrienteeringTvResults.Model;
 using OrienteeringTvResults.Mqtt;
 using System;
 using System.Collections.Generic;
@@ -11,21 +12,20 @@ namespace OrienteeringTvResults
 {
     internal class PollHostedService : HostedServiceBase
     {
-        private readonly DatabaseConfiguration _conf;
+        private readonly ApplicationConfiguration _conf;
         private readonly ResultsAdapter _results;
 
         public PollHostedService(IOptions<ApplicationConfiguration> conf, MqttHostedService mqtt, ResultsAdapter results)
         {
             Logger.LogInfo("Constructing PollHostedService");
-            _conf = conf.Value.Database;
+            _conf = conf.Value;
             _results = results;
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
+            var lastCheckClass = DateTime.MinValue;
             var lastCheckDictionary = new Dictionary<int, DateTime>();
-            var competitionId = _conf.Competition;
-            var stageId = _conf.Stage;
             while (!cancellationToken.IsCancellationRequested)
             {
                 try
@@ -33,7 +33,7 @@ namespace OrienteeringTvResults
                     Logger.LogInfo("Poll database...");
                     var competitionClasses = _results.Processor.GetClasses();
                     Logger.LogInfo($"Found {competitionClasses.Count} classes");
-                    foreach(var competitionClass in competitionClasses)
+                    foreach (var competitionClass in competitionClasses)
                     {
                         if (!lastCheckDictionary.TryGetValue(competitionClass.Id, out DateTime lastCheckTime))
                         {
@@ -57,8 +57,8 @@ namespace OrienteeringTvResults
                     }
                     var memoryUsed = GC.GetTotalMemory(false);
 
-                    Logger.LogInfo($"Memory usage: { + memoryUsed / 1024 / 1024 } MB");
-                    if(memoryUsed >= 70 * 1024 * 1024)
+                    Logger.LogInfo($"Memory usage: { +memoryUsed / 1024 / 1024 } MB");
+                    if (memoryUsed >= 70 * 1024 * 1024)
                     {
                         Logger.LogInfo("Forcing garbage collect");
                         GC.Collect();

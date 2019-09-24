@@ -1,4 +1,5 @@
-﻿using OrienteeringTvResults.Model.Configuration;
+﻿using OrienteeringTvResults.Model;
+using OrienteeringTvResults.Model.Configuration;
 using System;
 using System.Net.Mqtt;
 using System.Threading.Tasks;

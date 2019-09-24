@@ -18,12 +18,20 @@ services:
     environment:
       - 'mqtt:host=mosquitto'
       - 'mqtt:clientId=ResultsService'
-      - 'database:server=192.168.10.136'
-      - 'database:database=tt2017'
-      - 'database:username=TvService'
-      - 'database:password=secret'
-      - 'database:competition=3'
-      - 'database:stage=3'
+      - 'system=ola' # ola meos
+
+      - 'ola:database:server=192.168.10.136'
+      - 'ola:database:database=ola'
+      - 'ola:database:username=TvService'
+      - 'ola:database:password=secret'
+      - 'ola:eventid=1'
+      - 'ola:eventraceid=1'
+
+      - 'meos:database:server=192.168.10.136'
+      - 'meos:database:database=meos_'
+      - 'meos:database:username=TvService'
+      - 'meos:database:password=secret'
+
     ports:
       - '8080:80'
     volumes:

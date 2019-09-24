@@ -25,6 +25,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\MeosAdapter\MeosAdapter.csproj" />
     <ProjectReference Include="..\OlaAdapter\OlaAdapter.csproj" />
   </ItemGroup>
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate;
+using OlaAdapter.IntegrationTests.TestUtils;
 using OlaDatabase.Entities;
 using OlaDatabase.Session;
 using OrienteeringTvResults.Model;
@@ -13,7 +14,7 @@ namespace OlaAdapter.Tests.IntegrationTests
     {
         private ISessionFactoryCreator _sessionFactoryCreator;
         private ISession _session;
-        private DataHelper _dataHelper;
+        private InMemoryTestHelper _dataHelper;
         private EventEntity _eventEntity;
         private EventRaceEntity _eventRace;
 
@@ -24,7 +25,7 @@ namespace OlaAdapter.Tests.IntegrationTests
             SessionFactoryHelper.Initialize(_sessionFactoryCreator);
             _sessionFactoryCreator.OpenSession();
             _session = _sessionFactoryCreator.GetSession();
-            _dataHelper = new DataHelper(_session);
+            _dataHelper = new InMemoryTestHelper(_session);
 
             _eventEntity = _dataHelper.CreateEvent("TestTävling");
             _eventRace = _dataHelper.CreateEventRace(_eventEntity);
@@ -54,7 +55,7 @@ namespace OlaAdapter.Tests.IntegrationTests
 
             _dataHelper.CreateRaceClassSplitTimeControl(raceClass, splitTimeControl);
 
-            _dataHelper.ClearAndFlush();
+            _dataHelper.FlushAndClear();
             
             var target = CreateTarget();
             var actual = target.GetClass(1);
@@ -64,9 +65,9 @@ namespace OlaAdapter.Tests.IntegrationTests
             Assert.AreEqual("Radio", actual.SplitControls[1].Name);
         }
 
-        private IResultsProcessor CreateTarget()
+        private IResultsProvider CreateTarget()
         {
-            return new ResultsProcessor(new DatabaseConfiguration { Competition = 1, Stage = 1 });
+            return new OlaResultsProvider(new OlaConfiguration { EventId = 1, EventRaceId = 1 });
         }
     }
 }

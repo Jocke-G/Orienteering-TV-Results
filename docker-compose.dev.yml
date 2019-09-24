@@ -32,12 +32,20 @@ services:
     environment:
       - 'mqtt:host=mosquitto'
       - 'mqtt:clientId=ResultsService'
-      - 'database:server=mysql'
-      - 'database:database=ola'
-      - 'database:username=TvService'
-      - 'database:password=secret'
-      - 'database:competition=1'
-      - 'database:stage=1'
+      - 'system=ola' # ola meos
+
+      - 'ola:database:server=mysql'
+      - 'ola:database:database=ola'
+      - 'ola:database:username=TvService'
+      - 'ola:database:password=secret'
+      - 'ola:eventid=1'
+      - 'ola:eventraceid=1'
+
+      - 'meos:database:server=mysql'
+      - 'meos:database:database=ola'
+      - 'meos:database:username=TvService'
+      - 'meos:database:password=secret'
+
     ports:
       - '8080:80'
     volumes:

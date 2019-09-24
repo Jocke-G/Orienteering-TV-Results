@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OrienteeringTvResults
+namespace OrienteeringTvResults.Model
 {
     public static class Logger
     {

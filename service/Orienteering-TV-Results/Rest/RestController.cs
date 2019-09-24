@@ -10,7 +10,7 @@ namespace OrienteeringTvResults.Rest
     [ApiController]
     public class CompetitionsController : Controller
     {
-        private IResultsProcessor _results;
+        private IResultsProvider _results;
 
         public CompetitionsController(ResultsAdapter adapter)
         {
@@ -35,6 +35,13 @@ namespace OrienteeringTvResults.Rest
         public JsonResult GetClasses()
         {
             var competitionClasses = _results.GetClasses();
+            return new JsonResult(competitionClasses);
+        }
+
+        [HttpGet("classesSince/{since}")]
+        public JsonResult GetClassesChangedSince(DateTime since)
+        {
+            var competitionClasses = _results.GetClassesChangedSince(since);
             return new JsonResult(competitionClasses);
         }
 

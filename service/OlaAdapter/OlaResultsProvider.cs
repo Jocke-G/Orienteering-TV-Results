@@ -9,15 +9,15 @@ using System.Collections.Generic;
 
 namespace OrienteeringTvResults.OlaAdapter
 {
-    public class ResultsProcessor : IResultsProcessor
+    public class OlaResultsProvider : IResultsProvider
     {
         private readonly int _competitionId;
         private readonly int _stageId;
 
-        public ResultsProcessor(DatabaseConfiguration databaseConfiguration)
+        public OlaResultsProvider(OlaConfiguration databaseConfiguration)
         {
-            _competitionId = databaseConfiguration.Competition;
-            _stageId = databaseConfiguration.Stage;
+            _competitionId = databaseConfiguration.EventId;
+            _stageId = databaseConfiguration.EventRaceId;
         }
 
         public IList<Competition> GetCompetitions()

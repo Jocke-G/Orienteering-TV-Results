@@ -43,7 +43,7 @@ namespace OlaAdapter.Tests.UnitTests
             );
         RepositoryContainer.RaceClassRepository = mockResultsRepository.Object;
 
-            IResultsProcessor target = new ResultsProcessor(new DatabaseConfiguration { Competition = 1, Stage = 1 });
+            IResultsProvider target = new OlaResultsProvider(new OlaConfiguration { EventId = 1, EventRaceId = 1 });
             var actual = target.GetClass(1);
 
             Assert.AreEqual("H21", actual.ShortName);

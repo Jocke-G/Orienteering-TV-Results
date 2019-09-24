@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using OrienteeringTvResults.Model.Configuration;
+using OrienteeringTvResults.Configuration;
 using OrienteeringTvResults.Mqtt;
 
 namespace OrienteeringTvResults

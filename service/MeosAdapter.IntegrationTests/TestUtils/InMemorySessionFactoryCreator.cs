@@ -1,13 +1,13 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using MeosDatabase.Entities;
+using MeosDatabase.Session;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
-using OlaDatabase.Entities;
-using OlaDatabase.Session;
 
-namespace OlaAdapter.Tests
+namespace MeosAdapter.IntegrationTests
 {
     public class InMemorySessionFactoryCreator: ISessionFactoryCreator
     {
@@ -47,7 +47,7 @@ namespace OlaAdapter.Tests
         {
             return Fluently.Configure()
                     .Database(SQLiteConfiguration.Standard.InMemory().ShowSql())
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<EventEntity>())
+                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ClassEntity>())
                     .ExposeConfiguration(cfg =>
                     {
                         _configuration = cfg;
@@ -60,7 +60,6 @@ namespace OlaAdapter.Tests
         {
             var export = new SchemaExport(configuration);
             export.Execute(true, true, false, session.Connection, null);
-            //seexportCreate(false, true);
         }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
-using OrienteeringTvResults.Model.Configuration;
+using OrienteeringTvResults.Configuration;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace OrienteeringTvResults

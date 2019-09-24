@@ -1,16 +1,16 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using MeosDatabase.Entities;
 using NHibernate;
 using NHibernate.Context;
-using OlaDatabase.Entities;
 
-namespace OlaDatabase.Session
+namespace MeosDatabase.Session
 {
     public class MySqlSessionFactoryCreator: ISessionFactoryCreator
     {
         private readonly ISessionFactory _sessionFactory;
 
-        public MySqlSessionFactoryCreator(OlaDatabaseConfiguration conf)
+        public MySqlSessionFactoryCreator(MeosDatabaseConfiguration conf)
         {
             _sessionFactory = CreateSessionFactory(conf);
         }
@@ -36,7 +36,7 @@ namespace OlaDatabase.Session
 
         }
 
-        private static ISessionFactory CreateSessionFactory(OlaDatabaseConfiguration conf)
+        private static ISessionFactory CreateSessionFactory(MeosDatabaseConfiguration conf)
         {
             var config = Fluently.Configure().Database(
                 MySQLConfiguration.Standard.ConnectionString(
@@ -45,7 +45,7 @@ namespace OlaDatabase.Session
                         .Password(conf.Password)
                         .Database(conf.Database))
             )
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<EventEntity>())
+                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ClassEntity>())
                 .CurrentSessionContext<ThreadStaticSessionContext>();
             var sessionFactory = config.BuildSessionFactory();
 

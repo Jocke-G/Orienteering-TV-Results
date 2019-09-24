@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using OrienteeringTvResults.Model;
 using System;
 using System.Threading.Tasks;
 

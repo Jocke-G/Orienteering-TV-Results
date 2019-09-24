@@ -8,6 +8,13 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
 {
     internal static class SplitTranslator
     {
+        public static CompetitionClass AddSplitControls(this CompetitionClass competitionClass, RaceClassEntity raceClass)
+        {
+            var splitControls = ToSplitControls(raceClass);
+            competitionClass.SplitControls = splitControls;
+            return competitionClass;
+        }
+
         internal static IList<SplitControl> ToSplitControls(RaceClassEntity raceClass)
         {
             var splitControls = new List<SplitControl>();

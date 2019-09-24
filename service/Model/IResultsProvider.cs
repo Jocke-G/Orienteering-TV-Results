@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OrienteeringTvResults.Model
 {
-    public interface IResultsProcessor
+    public interface IResultsProvider
     {
         IList<Competition> GetCompetitions();
         Competition GetCompetition(int competitionId);

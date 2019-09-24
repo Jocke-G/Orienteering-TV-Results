@@ -1,19 +1,29 @@
 ﻿using System;
 using NHibernate;
 using OlaDatabase.Entities;
+using OlaDatabase.Session;
 
-namespace OlaAdapter.Tests
+namespace OlaAdapter.IntegrationTests.TestUtils
 {
-    internal class DataHelper
+    internal class InMemoryTestHelper
     {
         private readonly ISession _session;
+        private readonly InMemorySessionFactoryCreator _sessionFactoryCreator;
 
-        internal DataHelper(ISession session)
+        internal InMemoryTestHelper(ISession session)
         {
             _session = session;
         }
 
-        internal void ClearAndFlush()
+        internal InMemoryTestHelper()
+        {
+            _sessionFactoryCreator = new InMemorySessionFactoryCreator();
+            SessionFactoryHelper.Initialize(_sessionFactoryCreator);
+            _sessionFactoryCreator.OpenSession();
+            _session = _sessionFactoryCreator.GetSession();
+        }
+
+        internal void FlushAndClear()
         {
             _session.Flush();
             _session.Clear();
