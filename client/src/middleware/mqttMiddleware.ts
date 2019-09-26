@@ -3,7 +3,8 @@ import { Client, Message } from 'paho-mqtt';
 import { Configuration } from '../store/configuration/reducers';
 import { CONFIGURATION_RECEIVED } from '../store/configuration/actions';
 import { ClassResults } from '../store/results/reducers';
-import { classResultsReceived, SELECT_CLASS, selectClass } from '../store/results/actions';
+import { classResultsReceived, } from '../store/results/actions';
+import { selectClass, SELECT_CLASS } from '../store/classes/actions';
 
 export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   let client :Client;

@@ -1,17 +1,18 @@
 import React, { Dispatch } from "react"
 import { RouteComponentProps, withRouter } from "react-router"
 import { ThunkDispatch } from "redux-thunk"
-import { Action, fetchClasses } from "../store/results/actions"
+import { Action } from "../store/results/actions"
 import { connect } from "react-redux"
 import { RootState } from "../reducers/rootReducer"
-import { getClasses, ClassResults } from "../store/results/reducers"
 import { Link } from "react-router-dom"
+import { getClasses, Class } from "../store/classes/reducers"
+import { fetchClasses } from "../store/classes/actions"
 
 export interface OwnProps {
 }
   
 interface StateProps {
-  classes: ClassResults[],
+  classes?: Class[],
 }
   
 interface DispatchProps {
@@ -31,7 +32,7 @@ class SelectClass extends React.Component<Props, State> {
   render() {
     return(
       <div>
-        {this.props.classes.length > 0 ? this.props.classes.map((item, key) =>
+        {this.props.classes && this.props.classes.length > 0 ? this.props.classes.map((item, key) =>
          <div key={key}><Link to={`/?Class=${item.ShortName}`}>{item.ShortName}</Link></div>
         ):<div>Inga klasser</div>
         }

@@ -4,7 +4,8 @@ import { getResults, ClassResults } from '../store/results/reducers';
 import ClassCompetitorResultComponent from './ClassCompetitorResultComponent';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { ThunkDispatch } from 'redux-thunk';
-import { Action, selectClass, fetchClass } from '../store/results/actions';
+import { Action, fetchClass } from '../store/results/actions';
+import { selectClass } from '../store/classes/actions';
 
 export interface OwnProps {
 }

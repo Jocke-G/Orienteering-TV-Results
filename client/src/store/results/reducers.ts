@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { RootState } from '../../reducers/rootReducer';
-import { Action, CLASS_RESULTS_RECEIVED, SELECT_CLASS, CLASSES_RECEIVED } from '../results/actions';
+import { Action, CLASS_RESULTS_RECEIVED, } from '../results/actions';
 
 export interface ClassResults {
   Id: number,
@@ -31,8 +31,6 @@ export interface SplitTime {
 
 export interface State {
   results: ClassResults,
-  classes: ClassResults[],
-  selectedClass: string|null,
 }
 
 const initialState: ClassResults = {
@@ -56,29 +54,8 @@ const results = (state : ClassResults = initialState, action: Action): ClassResu
         }
       }
 
-const selectedClass = (state : string|null = null, action: Action): string|null => {
-  switch (action.type) {
-    case SELECT_CLASS:
-      return action.className;
-  default:
-      return state
-  }
-}
-
-const classes = (state: ClassResults[] = [], action: Action) : ClassResults[] => {
-  switch (action.type) {
-    case CLASSES_RECEIVED:
-      return action.classes
-    default:
-      return state
-  }
-}
-
 export default combineReducers<State>({
   results,
-  selectedClass,
-  classes
 });
 
 export const getResults = (state:RootState):ClassResults|undefined => state.results.results;
-export const getClasses = (state:RootState):ClassResults[] => state.results.classes;

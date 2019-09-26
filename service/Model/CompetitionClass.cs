@@ -11,6 +11,7 @@ namespace OrienteeringTvResults.Model
         public bool NoTimePresentation { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public IList<Result> Results { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public IList<SplitControl> SplitControls { get; set; }
     }
 }

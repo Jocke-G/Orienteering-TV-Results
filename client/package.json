@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "mousetrap": "^1.6.3",
     "paho-mqtt": "^1.1.0",
     "query-string": "^6.8.3",
     "react": "^16.9.0",
@@ -11,7 +12,7 @@
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-router-redux": "^5.0.0-alpha.9",
-    "react-scripts": "3.1.1",
+    "react-scripts": "3.1.2",
     "redux": "^4.0.4",
     "redux-actions": "^2.6.5",
     "redux-devtools-extension": "^2.13.8",
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
+    "@types/mousetrap": "^1.6.3",
     "@types/node": "^12.7.4",
     "@types/paho-mqtt": "^1.0.4",
     "@types/query-string": "^6.3.0",

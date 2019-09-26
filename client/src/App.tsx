@@ -10,9 +10,13 @@ import './App.css';
 import ClassResult from './components/ClassResultView';
 import { requestConfiguration } from './store/configuration/actions';
 import { ClassResults, getResults } from './store/results/reducers';
-import { fetchClass, selectClass, Action } from './store/results/actions';
+import { fetchClass, Action } from './store/results/actions';
 import SelectClass from './components/SelectClass';
 import { hasConfiguration } from './store/configuration/reducers';
+import InitModal from './components/InitModal';
+import { selectClass } from './store/classes/actions';
+import Mousetrap from 'mousetrap';
+import { getSelectedClass } from './store/classes/reducers';
 
 export interface OwnProps {
 //  propFromParent: number
@@ -20,7 +24,7 @@ export interface OwnProps {
 
 interface StateProps {
   results?: ClassResults,
-  selectedClass: string|null,
+  selectedClass?: string,
   hasConfiguration: boolean,
 }
 
@@ -33,29 +37,48 @@ interface DispatchProps {
 type Props = RouteComponentProps<{}> & StateProps & DispatchProps & OwnProps
 
 interface State {
-  //internalComponentStateField: string
+  modalVisible: boolean,
 }
 
 class App extends React.Component<Props, State> {
   constructor(props:Props){
     super(props);
-    this.props.requestConfiguration().then(() => {
+    this.state = {
+      modalVisible: true,
+    };
+    this.init();
+  }
+
+  init() {
+    console.log("[UI] Initiating");
+    this.props.requestConfiguration()
+    .then(() => {
       console.log("[UI] Conf received");
       this.updateSelectedClass();
     });
   }
 
+  componentDidMount() {
+    Mousetrap.bind('c', () => {
+      this.toggleModal();
+    })
+  }
+
+  toggleModal() {
+    console.log("toggleModal");
+    this.setState((state:Readonly<State>) => ({
+      modalVisible: !state.modalVisible,
+    }));
+  }
+
   componentDidUpdate(props:Props) {
-    if(this.props.hasConfiguration) {
-      this.updateSelectedClass();
-    }
   }
 
   updateSelectedClass() {
     console.log("[UI] updateSelectedClass");
     let parsed = queryString.parse(this.props.location.search);
     let className = parsed['Class'];
-    console.log(`[UI] className ${className}`);
+    console.log(`[UI] QueryString Class: ${className}, Selected class: ${this.props.selectedClass}`);
     if(typeof className === "string" && this.props.selectedClass !== className) {
       console.log(`[UI] selecting class: ${className}`);
       this.props.selectClass(className);
@@ -68,7 +91,10 @@ class App extends React.Component<Props, State> {
       if(this.props.selectedClass !== null) {
         console.log(`[UI/App] render ClassResult: ${this.props.selectedClass}`);
         return (
-          <ClassResult />
+          <React.Fragment>
+            <InitModal show={this.state.modalVisible} />
+            <ClassResult />
+          </React.Fragment>
         );
       } else {
         console.log(`[UI/App] render SelectClass`);
@@ -78,7 +104,7 @@ class App extends React.Component<Props, State> {
       }
     } else {
       console.log(`[UI/App] Rendering Loader`);
-      return (<div>Fetching configuration</div>)
+      return (<InitModal show={this.state.modalVisible} />)
     }
   }
 }
@@ -87,7 +113,7 @@ const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
   return {
     hasConfiguration: hasConfiguration(state),
     results: getResults(state),
-    selectedClass: state.results.selectedClass,
+    selectedClass: getSelectedClass(state),
   }
 }
 

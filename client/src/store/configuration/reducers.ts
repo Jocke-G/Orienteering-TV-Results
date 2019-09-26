@@ -1,9 +1,7 @@
-import { combineReducers } from 'redux'
-import { Action, CONFIGURATION_RECEIVED } from "./actions"
+import { Action, CONFIGURATION_RECEIVED, REQUEST_CONFIGURATION_ERROR, REQUESTING_CONFIGURATION } from "./actions"
 import { RootState } from '../../reducers/rootReducer'
 
 export interface Configuration {
-  isComplete: boolean;
   mqtt_host: string;
   mqtt_port: number;
   rest_host: string;
@@ -11,35 +9,54 @@ export interface Configuration {
 }
 
 export interface State {
-  configuration: Configuration,
+  isComplete: boolean;
+  requesting: boolean;
+  error: Error|null;
+  configuration: Configuration|null;
 }
 
-const initialState: Configuration = {
+const emptyConf: Configuration = {
+  mqtt_host: "",
+  mqtt_port: 0,
+  rest_host: "",
+  rest_port: 0,
+}
+
+const initialState: State = {
   isComplete: false,
-  mqtt_host : "",
-  mqtt_port : 0,
-  rest_host : "",
-  rest_port : 0,
+  requesting: false,
+  error: null,
+  configuration: null,
 }
 
-const configuration = (state : Configuration = initialState, action: Action): Configuration => {
+const configuration = (state : State = initialState, action: Action): State => {
   switch (action.type) {
+    case REQUESTING_CONFIGURATION:
+      return {
+        ...state,
+        requesting: true,
+        error: null,
+      }
     case CONFIGURATION_RECEIVED:
       return {
         ...state,
+        requesting: false,
         isComplete: true,
-        mqtt_host: action.configuration.mqtt_host,
-        mqtt_port: action.configuration.mqtt_port,
-        rest_host: action.configuration.rest_host,
-        rest_port: action.configuration.rest_port,
+        configuration: action.configuration,
       }
+    case REQUEST_CONFIGURATION_ERROR:
+      return {
+        ...state,
+        requesting: false,
+        error: action.error,
+      }
+    default:
+      return state
   }
-
-  return state;
 }
 
-export default combineReducers<State>({
-  configuration
-});
+export default configuration;
 
-export const hasConfiguration = (state:RootState):boolean => state.configuration.configuration.isComplete;
+export const hasConfiguration = (state:RootState):boolean => state.configuration.isComplete;
+export const getConfiguration = (state:RootState):Configuration => state.configuration.configuration ? state.configuration.configuration : emptyConf;
+export const getError = (state:RootState):Error|null => state.configuration.error;
