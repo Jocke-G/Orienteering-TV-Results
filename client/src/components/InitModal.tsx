@@ -4,6 +4,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { Action, } from '../store/results/actions';
 import IntegrationConfigurationPane from './InitModalItems/IntegrationConfigurationPane';
 import ClassSelectorPane from './InitModalItems/ClassSelectorPane';
+import MqttStatusPane from './InitModalItems/MqttStatusPane';
 
 export interface OwnProps {
   show: boolean,
@@ -51,6 +52,8 @@ class InitModal extends Component<Props> {
           <IntegrationConfigurationPane />
           <hr />
           <ClassSelectorPane />
+          <hr />
+          <MqttStatusPane />
         </div>
       </div>
     )

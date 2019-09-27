@@ -6,13 +6,13 @@ namespace OrienteeringTvResults
 {
     public class MqttHostedService
     {
-        private MqttHandler _handler;
+        internal MqttHandler Handler { get; private set; }
 
         public MqttHostedService(IOptions<ApplicationConfiguration> conf)
         {
 
-            _handler = new MqttHandler();
-            _handler.Initialize(conf.Value.Mqtt).Wait();
+            Handler = new MqttHandler();
+            Handler.Initialize(conf.Value.Mqtt).Wait();
         }
     }
 }

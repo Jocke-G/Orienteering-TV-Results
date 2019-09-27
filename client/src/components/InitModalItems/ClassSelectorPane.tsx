@@ -60,12 +60,12 @@ class ClassSelectorPane extends Component<Props, State> {
     return(
     <div>
       <p><b>Välj klass</b></p>
+        <button onClick={this.props.fetch}>Hämta klasser</button><br />
         {error?
           <p style={{color: "red"}}>{ error.message }</p>
         :
           <Fragment>
             <p>Vald klass: {this.props.selectedClass}</p>
-            <button onClick={this.props.fetch}>Hämta klasser</button><br />
             { this.props.classes ?
             <Fragment>
               <select
@@ -96,7 +96,7 @@ const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
   }
 }
    
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<Action>, ownProps: OwnProps): DispatchProps => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<State, {}, any> & Dispatch<Action>, ownProps: OwnProps): DispatchProps => {
   return {
     fetch: () => dispatch(fetchClasses()),
     selectClass: (className: Class) => {

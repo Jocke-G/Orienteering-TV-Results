@@ -14,18 +14,24 @@ namespace OrienteeringTvResults
     {
         private readonly ApplicationConfiguration _conf;
         private readonly ResultsAdapter _results;
+        private Dictionary<int, DateTime> _lastCheckDictionary;
 
         public PollHostedService(IOptions<ApplicationConfiguration> conf, MqttHostedService mqtt, ResultsAdapter results)
         {
             Logger.LogInfo("Constructing PollHostedService");
             _conf = conf.Value;
             _results = results;
+            _lastCheckDictionary = new Dictionary<int, DateTime>();
+            mqtt.Handler.OnResendRequest += Reset;
+        }
+
+        public void Reset(object sender, EventArgs e)
+        {
+            _lastCheckDictionary.Clear();
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            var lastCheckClass = DateTime.MinValue;
-            var lastCheckDictionary = new Dictionary<int, DateTime>();
             while (!cancellationToken.IsCancellationRequested)
             {
                 try
@@ -35,7 +41,7 @@ namespace OrienteeringTvResults
                     Logger.LogInfo($"Found {competitionClasses.Count} classes");
                     foreach (var competitionClass in competitionClasses)
                     {
-                        if (!lastCheckDictionary.TryGetValue(competitionClass.Id, out DateTime lastCheckTime))
+                        if (!_lastCheckDictionary.TryGetValue(competitionClass.Id, out DateTime lastCheckTime))
                         {
                             lastCheckTime = DateTime.MinValue;
                         }
@@ -48,7 +54,7 @@ namespace OrienteeringTvResults
                             await MqttPublisher.PublishAsync(results);
                             var lastModified = results.Results.Aggregate((r1, r2) => r1.ModifyDate > r2.ModifyDate ? r1 : r2).ModifyDate;
                             Logger.LogInfo($"Updating last check time for '{competitionClass.ShortName}' to {lastModified}");
-                            lastCheckDictionary[competitionClass.Id] = lastModified;
+                            _lastCheckDictionary[competitionClass.Id] = lastModified;
                         }
                         else
                         {

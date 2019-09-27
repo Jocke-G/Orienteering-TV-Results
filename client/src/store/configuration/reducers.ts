@@ -57,6 +57,7 @@ const configuration = (state : State = initialState, action: Action): State => {
 
 export default configuration;
 
+export const isFetching = (state:RootState):boolean => state.configuration.requesting;
 export const hasConfiguration = (state:RootState):boolean => state.configuration.isComplete;
 export const getConfiguration = (state:RootState):Configuration => state.configuration.configuration ? state.configuration.configuration : emptyConf;
 export const getError = (state:RootState):Error|null => state.configuration.error;

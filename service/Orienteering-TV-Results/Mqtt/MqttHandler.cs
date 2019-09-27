@@ -11,15 +11,35 @@ namespace OrienteeringTvResults.Mqtt
         private static IMqttClient _client;
         private static MqttApplicationConfiguration _conf;
 
+        public event EventHandler OnResendRequest;
+
         public async Task Initialize(MqttApplicationConfiguration configuration)
         {
             _conf = configuration;
 
             _client = await CreateClient();
+            _client
+                .MessageStream
+                .Subscribe(msg =>
+                {
+                    OnMessageReceivedAsync(msg);
+                });
             await ConnectAsync(_client, _conf);
             _client.Disconnected += OnDisconnectedAsync;
 
             MqttPublisher.Initialize(_client);
+        }
+
+        private void OnMessageReceivedAsync(MqttApplicationMessage msg)
+        {
+            switch(msg.Topic)
+            {
+                case "results/resend":
+                    var e = new EventArgs();
+                    EventHandler handler = OnResendRequest;
+                    handler.Invoke(this, e);
+                    break;
+            }
         }
 
         private async Task<IMqttClient> CreateClient()
@@ -33,6 +53,7 @@ namespace OrienteeringTvResults.Mqtt
         private async Task ConnectAsync(IMqttClient client, MqttApplicationConfiguration conf)
         {
             await client.ConnectAsync(new MqttClientCredentials(conf.ClientId));
+            await client.SubscribeAsync("results/resend", MqttQualityOfService.AtMostOnce);
         }
 
         private async void OnDisconnectedAsync(object sender, MqttEndpointDisconnected e)

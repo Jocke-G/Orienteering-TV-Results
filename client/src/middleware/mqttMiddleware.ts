@@ -5,6 +5,7 @@ import { CONFIGURATION_RECEIVED } from '../store/configuration/actions';
 import { ClassResults } from '../store/results/reducers';
 import { classResultsReceived, } from '../store/results/actions';
 import { selectClass, SELECT_CLASS } from '../store/classes/actions';
+import { setMqttStatus, reportMessageReceived, PUBLISH_MQTT } from '../store/mqtt/actions';
 
 export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   let client :Client;
@@ -12,7 +13,6 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
 
   let createClient = (config:Configuration) => {
     let clientId = "TV_" + Math.random().toString(16).substr(2, 8);
-    console.log(`Creating MQTT client with id: '${ clientId }' to host '${ config.mqtt_host }' with port ${ config.mqtt_port }`)
     client = new Client(config.mqtt_host, Number(config.mqtt_port), clientId);
 
     client.onMessageArrived = (msg) => {
@@ -30,12 +30,12 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   }
 
   let connect = () => {
-    console.log("Connecting MQTT");
+    dispatch(setMqttStatus("Connecting"));
     client.connect({onSuccess: () => {
-      console.log("MQTT Connected");
+      dispatch(setMqttStatus("Connected"));
       startSubscriptions();
     }, onFailure: (error) => {
-      console.log("MQTT Connect failed: " + error.errorMessage);
+      dispatch(setMqttStatus(`Failed: ${error.errorMessage}`));
       setReconnectTimer();
     }});
   };
@@ -72,6 +72,7 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
   }
 
   let handleMessage = (msg:Message) => {
+    dispatch(reportMessageReceived(msg));
     var gi = /^Results\/Class\/[^/]+$/gi;
     if (msg.destinationName.match(gi)) {
       let obj: ClassResults = JSON.parse(msg.payloadString);
@@ -92,9 +93,14 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
           connect();
           return next(action);
         case SELECT_CLASS:
-            console.log("MQTT: Class selected");
+          console.log("MQTT: Class selected");
           updateSelectedClass(action.className);
           return next(action);
+        case PUBLISH_MQTT:
+          let message = new Message(action.message);
+          message.destinationName = action.topic;
+          client.send(message);
+          break;
         default:
           return next(action)
       }
