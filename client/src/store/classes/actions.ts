@@ -43,7 +43,6 @@ export const fetchClasses = (): ThunkAction<Promise<void>, RootState, {}, Action
     })
     .then(r => r.text())
     .then(resp => {
-       console.log("Received text: " + resp);
         let obj: Class[] = JSON.parse(resp);
         dispatch(classesReceived(obj))
     })

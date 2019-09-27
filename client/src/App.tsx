@@ -9,21 +9,20 @@ import './App.css';
 
 import ClassResult from './components/ClassResultView';
 import { requestConfiguration } from './store/configuration/actions';
-import { ClassResults, getResults } from './store/results/reducers';
 import { fetchClass, Action } from './store/results/actions';
-import SelectClass from './components/SelectClass';
 import { hasConfiguration } from './store/configuration/reducers';
 import InitModal from './components/InitModal';
 import { selectClass } from './store/classes/actions';
 import Mousetrap from 'mousetrap';
 import { getSelectedClass } from './store/classes/reducers';
+import { Layout, getLayout } from './store/layouts/reducers';
+import LayoutRoot from './components/Layout/LayoutRoot';
 
 export interface OwnProps {
-//  propFromParent: number
 }
 
 interface StateProps {
-  results?: ClassResults,
+  layout: Layout|null|undefined,
   selectedClass?: string,
   hasConfiguration: boolean,
 }
@@ -87,32 +86,25 @@ class App extends React.Component<Props, State> {
   }
 
   render() {
-    if(this.props.hasConfiguration){
-      if(this.props.selectedClass !== null) {
-        console.log(`[UI/App] render ClassResult: ${this.props.selectedClass}`);
-        return (
-          <React.Fragment>
-            <InitModal show={this.state.modalVisible} />
-            <ClassResult />
-          </React.Fragment>
-        );
-      } else {
-        console.log(`[UI/App] render SelectClass`);
-        return (
-          <SelectClass />
-        );
+    return(
+
+    <React.Fragment>
+      <InitModal show={this.state.modalVisible} />
+      {this.props.layout?
+      <LayoutRoot />
+      : this.props.selectedClass?
+        <ClassResult class={this.props.selectedClass} />
+        : null
       }
-    } else {
-      console.log(`[UI/App] Rendering Loader`);
-      return (<InitModal show={this.state.modalVisible} />)
-    }
+    </React.Fragment>
+    );
   }
 }
 
 const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
   return {
+    layout: getLayout(state),
     hasConfiguration: hasConfiguration(state),
-    results: getResults(state),
     selectedClass: getSelectedClass(state),
   }
 }

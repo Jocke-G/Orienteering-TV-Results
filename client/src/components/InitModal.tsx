@@ -5,6 +5,7 @@ import { Action, } from '../store/results/actions';
 import IntegrationConfigurationPane from './InitModalItems/IntegrationConfigurationPane';
 import ClassSelectorPane from './InitModalItems/ClassSelectorPane';
 import MqttStatusPane from './InitModalItems/MqttStatusPane';
+import LayoutPanel from './InitModalItems/LayoutPanel';
 
 export interface OwnProps {
   show: boolean,
@@ -50,6 +51,8 @@ class InitModal extends Component<Props> {
       <div className="backdrop" style={backdropStyle}>
         <div className="modal" style={modalStyle}>
           <IntegrationConfigurationPane />
+          <hr />
+          <LayoutPanel />
           <hr />
           <ClassSelectorPane />
           <hr />

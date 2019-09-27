@@ -39,22 +39,18 @@ namespace OrienteeringTvResults.Model
             if ((Status == ResultStatus.Passed || Status == ResultStatus.NotFinishedYet || Status == ResultStatus.Finished)
                 && (other.Status == ResultStatus.NotStarted || other.Status == ResultStatus.NotPassed))
             {
-                Console.WriteLine($"{Status} preceeds {other.Status}");
                 return thisPrecedes;
             }
             else if ((other.Status == ResultStatus.Passed || other.Status == ResultStatus.NotFinishedYet || other.Status == ResultStatus.Finished)
                 && (Status == ResultStatus.NotStarted || Status == ResultStatus.NotPassed)){
-                Console.WriteLine($"{Status} follows {other.Status}");
                 return thisFollows;
             }
             else if (other.Status == ResultStatus.NotPassed && Status == ResultStatus.NotStarted)
             {
-                Console.WriteLine($"{Status} follows {other.Status}");
                 return thisFollows;
             }
             else if (other.Status == ResultStatus.NotStarted && other.Status == ResultStatus.NotStarted)
             {
-                Console.WriteLine($"{Status} preceeds {other.Status}");
                 return thisPrecedes;
             }
 
@@ -62,17 +58,14 @@ namespace OrienteeringTvResults.Model
             {
                 if (TotalTime > other.TotalTime)
                 {
-                    Console.WriteLine($"{TotalTime} follows {other.TotalTime}");
                     return thisFollows;
                 }
                 else if(TotalTime < other.TotalTime)
                 {
-                    Console.WriteLine($"{TotalTime} preceeds {other.TotalTime}");
                     return thisPrecedes;
                 }
                 else
                 {
-                    Console.WriteLine($"{TotalTime} has same position as {other.TotalTime}");
                     return thisIsSamePosition;
                 }
             }
@@ -99,17 +92,14 @@ namespace OrienteeringTvResults.Model
         {
             if (current > other)
             {
-                Console.WriteLine($"{current} follows {other}");
                 return thisFollows;
             }
             else if (current < other)
             {
-                Console.WriteLine($"{current} preceeds {other}");
                 return thisPrecedes;
             }
             else
             {
-                Console.WriteLine($"{current} has same position as {other}");
                 return thisIsSamePosition;
             }
         }

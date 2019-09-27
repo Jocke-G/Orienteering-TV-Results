@@ -1,15 +1,15 @@
-import { MiddlewareAPI } from 'redux';
+import { MiddlewareAPI, AnyAction, Dispatch } from 'redux';
 import { Client, Message } from 'paho-mqtt';
 import { Configuration } from '../store/configuration/reducers';
 import { CONFIGURATION_RECEIVED } from '../store/configuration/actions';
 import { ClassResults } from '../store/results/reducers';
 import { classResultsReceived, } from '../store/results/actions';
-import { selectClass, SELECT_CLASS } from '../store/classes/actions';
-import { setMqttStatus, reportMessageReceived, PUBLISH_MQTT } from '../store/mqtt/actions';
+import { setMqttStatus, reportMessageReceived, PUBLISH_MQTT, SUBSCRIBE_CLASS, mqttSubscriptionTopics, UNSUBSCRIBE_CLASS } from '../store/mqtt/actions';
+import { RootState } from '../reducers/rootReducer';
+import { getSubscriptions } from '../store/mqtt/reducers';
 
-export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
+export const reduxMqttMiddleware = () => ({dispatch, getState }: MiddlewareAPI<Dispatch<AnyAction>, Readonly<RootState>>) => {
   let client :Client;
-  let selectedClass: string;
 
   let createClient = (config:Configuration) => {
     let clientId = "TV_" + Math.random().toString(16).substr(2, 8);
@@ -40,28 +40,34 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
     }});
   };
 
-  let startSubscriptions = () => {
-    client.subscribe(`Clients/TV1`);
-
-    if(selectedClass !== undefined){
-      let topic = `Results/Class/${selectedClass}`;
-      console.log(`Subscribing to topic: '${topic}'`)
-      client.subscribe(`Results/Class/${selectedClass}`);
-    }
+  let createClassTopic = (className:string) => {
+    return `Results/Class/${className}`;
   }
 
-  let updateSelectedClass = (className:string) => {
+  let addSubscription = (className:string) => {
+    let topic = createClassTopic(className);
     if(client !== undefined && client.isConnected()) {
-      if(selectedClass !== undefined) {
-        let oldTopic = `Results/Class/${selectedClass}`;
-        console.log(`Unsubscribing to topic: '${oldTopic}'`);
-        client.unsubscribe(oldTopic);
-      }
-      let newTopic = `Results/Class/${className}`;
-      console.log(`Subscribing to topic: '${newTopic}'`)
-      client.subscribe(newTopic);
+      client.subscribe(topic);
     }
-    selectedClass = className;
+    let topics = [...getSubscriptions(getState()), topic];
+    dispatch(mqttSubscriptionTopics(topics))
+  }
+
+  let removeSubscription = (className:string) => {
+    let topic = createClassTopic(className);
+    if(client !== undefined && client.isConnected()) {
+      client.unsubscribe(topic);
+    }
+    let topics = getSubscriptions(getState()).filter(element => element !== topic);
+    dispatch(mqttSubscriptionTopics(topics))
+  }
+
+  let startSubscriptions = () => {
+    client.subscribe(`Clients/TV1`);
+    let topics = getSubscriptions(getState());
+    topics.forEach((topic:string) => {
+      client.subscribe(topic);
+    })
   }
 
   let setReconnectTimer = () => {
@@ -77,8 +83,6 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
     if (msg.destinationName.match(gi)) {
       let obj: ClassResults = JSON.parse(msg.payloadString);
       dispatch(classResultsReceived(obj))
-    } else if(msg.destinationName === `Clients/TV1`) {
-      dispatch(selectClass(msg.payloadString));
     } else {
       console.log(`Message received on unhandled topic: ${msg.destinationName}`)
     }
@@ -92,15 +96,17 @@ export const reduxMqttMiddleware = () => ({dispatch}: MiddlewareAPI) => {
           createClient(action.configuration);
           connect();
           return next(action);
-        case SELECT_CLASS:
-          console.log("MQTT: Class selected");
-          updateSelectedClass(action.className);
+        case SUBSCRIBE_CLASS:
+          addSubscription(action.className);
+          return next(action);
+        case UNSUBSCRIBE_CLASS:
+          removeSubscription(action.className);
           return next(action);
         case PUBLISH_MQTT:
           let message = new Message(action.message);
           message.destinationName = action.topic;
           client.send(message);
-          break;
+          return next(action)
         default:
           return next(action)
       }

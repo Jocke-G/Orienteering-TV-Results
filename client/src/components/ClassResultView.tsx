@@ -5,9 +5,10 @@ import ClassCompetitorResultComponent from './ClassCompetitorResultComponent';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action, fetchClass } from '../store/results/actions';
-import { selectClass } from '../store/classes/actions';
+import { subscribeClass, unsubscribeClass } from '../store/mqtt/actions';
 
 export interface OwnProps {
+  class: string,
 }
 
 type StateProps = {
@@ -15,13 +16,24 @@ type StateProps = {
 }
 
 interface DispatchProps {
-  selectClass: (className:string) => void;
+  subscribeClass: (className:string) => void;
   fetchClass: (className:string) => void;
+  unsubscribeClass: (className:string) => void;
 }
 
 type Props = RouteComponentProps<{}> & StateProps & DispatchProps & OwnProps
 
 class ClassResultsView extends Component<Props> {
+  constructor(props:Props) {
+    super(props);
+    props.subscribeClass(props.class);
+    props.fetchClass(props.class);
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeClass(this.props.class)
+  }
+
   render() {
     return (
       <table id="header" className="result">
@@ -86,14 +98,15 @@ class ClassResultsView extends Component<Props> {
 
 const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
   return {
-    results: getResults(state),
+    results: getResults(state, ownProps.class),
   }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<Action>, ownProps: OwnProps): DispatchProps => {
   return {
-    selectClass: (className: string) => dispatch(selectClass(className)),
-    fetchClass: async (className) => dispatch(fetchClass(className))
+    subscribeClass: (className:string) => dispatch(subscribeClass(className)),
+    fetchClass: async (className:string) => dispatch(fetchClass(className)),
+    unsubscribeClass: (className:string) => dispatch(unsubscribeClass(className)),
   }
 }
 

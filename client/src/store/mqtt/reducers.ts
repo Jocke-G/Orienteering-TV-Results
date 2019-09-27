@@ -1,14 +1,16 @@
-import { Action, SET_MQTT_STATUS, MESSAGE_RECEIVED } from "./actions"
+import { Action, SET_MQTT_STATUS, MESSAGE_RECEIVED, MQTT_SUBSCRIPTIONS } from "./actions"
 import { RootState } from "../../reducers/rootReducer"
 import { Message } from "paho-mqtt"
 
 export interface State {
   status: string,
   latestMessage?: Message,
+  subscriptions: string[],
 }
 
 const initialState: State = {
   status: "",
+  subscriptions: [],
 }
 
 const mqtt = (state : State = initialState, action: Action): State => {
@@ -17,6 +19,11 @@ const mqtt = (state : State = initialState, action: Action): State => {
       return {
         ...state,
         status: action.status,
+      }
+    case MQTT_SUBSCRIPTIONS:
+      return {
+        ...state,
+        subscriptions: action.topics,
       }
     case MESSAGE_RECEIVED:
       return {
@@ -31,4 +38,5 @@ const mqtt = (state : State = initialState, action: Action): State => {
 export default mqtt;
 
 export const getStatus = (state:RootState):string => state.mqtt.status;
-export const getLatestMessage = (state:RootState):Message|undefined => state.mqtt.latestMessage
+export const getLatestMessage = (state:RootState):Message|undefined => state.mqtt.latestMessage;
+export const getSubscriptions = (state:RootState):string[] => state.mqtt.subscriptions;
