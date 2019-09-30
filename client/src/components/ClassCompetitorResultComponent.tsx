@@ -8,16 +8,29 @@ type AppProps = {
 }
 
 class ClassResultsView extends Component<AppProps> {
+
+  getStartTimeString = ():string => {
+    let dateObj = new Date(this.props.result.StartTime);
+    return `${dateObj.getHours().toString().padStart(2, '0')}:${dateObj.getMinutes().toString().padStart(2, '0')}:${dateObj.getSeconds().toString().padStart(2, '0')}`;
+  }
+
+  toSplitTime = (value:any):string => {
+    if(value == null)
+      return "";
+
+    return value.replace(/^00:/,'');
+  }
+
   render() {
     return (
       <tr className= { this.props.index % 2 === 0 ? "trDark" : ""}>
         <td>{ this.props.result.FirstName } { this.props.result.LastName }</td>
         <td>{ this.props.result.Club }</td>
-        <td>{ this.props.result.StartTime }</td>
+        <td>{ this.getStartTimeString() }</td>
         {this.props.result.SplitTimes.map((item, key) => 
           <Fragment key={key}>
             <td>{item.Ordinal}</td>
-            <td>{item.Time}</td>
+            <td>{this.toSplitTime(item.Time)}</td>
           </Fragment>
         )}
           {(() => {
@@ -26,14 +39,14 @@ class ClassResultsView extends Component<AppProps> {
               return (
                 <Fragment>
                   <td align='right'>{ this.props.result.Ordinal }</td>
-                  <td align='right'>{ this.props.result.TotalTime }</td>
+                  <td align='right'>{ this.toSplitTime(this.props.result.TotalTime) }</td>
                 </Fragment>
               );
             case 'Finished':
               return (
                 <Fragment>
                   <td align='right'>({ this.props.result.Ordinal })</td>
-                  <td align='right'>{ this.props.result.TotalTime }</td>
+                  <td align='right'>{ this.toSplitTime(this.props.result.TotalTime) }</td>
                 </Fragment>
               );
             case 'NotFinishedYet':
