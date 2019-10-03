@@ -6,7 +6,6 @@ import { getConfiguration } from '../configuration/reducers';
 export const REQUESTING_CLASSES = 'REQUESTING_CLASSES';
 export const CLASSES_RECEIVED = 'CLASSES_RECEIVED';
 export const REQUEST_CLASSES_ERROR = 'REQUEST_CLASSES_ERROR';
-export const SELECT_CLASS = 'SELECT_CLASS';
 
 export interface requestingClassesAction {
   type: typeof REQUESTING_CLASSES,
@@ -22,12 +21,7 @@ export interface requestClassesErrorAction {
   error: Error,
 }
 
-export interface selectClassAction {
-  type: typeof SELECT_CLASS,
-  className: string,
-}
-
-export type Action = requestingClassesAction | classesReceivedAction | requestClassesErrorAction |  selectClassAction;
+export type Action = requestingClassesAction | classesReceivedAction | requestClassesErrorAction;
 
 export const fetchClasses = (): ThunkAction<Promise<void>, RootState, {}, Action> => (dispatch: ThunkDispatch<RootState, {}, Action>, getState:any): any => {
   const state:RootState = getState();
@@ -63,16 +57,8 @@ export function classesReceived(classes: Class[]) : classesReceivedAction {
 }
 
 export function requestClassesError(error: Error): requestClassesErrorAction {
-  console.log("requestClassesError");
   return{
     type: REQUEST_CLASSES_ERROR,
     error: error,
   }
-}
-
-export function selectClass(className: string) : selectClassAction {
-  return {
-    type: SELECT_CLASS,
-    className: className,
-  };
 }

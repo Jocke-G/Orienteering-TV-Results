@@ -24,7 +24,6 @@ export type Action = requestingConfigurationAction | configurationReceivedAction
 
 export const requestConfiguration = (): ThunkAction<Promise<void>, RootState, {}, Action> => (dispatch: ThunkDispatch<{}, {}, Action>): any => {
   return new Promise((resolve, reject) => {
-    console.log("Thunk: requestConfiguration");
     dispatch(requestingConfiguration());
     fetch('/config.json')
       .then(response => {
@@ -40,7 +39,6 @@ export const requestConfiguration = (): ThunkAction<Promise<void>, RootState, {}
           })
           .catch((error:Error) => {
             dispatch(requestConfigurationError(error))
-            console.log("Mitt JsonFAil")
           });
     })
     .catch((error:Error) => {

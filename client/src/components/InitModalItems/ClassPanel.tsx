@@ -1,22 +1,21 @@
 import React, { Component, Dispatch, Fragment, FormEvent } from 'react';
 import { connect } from "react-redux";
 import { ThunkDispatch } from 'redux-thunk';
-import { Action, fetchClass, } from '../../store/results/actions';
-import { getClasses, Class, getError, getSelectedClass } from '../../store/classes/reducers';
-import { fetchClasses, selectClass } from '../../store/classes/actions';
+import { Action } from '../../store/results/actions';
+import { getClasses, Class, getError } from '../../store/classes/reducers';
+import { fetchClasses } from '../../store/classes/actions';
 
 export interface OwnProps {
+  selectClass: (className:string) => void;
 }
 
 type StateProps = {
   classes?: Class[],
   error: Error|null,
-  selectedClass?: string,
 }
 
 interface DispatchProps {
   fetch: () => void;
-  selectClass: (className:Class) => void;
 }
 
 type Props = StateProps & DispatchProps & OwnProps
@@ -25,7 +24,8 @@ interface State {
   selectedClass?: Class,
 }
 
-class ClassSelectorPane extends Component<Props, State> {
+class ClassPanel extends Component<Props, State> {
+  
   constructor(props:Props) {
     super(props);
     this.state = {};
@@ -49,10 +49,8 @@ class ClassSelectorPane extends Component<Props, State> {
   }
 
   onSelectClass = () => {
-    console.log(this.state.selectedClass);
-
     if(this.state.selectedClass)
-      this.props.selectClass(this.state.selectedClass);
+      this.props.selectClass(this.state.selectedClass.ShortName);
   }
 
   render() {
@@ -65,7 +63,6 @@ class ClassSelectorPane extends Component<Props, State> {
           <p style={{color: "red"}}>{ error.message }</p>
         :
           <Fragment>
-            <p>Vald klass: {this.props.selectedClass}</p>
             { this.props.classes ?
             <Fragment>
               <select
@@ -92,18 +89,13 @@ const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
   return {
     classes: getClasses(state),
     error: getError(state),
-    selectedClass: getSelectedClass(state),
   }
 }
    
 const mapDispatchToProps = (dispatch: ThunkDispatch<State, {}, any> & Dispatch<Action>, ownProps: OwnProps): DispatchProps => {
   return {
     fetch: () => dispatch(fetchClasses()),
-    selectClass: (className: Class) => {
-      dispatch(selectClass(className.ShortName));
-      dispatch(fetchClass(className.ShortName));
-    },
   }
 }
-    
-  export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ClassSelectorPane);
+
+export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ClassPanel);

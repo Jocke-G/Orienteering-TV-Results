@@ -2,11 +2,12 @@ import React, { Component, Dispatch, Fragment, CSSProperties, RefObject } from '
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from 'react-router';
 import { ThunkDispatch } from 'redux-thunk';
-import { Action } from '../../store/layouts/actions';
+import { Action, fetchLayout } from '../../store/layouts/actions';
 import { Layout, getLayout } from '../../store/layouts/reducers';
 import ClassResultView from '../ClassResultView';
 
 export interface OwnProps {
+  layoutName: string,
 }
 
 type StateProps = {
@@ -14,6 +15,7 @@ type StateProps = {
 }
 
 interface DispatchProps {
+  fetchLayout: (layoutName:string) => void;
 }
 
 type Props = RouteComponentProps<{}> & StateProps & DispatchProps & OwnProps
@@ -36,6 +38,7 @@ class LayoutRoot extends Component<Props, State> {
       scrollDown: true,
       scrollWait: 0,
     }
+    props.fetchLayout(this.props.layoutName);
   }
 
   componentDidMount() {
@@ -94,7 +97,8 @@ class LayoutRoot extends Component<Props, State> {
                 overflow: "scroll",
               }
               let key = rowKey + "-" +colKey;
-              this.state.cells[key] = React.createRef();
+              let cells = this.state.cells;
+              cells[key] = React.createRef();
               let cellDiv = <div ref={this.state.cells[key]} style={style} key={key}><ClassResultView class={cell.Class} /></div>;
                 return(
               cellDiv
@@ -116,6 +120,7 @@ const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<Action>, ownProps: OwnProps): DispatchProps => {
   return {
+    fetchLayout: (layoutName:string) => dispatch(fetchLayout(layoutName)),
   }
 }
 

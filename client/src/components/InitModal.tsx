@@ -3,12 +3,14 @@ import { connect } from "react-redux";
 import { ThunkDispatch } from 'redux-thunk';
 import { Action, } from '../store/results/actions';
 import IntegrationConfigurationPane from './InitModalItems/IntegrationConfigurationPane';
-import ClassSelectorPane from './InitModalItems/ClassSelectorPane';
+import ClassPanel from './InitModalItems/ClassPanel';
 import MqttStatusPane from './InitModalItems/MqttStatusPane';
 import LayoutPanel from './InitModalItems/LayoutPanel';
 
 export interface OwnProps {
   show: boolean,
+  selectClass: (className:string) => void;
+  selectLayout: (layoutName:string) => void;
 }
 
 type StateProps = {
@@ -19,7 +21,18 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps & OwnProps
 
-class InitModal extends Component<Props> {
+interface State {
+}
+
+class InitModal extends Component<Props, State> {
+  selectClass = (className:string) => {
+    this.props.selectClass(className);
+  }
+
+  selectLayout = (layoutName:string) => {
+    this.props.selectLayout(layoutName);
+  }
+
   render() {
     if(!this.props.show) {
       return null;
@@ -52,9 +65,9 @@ class InitModal extends Component<Props> {
         <div className="modal" style={modalStyle}>
           <IntegrationConfigurationPane />
           <hr />
-          <LayoutPanel />
+          <LayoutPanel selectLayout={this.selectLayout} />
           <hr />
-          <ClassSelectorPane />
+          <ClassPanel selectClass={this.selectClass} />
           <hr />
           <MqttStatusPane />
         </div>

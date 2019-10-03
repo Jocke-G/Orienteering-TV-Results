@@ -6,6 +6,7 @@ import { fetchLayout, Action } from '../../store/layouts/actions';
 import BusyButton from '../BusyButton';
 
 export interface OwnProps {
+  selectLayout: (layoutName:string) => void,
 }
 
 type StateProps = {
@@ -37,7 +38,9 @@ class LayoutsPanel extends Component<Props, State> {
   }
 
   onSelectLayout = () => {
-    this.props.fetch(this.state.layoutName);
+    const layoutName = this.state.layoutName;
+    this.props.fetch(layoutName);
+    this.props.selectLayout(layoutName)
   }
 
   render() {

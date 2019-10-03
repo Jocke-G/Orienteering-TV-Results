@@ -1,36 +1,28 @@
-import * as React from 'react'
+import React, { Component, Fragment } from 'react'
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router";
-import queryString from 'query-string';
+import { RouteComponentProps, withRouter, Route, match as Match } from "react-router";
 import { ThunkDispatch } from 'redux-thunk';
+import Mousetrap from 'mousetrap';
 
 import './App.css';
 
-import ClassResult from './components/ClassResultView';
 import { requestConfiguration } from './store/configuration/actions';
-import { fetchClass, Action } from './store/results/actions';
+import { Action } from './store/results/actions';
 import { hasConfiguration } from './store/configuration/reducers';
 import InitModal from './components/InitModal';
-import { selectClass } from './store/classes/actions';
-import Mousetrap from 'mousetrap';
-import { getSelectedClass } from './store/classes/reducers';
-import { Layout, getLayout } from './store/layouts/reducers';
 import LayoutRoot from './components/Layout/LayoutRoot';
+import ClassResultView from './components/ClassResultView';
 
 export interface OwnProps {
 }
 
 interface StateProps {
-  layout: Layout|null|undefined,
-  selectedClass?: string,
   hasConfiguration: boolean,
 }
 
 interface DispatchProps {
   requestConfiguration: () => Promise<void>;
-  selectClass: (className:string) => void;
-  fetchClass: (className:string) => void;
 }
 
 type Props = RouteComponentProps<{}> & StateProps & DispatchProps & OwnProps
@@ -39,22 +31,15 @@ interface State {
   modalVisible: boolean,
 }
 
-class App extends React.Component<Props, State> {
+class App extends Component<Props, State> {
   constructor(props:Props){
     super(props);
-    this.state = {
-      modalVisible: true,
-    };
-    this.init();
-  }
 
-  init() {
-    console.log("[UI] Initiating");
-    this.props.requestConfiguration()
-    .then(() => {
-      console.log("[UI] Conf received");
-      this.updateSelectedClass();
-    });
+    const location = this.props.location['pathname'];
+    this.state = {
+      modalVisible: location === "/",
+    };
+    this.props.requestConfiguration();
   }
 
   componentDidMount() {
@@ -64,56 +49,59 @@ class App extends React.Component<Props, State> {
   }
 
   toggleModal() {
-    console.log("toggleModal");
     this.setState((state:Readonly<State>) => ({
       modalVisible: !state.modalVisible,
     }));
   }
 
-  componentDidUpdate(props:Props) {
+  selectLayout = (layoutName:string) => {
+    this.props.history.push(`/layout/${layoutName}`)
   }
 
-  updateSelectedClass() {
-    console.log("[UI] updateSelectedClass");
-    let parsed = queryString.parse(this.props.location.search);
-    let className = parsed['Class'];
-    console.log(`[UI] QueryString Class: ${className}, Selected class: ${this.props.selectedClass}`);
-    if(typeof className === "string" && this.props.selectedClass !== className) {
-      console.log(`[UI] selecting class: ${className}`);
-      this.props.selectClass(className);
-      this.props.fetchClass(className);
+  selectClass = (className:string) => {
+    this.props.history.push(`/class/${className}`)
+  }
+
+  renderClassResults = (match:Match<any>|null) => {
+    if(match == null) {
+      return(null);
     }
+    return(<ClassResultView class={ match.params.className }/>);
+  }
+
+  renderLayout = (match:Match<any>|null) => {
+    if(match == null) {
+      return(null);
+    }
+    return(<LayoutRoot layoutName={ match.params.layoutName }/>);
   }
 
   render() {
     return(
-
-    <React.Fragment>
-      <InitModal show={this.state.modalVisible} />
-      {this.props.layout?
-      <LayoutRoot />
-      : this.props.selectedClass?
-        <ClassResult class={this.props.selectedClass} />
-        : null
-      }
-    </React.Fragment>
+    <Fragment>
+      <InitModal selectLayout={this.selectLayout} selectClass={this.selectClass} show={this.state.modalVisible} />
+      {!this.props.hasConfiguration?
+      <p><i>Hämtar konfiguration</i></p>
+      :
+      <Fragment>
+        <Route exact path="/layout/:layoutName" children={({ match }) => this.renderLayout(match)} />
+        <Route exact path="/class/:className" children={({ match }) => this.renderClassResults(match)}/>
+      </Fragment>
+    }
+    </Fragment>
     );
   }
 }
 
 const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
   return {
-    layout: getLayout(state),
     hasConfiguration: hasConfiguration(state),
-    selectedClass: getSelectedClass(state),
   }
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<Action>, ownProps: OwnProps): DispatchProps => {
   return {
-    requestConfiguration: async () => {await dispatch(requestConfiguration())},
-    selectClass: (className: string) => dispatch(selectClass(className)),
-    fetchClass: async (className) => dispatch(fetchClass(className))
+    requestConfiguration: async () => {dispatch(requestConfiguration())},
   }
 }
 

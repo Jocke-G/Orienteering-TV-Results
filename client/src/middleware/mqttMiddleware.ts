@@ -24,8 +24,8 @@ export const reduxMqttMiddleware = () => ({dispatch, getState }: MiddlewareAPI<D
     };
 
     client.onConnectionLost = (error) => {
-      console.log("Connection lost, code: '" + error.errorCode + "' message: '" + error.errorMessage + "'");
       setReconnectTimer();
+      dispatch(setMqttStatus(`Failed: ${error.errorMessage}`));
     }  
   }
 
@@ -72,7 +72,6 @@ export const reduxMqttMiddleware = () => ({dispatch, getState }: MiddlewareAPI<D
 
   let setReconnectTimer = () => {
     setTimeout(() => {
-      console.log("Reconnecting MQTT...");
       connect();
     }, 5 * 1000)
   }
@@ -92,7 +91,6 @@ export const reduxMqttMiddleware = () => ({dispatch, getState }: MiddlewareAPI<D
     try {
       switch(action.type) {
         case CONFIGURATION_RECEIVED:
-          console.log("MQTT: Conf received");
           createClient(action.configuration);
           connect();
           return next(action);

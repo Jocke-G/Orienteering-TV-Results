@@ -18,7 +18,6 @@ export const fetchClass = (className:string): ThunkAction<Promise<void>, RootSta
   let host = conf.rest_host;
   let port = conf.rest_port;
   let classUrl = `http://${host}:${port}/api/classes/${ className }`;
-  console.log(`Fetching initial class from ${classUrl}`); 
   fetch(classUrl, {
       method: "GET",
       headers: {}

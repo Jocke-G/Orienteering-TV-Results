@@ -36,7 +36,7 @@ class ClassResultsView extends Component<Props> {
 
   render() {
     if(this.props.results === undefined) {
-      return (<p><i>Väntar på klassdefinition</i></p>)
+      return (<p><i>Väntar på klassdefinition för '{this.props.class}'</i></p>)
     }
     return (
       <Fragment>
