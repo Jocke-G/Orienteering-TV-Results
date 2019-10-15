@@ -6,11 +6,11 @@ export interface Layout {
 }
 
 export interface LayoutRow {
-  Columns: LayoutCell[],
+  Cells: LayoutCell[],
 }
 
 export interface LayoutCell {
-  Class: string,
+  ClassName: string,
 }
 
 export interface State {

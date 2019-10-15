@@ -1,6 +1,8 @@
 {
     "mqtt_host": "localhost",
     "mqtt_port": "8000",
-    "rest_host": "localhost",
-    "rest_port": 5000
+    "layouts_rest_host": "localhost",
+    "layouts_rest_port": 8081,
+    "results_rest_host": "localhost",
+    "results_rest_port": 8080
 }

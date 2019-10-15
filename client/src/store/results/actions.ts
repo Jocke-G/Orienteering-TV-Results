@@ -14,10 +14,9 @@ export type Action = classResultsReceivedAction;
 
 export const fetchClass = (className:string): ThunkAction<Promise<void>, RootState, {}, Action> => (dispatch: ThunkDispatch<RootState, {}, Action>, getState:any): any => {
   const state:RootState = getState();
-  let conf = getConfiguration(state);
-  let host = conf.rest_host;
-  let port = conf.rest_port;
-  let classUrl = `http://${host}:${port}/api/classes/${ className }`;
+
+  const conf = getConfiguration(state);
+  const classUrl = `http://${conf.results_rest_host}:${conf.results_rest_port}/api/classes/${ className }`;
   fetch(classUrl, {
       method: "GET",
       headers: {}

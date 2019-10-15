@@ -89,7 +89,7 @@ class LayoutRoot extends Component<Props, State> {
       <div style={wrapperStyle} className='wrapper'>
         {props.layout.Rows.map((row, rowKey) => 
         <Fragment key={rowKey}>
-          {row.Columns.map((cell, colKey) => {
+          {row.Cells.map((cell, colKey) => {
               var style:CSSProperties = {
                 gridColumn: colKey + 1,
                 gridRow: rowKey + 1,
@@ -99,7 +99,7 @@ class LayoutRoot extends Component<Props, State> {
               let key = rowKey + "-" +colKey;
               let cells = this.state.cells;
               cells[key] = React.createRef();
-              let cellDiv = <div ref={this.state.cells[key]} style={style} key={key}><ClassResultView class={cell.Class} /></div>;
+              let cellDiv = <div ref={this.state.cells[key]} style={style} key={key}><ClassResultView class={cell.ClassName} /></div>;
                 return(
               cellDiv
             )

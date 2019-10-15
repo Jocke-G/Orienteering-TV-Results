@@ -1,6 +1,7 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { RootState } from "../../reducers/rootReducer";
 import { Layout } from './reducers';
+import { getConfiguration } from '../configuration/reducers';
 
 export const REQUESTING_LAYOUT = 'REQUESTING_LAYOUT';
 export const LAYOUT_RECEIVED = 'LAYOUT_RECEIVED';
@@ -23,8 +24,10 @@ export interface requestLayoutErrorAction {
 export type Action = requestingLayoutAction | layoutReceivedAction | requestLayoutErrorAction;
 
 export const fetchLayout = (layoutName:String): ThunkAction<Promise<void>, RootState, {}, Action> => (dispatch: ThunkDispatch<RootState, {}, Action>, getState:any): any => {
+  const state:RootState = getState();
 
-  let url = `/api/layouts/${layoutName}.json`;
+  const conf = getConfiguration(state);
+  const url = `http://${conf.layouts_rest_host}:${conf.layouts_rest_port}/layouts/${layoutName}`;
   dispatch(requestingLayout());
   fetch(url, {
       method: "GET",

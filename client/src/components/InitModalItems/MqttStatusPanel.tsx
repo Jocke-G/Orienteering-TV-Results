@@ -24,7 +24,7 @@ type Props = StateProps & DispatchProps & OwnProps
 interface State {
 }
 
-class MqttStatusPane extends Component<Props, State> {
+class MqttStatusPanel extends Component<Props, State> {
   trigResendResults = () => {
     this.props.trigResendResults();
   }
@@ -62,4 +62,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<State, Props, any> & Dispatc
   }
 }
     
-export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(MqttStatusPane);
+export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(MqttStatusPanel);

@@ -62,8 +62,8 @@ class LayoutsPanel extends Component<Props, State> {
             <tbody>
             {props.layout.Rows.map((row, rowKey) => 
             <tr key={rowKey}>
-              {row.Columns.map((cell, rowKey) => 
-                <td key={rowKey}>{cell.Class}</td>
+              {row.Cells.map((cell, rowKey) => 
+                <td key={rowKey}>{cell.ClassName}</td>
               )}
             </tr>
             )}

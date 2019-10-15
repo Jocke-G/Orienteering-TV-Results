@@ -33,7 +33,6 @@ export interface ClassResultDictionary {
 }
 
 export interface State {
-  //results: { [index:string] :  ClassResults},
   results: ClassResultDictionary,
 }
 

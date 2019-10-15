@@ -70,5 +70,12 @@ services:
     restart: always
     depends_on:
       - mosquitto
+    environment:
+      - 'mqtt_host=results'
+      - 'mqtt_port=8000'
+      - 'results_rest_host=results'
+      - 'results_rest_port=8080'
+      - 'layouts_rest_host=results'
+      - 'layouts_rest_port=8081'
     ports:
       - '80:80'

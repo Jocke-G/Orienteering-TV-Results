@@ -4,8 +4,10 @@ import { RootState } from '../../reducers/rootReducer'
 export interface Configuration {
   mqtt_host: string;
   mqtt_port: number;
-  rest_host: string;
-  rest_port: number;
+  layouts_rest_host: string;
+  layouts_rest_port: number;
+  results_rest_host: string;
+  results_rest_port: number;
 }
 
 export interface State {
@@ -18,8 +20,10 @@ export interface State {
 const emptyConf: Configuration = {
   mqtt_host: "",
   mqtt_port: 0,
-  rest_host: "",
-  rest_port: 0,
+  layouts_rest_host: "",
+  layouts_rest_port: 0,
+  results_rest_host: "",
+  results_rest_port: 0,
 }
 
 const initialState: State = {

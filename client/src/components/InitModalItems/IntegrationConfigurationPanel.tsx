@@ -21,7 +21,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps & OwnProps
 
-class InitModal extends Component<Props> {
+class IntegrationConfigurationPanel extends Component<Props> {
   onClick = () => {
     this.props.fetch();
   };
@@ -37,7 +37,8 @@ class InitModal extends Component<Props> {
         :
           <Fragment>
             <p>MQTT: {this.props.configuration.mqtt_host}:{this.props.configuration.mqtt_port}</p>
-            <p>REST: {this.props.configuration.rest_host}:{this.props.configuration.rest_port}</p>
+            <p>Layouts REST: {this.props.configuration.layouts_rest_host}:{this.props.configuration.layouts_rest_port} <a href={ `http://${this.props.configuration.layouts_rest_host}:${this.props.configuration.layouts_rest_port}/swagger-ui.html` } rel="noopener noreferrer" target="_blank">Swagger UI</a></p>
+            <p>Results REST: {this.props.configuration.results_rest_host}:{this.props.configuration.results_rest_port} <a href={ `http://${this.props.configuration.results_rest_host}:${this.props.configuration.results_rest_port}/swagger/index.html` } rel="noopener noreferrer" target="_blank">Swagger UI</a></p>
           </Fragment>
         }
         <BusyButton isBusy={props.isFetching} onClick={this.onClick}></BusyButton>
@@ -60,4 +61,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<State, Props, any> & Dispatc
   }
 }
     
-export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(InitModal);
+export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(IntegrationConfigurationPanel);

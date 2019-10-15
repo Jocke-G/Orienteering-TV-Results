@@ -26,10 +26,8 @@ export type Action = requestingClassesAction | classesReceivedAction | requestCl
 export const fetchClasses = (): ThunkAction<Promise<void>, RootState, {}, Action> => (dispatch: ThunkDispatch<RootState, {}, Action>, getState:any): any => {
   const state:RootState = getState();
 
-  let conf = getConfiguration(state);
-  let host = conf.rest_host;
-  let port = conf.rest_port;
-  let classUrl = `http://${host}:${port}/api/classes`;
+  const conf = getConfiguration(state);
+  const classUrl = `http://${conf.results_rest_host}:${conf.results_rest_port}/api/classes`;
   dispatch(requestingClasses());
   fetch(classUrl, {
       method: "GET",

@@ -2,9 +2,9 @@ import React, { Component, Dispatch, CSSProperties } from 'react';
 import { connect } from "react-redux";
 import { ThunkDispatch } from 'redux-thunk';
 import { Action, } from '../store/results/actions';
-import IntegrationConfigurationPane from './InitModalItems/IntegrationConfigurationPane';
+import IntegrationConfigurationPanel from './InitModalItems/IntegrationConfigurationPanel';
 import ClassPanel from './InitModalItems/ClassPanel';
-import MqttStatusPane from './InitModalItems/MqttStatusPane';
+import MqttStatusPanel from './InitModalItems/MqttStatusPanel';
 import LayoutPanel from './InitModalItems/LayoutPanel';
 
 export interface OwnProps {
@@ -63,13 +63,13 @@ class InitModal extends Component<Props, State> {
     return(
       <div className="backdrop" style={backdropStyle}>
         <div className="modal" style={modalStyle}>
-          <IntegrationConfigurationPane />
+          <IntegrationConfigurationPanel />
           <hr />
           <LayoutPanel selectLayout={this.selectLayout} />
           <hr />
           <ClassPanel selectClass={this.selectClass} />
           <hr />
-          <MqttStatusPane />
+          <MqttStatusPanel />
         </div>
       </div>
     )
