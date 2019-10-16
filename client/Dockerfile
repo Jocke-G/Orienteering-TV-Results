@@ -8,6 +8,8 @@ RUN npm run-script build
 
 FROM nginx:alpine
 COPY --from=build-deps /usr/src/app/build /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf
+COPY config/nginx.conf /etc/nginx/conf.d
 EXPOSE 80
 
 WORKDIR /usr/share/nginx/html

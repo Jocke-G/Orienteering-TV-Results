@@ -31,24 +31,10 @@ services:
       - 'meos:database:database=meos_'
       - 'meos:database:username=TvService'
       - 'meos:database:password=secret'
-
     ports:
       - '8080:80'
     volumes:
       - './service-logs:/app/logs'
-  layout-service:
-    build:
-      context: ./LayoutService
-      dockerfile: Dockerfile
-    restart: always
-    depends_on:
-      - mysql
-    environment:
-      - 'SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/layout'
-      - 'SPRING_DATASOURCE_USERNAME=root'
-      - 'SPRING_DATASOURCE_PASSWORD=supersecret'
-    ports:
-      - '8081:8081'
   client:
     build:
       context: ./client

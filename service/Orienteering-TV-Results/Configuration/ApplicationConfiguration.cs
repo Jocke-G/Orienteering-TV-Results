@@ -10,5 +10,6 @@ namespace OrienteeringTvResults.Configuration
         public OlaConfiguration Ola { get; set; }
         public MeosConfiguration Meos { get; set; }
         public double PollWaitTime { get; set; }
+        public bool EnablePollService { get; set; }
     }
 }

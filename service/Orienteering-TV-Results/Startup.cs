@@ -23,7 +23,12 @@ namespace OrienteeringTvResults
 
             services.AddSingleton<MqttHostedService>();
             services.AddSingleton<ResultsAdapter>();
-            services.AddSingleton<IHostedService, PollHostedService>();
+
+            var settings = configuration.Get<ApplicationConfiguration>();
+            if (settings.EnablePollService)
+            {
+                services.AddSingleton<IHostedService, PollHostedService>();
+            }
 
             services
                 .AddMvc()

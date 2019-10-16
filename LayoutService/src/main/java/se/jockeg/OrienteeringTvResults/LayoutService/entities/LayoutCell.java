@@ -33,7 +33,6 @@ public class LayoutCell implements Serializable {
     }
 
     @Column(name = "className")
-    @JsonProperty("Class")
     private String className;
 
     public String getClassName() {
