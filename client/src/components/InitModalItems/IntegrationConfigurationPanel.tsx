@@ -37,7 +37,7 @@ class IntegrationConfigurationPanel extends Component<Props> {
         :
           <Fragment>
             <p>MQTT: {this.props.configuration.mqtt_host}:{this.props.configuration.mqtt_port}</p>
-            <p>Layouts REST: {this.props.configuration.layouts_rest_host}:{this.props.configuration.layouts_rest_port} <a href={ `http://${this.props.configuration.layouts_rest_host}:${this.props.configuration.layouts_rest_port}/swagger-ui.html` } rel="noopener noreferrer" target="_blank">Swagger UI</a></p>
+            <p>Layouts REST: <a href={ `http://${this.props.configuration.layouts_rest_host}:${this.props.configuration.layouts_rest_port}` } rel="noopener noreferrer" target="_blank">{`http://${this.props.configuration.layouts_rest_host}:${this.props.configuration.layouts_rest_port}`}</a></p>
             <p>Results REST: {this.props.configuration.results_rest_host}:{this.props.configuration.results_rest_port} <a href={ `http://${this.props.configuration.results_rest_host}:${this.props.configuration.results_rest_port}/swagger/index.html` } rel="noopener noreferrer" target="_blank">Swagger UI</a></p>
           </Fragment>
         }
