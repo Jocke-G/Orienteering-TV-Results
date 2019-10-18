@@ -51,17 +51,11 @@ services:
       - './service-logs:/app/logs'
   layout-service:
     build:
-      context: ./LayoutService
+      context: ./layout-service
       dockerfile: Dockerfile
     restart: always
-    depends_on:
-      - mysql
-    environment:
-      - 'SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/layout'
-      - 'SPRING_DATASOURCE_USERNAME=layout-service'
-      - 'SPRING_DATASOURCE_PASSWORD=secret'
     ports:
-      - '8081:8081'
+      - '8081:80'
   client:
     build:
       context: ./client
@@ -70,7 +64,7 @@ services:
     depends_on:
       - mosquitto
     environment:
-      - 'mqtt_host=results'
+      - 'mqtt_host=localhost'
       - 'mqtt_port=8000'
       - 'results_rest_host=localhost'
       - 'results_rest_port=8080'

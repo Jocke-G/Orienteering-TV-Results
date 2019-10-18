@@ -35,6 +35,13 @@ services:
       - '8080:80'
     volumes:
       - './service-logs:/app/logs'
+  layout-service:
+    build:
+      context: ./layout-service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '8081:80'
   client:
     build:
       context: ./client
