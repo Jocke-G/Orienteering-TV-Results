@@ -3,7 +3,7 @@ using LayoutRestService.Contracts;
 
 namespace LayoutRestService.Services
 {
-    internal interface ILayoutService
+    public interface ILayoutService
     {
         IList<Layout> GetLayouts();
         Layout GetLayoutByName(string name);

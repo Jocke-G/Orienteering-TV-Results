@@ -54,6 +54,13 @@ services:
       context: ./layout-service
       dockerfile: Dockerfile
     restart: always
+    depends_on:
+      - mysql
+    environment:
+      - 'database:server=mysql'
+      - 'database:database=layout'
+      - 'database:username=layout-service'
+      - 'database:password=secret'
     ports:
       - '8081:80'
   client:

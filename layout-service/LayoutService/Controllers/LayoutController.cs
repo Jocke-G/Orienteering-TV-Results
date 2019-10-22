@@ -15,10 +15,10 @@ namespace LayoutRestService.Controllers
         private readonly ILogger<LayoutController> _logger;
         private readonly ILayoutService _service;
 
-        public LayoutController(ILogger<LayoutController> logger)
+        public LayoutController(ILogger<LayoutController> logger, ILayoutService service)
         {
             _logger = logger;
-            _service = new LayoutService();
+            _service = service;
         }
 
         [HttpGet("layouts")]

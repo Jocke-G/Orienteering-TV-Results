@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayoutRestService", "LayoutService\LayoutRestService.csproj", "{941FDA3C-7705-4463-835A-C49D6EA373E1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayoutRestService.Tests", "LayoutService.Tests\LayoutRestService.Tests.csproj", "{2FE3EB98-1583-4933-819F-E998788CBB17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayoutRestService.UnitTests", "LayoutService.Tests\LayoutRestService.UnitTests.csproj", "{2FE3EB98-1583-4933-819F-E998788CBB17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutRestService.IntegrationTests", "LayoutRestService.IntegrationTests\LayoutRestService.IntegrationTests.csproj", "{0D4BB54C-CEE6-4159-AA14-4DE541709154}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayoutRestService.IntegrationTests", "LayoutRestService.IntegrationTests\LayoutRestService.IntegrationTests.csproj", "{0D4BB54C-CEE6-4159-AA14-4DE541709154}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

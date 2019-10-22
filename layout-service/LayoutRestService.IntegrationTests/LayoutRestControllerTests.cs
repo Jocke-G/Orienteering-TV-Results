@@ -2,29 +2,32 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace LayoutRestService.IntegrationTests
 {
     public class LayoutRestControllerTests
-         : IClassFixture<WebApplicationFactory<Startup>>
+         : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
-        private readonly WebApplicationFactory<Startup> _factory;
+        private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<Startup> _factory;
 
-        public LayoutRestControllerTests(WebApplicationFactory<Startup> factory)
+        public LayoutRestControllerTests(CustomWebApplicationFactory<Startup> factory)
         {
             _factory = factory;
+            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false
+            });
         }
 
         [Fact]
         public async Task TestGetLayouts_LayoutsExists_TeturnJsonArrayOfLayouts()
         {
-            // Arrange
-            var client = _factory.CreateClient();
-
             // Act
-            var response = await client.GetAsync("/layouts");
+            var response = await _client.GetAsync("/layouts");
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -35,19 +38,17 @@ namespace LayoutRestService.IntegrationTests
 
             var obj = JToken.Parse(stringResponse);
 
-            Assert.Equal(2, obj.Count());
-            Assert.Equal("TV1", obj[0]["Name"]);
-            Assert.Equal("TV2", obj[1]["Name"]);
+            Assert.Equal(3, obj.Count());
+            Assert.Equal("TestTV1", obj[0]["Name"]);
+            Assert.Equal("TestTV2", obj[1]["Name"]);
+            Assert.Equal("TestTV3", obj[2]["Name"]);
         }
 
         [Fact]
         public async Task TestGetLayout_LayoutExists_ReturnJsonLayout()
         {
-            // Arrange
-            var client = _factory.CreateClient();
-
             // Act
-            var response = await client.GetAsync("/layouts/TV1");
+            var response = await _client.GetAsync("/layouts/TestTV1");
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -58,17 +59,14 @@ namespace LayoutRestService.IntegrationTests
 
             var obj = JToken.Parse(stringResponse);
 
-            Assert.Equal("TV1", obj["Name"]);
+            Assert.Equal("TestTV1", obj["Name"]);
         }
 
         [Fact]
         public async Task TestGetLayout_LayoutDontExists_ReturnNotFound()
         {
-            // Arrange
-            var client = _factory.CreateClient();
-
             // Act
-            var response = await client.GetAsync("/layouts/TV0");
+            var response = await _client.GetAsync("/layouts/TV0");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

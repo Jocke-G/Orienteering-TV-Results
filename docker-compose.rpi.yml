@@ -40,6 +40,11 @@ services:
       context: ./layout-service
       dockerfile: Dockerfile
     restart: always
+    environment:
+      - 'database:server=192.168.10.136'
+      - 'database:database=layout'
+      - 'database:username=layout-service'
+      - 'database:password=secret'
     ports:
       - '8081:80'
   client:
@@ -49,6 +54,13 @@ services:
     restart: always
     depends_on:
       - mosquitto
+    environment:
+      - 'mqtt_host=results'
+      - 'mqtt_port=8000'
+      - 'results_rest_host=results'
+      - 'results_rest_port=8080'
+      - 'layouts_rest_host=results'
+      - 'layouts_rest_port=8081'
     volumes:
       - './config/client.json:/usr/share/nginx/html/config.json'
     ports:
