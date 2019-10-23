@@ -1,9 +1,8 @@
-using LayoutRestService.Data;
+using LayoutRestService.Dapper;
 using LayoutRestService.Models.Configuration;
 using LayoutRestService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,13 +32,13 @@ namespace LayoutRestService
             services.Configure<ApplicationConfiguration>(configuration);
 
             var settings = configuration.Get<ApplicationConfiguration>();
-            ConfigureEntityFramework(services, settings.Database);
+
+            Initializer.Initialize(services, settings.Database);
 
             services.AddControllers().AddJsonOptions(options => {
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
 
-            services.AddScoped<ILayoutRepository, LayoutRepository>();
             services.AddScoped<ILayoutService, LayoutService>();
 
             services.AddCors(o => o.AddPolicy(DefaultCorsPolicy, builder =>
@@ -53,11 +52,6 @@ namespace LayoutRestService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
-        }
-
-        private void ConfigureEntityFramework(IServiceCollection services, DatabaseConfiguration configuration)
-        {
-            services.AddDbContext<AppDbContext>(c => c.UseMySql(configuration.GetConnectionString()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

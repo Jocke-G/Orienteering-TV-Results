@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LayoutRestService.Contracts;
-using LayoutRestService.Data;
 using LayoutRestService.Models;
+using LayoutRestService.RepositoryInterfaces;
 
 namespace LayoutRestService.Services
 {

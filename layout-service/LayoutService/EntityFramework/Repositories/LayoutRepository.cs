@@ -1,0 +1,35 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using LayoutRestService.Models;
+using LayoutRestService.RepositoryInterfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace LayoutRestService.EntityFramework.Repositories
+{
+    public class LayoutRepository
+        : ILayoutRepository
+    {
+        private readonly AppDbContext _context;
+
+        public LayoutRepository(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public IList<LayoutEntity> GetAll()
+        {
+            return _context
+                .Layouts
+                .ToList();
+        }
+
+        public LayoutEntity GetByName(string name)
+        {
+            return _context
+                .Layouts
+                .Include(x => x.Rows)
+                .ThenInclude(x => x.Cells)
+                .SingleOrDefault(x => x.Name == name);
+        }
+    }
+}

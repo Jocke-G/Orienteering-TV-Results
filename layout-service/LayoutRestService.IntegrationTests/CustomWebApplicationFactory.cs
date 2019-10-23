@@ -1,4 +1,4 @@
-﻿using LayoutRestService.Data;
+﻿using LayoutRestService.EntityFramework;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
