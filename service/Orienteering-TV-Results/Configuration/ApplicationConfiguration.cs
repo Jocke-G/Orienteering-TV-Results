@@ -1,4 +1,5 @@
-﻿using OrienteeringTvResults.MeosAdapter;
+﻿using OrienteeringTvResults.Common.Configuration;
+using OrienteeringTvResults.MeosAdapter;
 using OrienteeringTvResults.Model.Configuration;
 
 namespace OrienteeringTvResults.Configuration

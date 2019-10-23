@@ -1,7 +1,7 @@
 ﻿using OlaDatabase;
 using OlaDatabase.Session;
+using OrienteeringTvResults.Common.Configuration;
 using OrienteeringTvResults.Model;
-using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter.EagerFetchers;
 using OrienteeringTvResults.OlaAdapter.Translators;
 using System;

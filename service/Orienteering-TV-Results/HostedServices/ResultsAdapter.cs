@@ -2,7 +2,6 @@
 using OrienteeringTvResults.Configuration;
 using OrienteeringTvResults.MeosAdapter;
 using OrienteeringTvResults.Model;
-using OrienteeringTvResults.OlaAdapter;
 using System;
 
 namespace OrienteeringTvResults
@@ -17,8 +16,12 @@ namespace OrienteeringTvResults
             {
                 case "ola":
                     var olaConf = conf.Value.Ola;
-                    OlaSessionAdapter.Initialize(olaConf);
-                    Processor = new OlaResultsProvider(olaConf);
+                    OlaAdapter.OlaSessionAdapter.Initialize(olaConf);
+                    Processor = new OlaAdapter.OlaResultsProvider(olaConf);
+                    break;
+                case "ola-dapper":
+                    var olaDapperConf = conf.Value.Ola;
+                    Processor = new OlaDapper.OlaResultsProvider(olaDapperConf);
                     break;
                 case "meos":
                     var meosConf = conf.Value.Meos;

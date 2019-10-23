@@ -3,8 +3,8 @@ using NHibernate;
 using OlaAdapter.IntegrationTests.TestUtils;
 using OlaDatabase.Entities;
 using OlaDatabase.Session;
+using OrienteeringTvResults.Common.Configuration;
 using OrienteeringTvResults.Model;
-using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
 using System;
 

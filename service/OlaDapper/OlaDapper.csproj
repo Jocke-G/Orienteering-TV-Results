@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyName>OrienteeringTvResults.OlaDapper</AssemblyName>
+    <RootNamespace>OrienteeringTvResults.OlaDapper</RootNamespace>
+    <OutputPath>$(SolutionDir)\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="MySqlConnector" Version="0.60.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Common.csproj" />
+  </ItemGroup>
+
+</Project>

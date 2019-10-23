@@ -1,6 +1,4 @@
-﻿using OlaDatabase;
-
-namespace OrienteeringTvResults.Model.Configuration
+﻿namespace OrienteeringTvResults.Common.Configuration
 {
     public class OlaConfiguration
     {

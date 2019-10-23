@@ -5,8 +5,8 @@ using OlaDatabase;
 using OlaDatabase.Entities;
 using OlaDatabase.RepositoryInterfaces;
 using OlaDatabase.Session;
+using OrienteeringTvResults.Common.Configuration;
 using OrienteeringTvResults.Model;
-using OrienteeringTvResults.Model.Configuration;
 using OrienteeringTvResults.OlaAdapter;
 
 namespace OlaAdapter.Tests.UnitTests

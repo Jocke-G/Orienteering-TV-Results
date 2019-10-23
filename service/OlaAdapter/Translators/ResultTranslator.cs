@@ -1,4 +1,5 @@
 ﻿using OlaDatabase.Entities;
+using OrienteeringTvResults.Common.Translators;
 using OrienteeringTvResults.Model;
 using System;
 using System.Collections.Generic;
@@ -35,51 +36,17 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
             return results;
         }
 
-        private static ResultStatus ToResultStatus(string status)
-        {
-            switch (status)
-            {
-                case "passed":
-                    return ResultStatus.Passed;
-                case "finished":
-                    return ResultStatus.Finished;
-                case "notValid":
-                case "disqualified":
-                    return ResultStatus.NotPassed;
-                case "notStarted":
-                    return ResultStatus.NotStarted;
-                default:
-                    /*
-                     *finishedTimeOk
-                     * finishedPunchOk
-                     * movedUp
-                     * walkOver
-                     * started
-                     * notActivated
-                     * notParticipating
-                     */
-                    return ResultStatus.NotFinishedYet;
-            }
-        }
-
         private static Result ToResultWithTimes(ResultEntity resultEntity)
         {
-            TimeSpan? totalTime = null;
-            if(resultEntity.TotalTime != 0)
-            {
-                totalTime = TimeSpan.FromSeconds(resultEntity.TotalTime / 100);
-            }
-
             return new Result
             {
-
                 FirstName = resultEntity.Entry.Competitor.FirstName,
                 LastName = resultEntity.Entry.Competitor.FamilyName,
                 StartTime = resultEntity.StartTime,
-                Status = ToResultStatus(resultEntity.RunnerStatus),
+                Status = OlaRunnerStatusTranslator.ToResultStatus(resultEntity.RunnerStatus),
                 Club = resultEntity.Entry.Competitor.DefaultOrganisation.Name,
                 ModifyDate = CalculateModifyDateIncludingSplitTimes(resultEntity),
-                TotalTime = totalTime,
+                TotalTime = OlaTimeSpanTranslator.ToTimeSpan(resultEntity.TotalTime),
                 SplitTimes = SplitTranslator.ToSplitTimes(resultEntity),
             };
         }
@@ -100,7 +67,7 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
                 FirstName = resultEntity.Entry.Competitor.FirstName,
                 LastName = resultEntity.Entry.Competitor.FamilyName,
                 StartTime = resultEntity.StartTime,
-                Status = ToResultStatus(resultEntity.RunnerStatus),
+                Status = OlaRunnerStatusTranslator.ToResultStatus(resultEntity.RunnerStatus),
                 Club = resultEntity.Entry.Competitor.DefaultOrganisation.Name,
                 ModifyDate = resultEntity.ModifyDate,
             };
