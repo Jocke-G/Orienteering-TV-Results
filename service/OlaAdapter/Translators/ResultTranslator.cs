@@ -1,4 +1,5 @@
 ﻿using OlaDatabase.Entities;
+using OrienteeringTvResults.Common.Calculators;
 using OrienteeringTvResults.Common.Translators;
 using OrienteeringTvResults.Model;
 using System;
@@ -23,15 +24,15 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
 
         internal static IList<Result> ToResultsWithTimes(IEnumerable<ResultEntity> resultEntities)
         {
-            List<Result> results = new List<Result>();
+            IList<Result> results = new List<Result>();
             foreach (var resultEntity in resultEntities)
             {
                 results.Add(ToResultWithTimes(resultEntity));
             }
 
-            results = OrderByStatusAndTime(results);
-            results = AddOrdinal(results);
-            results.Sort();
+            results = ResultOrderer.OrderByStatusAndTime(results);
+            results = OrdinalCalculator.AddOrdinal(results);
+            results = ResultOrderer.OrderBySplitTimes(results);
 
             return results;
         }
@@ -66,51 +67,10 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
             {
                 FirstName = resultEntity.Entry.Competitor.FirstName,
                 LastName = resultEntity.Entry.Competitor.FamilyName,
-                StartTime = resultEntity.StartTime,
                 Status = OlaRunnerStatusTranslator.ToResultStatus(resultEntity.RunnerStatus),
                 Club = resultEntity.Entry.Competitor.DefaultOrganisation.Name,
                 ModifyDate = resultEntity.ModifyDate,
             };
-        }
-
-        private static List<Result> OrderByStatusAndTime(List<Result> results)
-        {
-            var preferences = new Dictionary<ResultStatus, int> {
-                { ResultStatus.Finished, 1 },
-                { ResultStatus.Passed, 1 },
-                { ResultStatus.NotFinishedYet, 1 },
-                { ResultStatus.NotPassed, 2 },
-                { ResultStatus.NotStarted, 3 },
-            };
-
-            return results.OrderBy(item => preferences.GetValueOrDefault(item.Status)).ThenBy(x => x.TotalTime).ToList();
-        }
-
-        private static List<Result> AddOrdinal(List<Result> results)
-        {
-            var ordinal = 1;
-            for (int i = 0; i < results.Count; i++)
-            {
-                var result = results[i];
-                if (result.Status != ResultStatus.Passed && result.Status != ResultStatus.Finished)
-                {
-                    break;
-                }
-
-                result.Ordinal = ordinal;
-
-                if (results.LastIndexOf(result) != i && results[i + 1].TotalTime > result.TotalTime)
-                {
-                    ordinal++;
-                }
-                else if (i > 0 && results[i - 1].TotalTime != result.TotalTime)
-                {
-                    ordinal = i + 1;
-                }
-                result.Ordinal = ordinal;
-            }
-
-            return results;
         }
     }
 }

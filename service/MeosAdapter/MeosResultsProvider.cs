@@ -7,7 +7,8 @@ using OrienteeringTvResults.Model;
 
 namespace OrienteeringTvResults.MeosAdapter
 {
-    public class MeosResultsProvider : IResultsProvider
+    public class MeosResultsProvider
+        : IResultsProvider
     {
         private MeosConfiguration _conf;
 
@@ -51,6 +52,11 @@ namespace OrienteeringTvResults.MeosAdapter
         }
 
         public CompetitionClass GetClass(string shortName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Result> Finish(int limit)
         {
             throw new NotImplementedException();
         }

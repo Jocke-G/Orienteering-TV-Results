@@ -1,5 +1,6 @@
 ﻿using OlaDapper.Entities;
 using OrienteeringTvResults.Model;
+using OrienteeringTvResults.OlaDapper.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,6 +20,27 @@ namespace OlaDapper.Translators
                 Id = entity.Id,
                 ShortName = entity.ShortName,
                 NoTimePresentation = entity.NoTimePresentation,
+                SplitControls = ToContract(entity.Courses),
+            };
+        }
+
+        private static IList<SplitControl> ToContract(IList<CourseEntity> courses)
+        {
+            if(courses.Count != 1)
+                return null;
+
+            var course = courses.Single();
+            return course
+                .SplitControls
+                .Select(x => ToContract(x))
+                .ToList();
+        }
+
+        private static SplitControl ToContract(SplitControlEntity entity)
+        {
+            return new SplitControl
+            {
+                Name = entity.Name,
             };
         }
     }

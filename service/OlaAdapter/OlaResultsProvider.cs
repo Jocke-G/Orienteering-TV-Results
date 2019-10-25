@@ -88,5 +88,10 @@ namespace OrienteeringTvResults.OlaAdapter
                 return RepositoryContainer.ResultRepository.HasNewResults(_competitionId, _stageId, raceClassId, lastCheckTime);
             }
         }
+
+        public IList<Result> Finish(int limit)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

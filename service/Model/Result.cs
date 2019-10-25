@@ -26,7 +26,9 @@ namespace OrienteeringTvResults.Model
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Club { get; set; }
+        public string ClassName { get; set; }
         public DateTime StartTime { get; set; }
+        public DateTime FinishTime { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public ResultStatus Status { get; set; }
         public TimeSpan? TotalTime { get; set; }

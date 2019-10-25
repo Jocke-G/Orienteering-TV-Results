@@ -63,7 +63,6 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
                 {
                     splitTimes.Add(new SplitTime
                     {
-                        Number = control.Id,
                         PassedCount = passedCount,
                     });
                 }
@@ -79,7 +78,6 @@ namespace OrienteeringTvResults.OlaAdapter.Translators
                     splitTimes.Add(new SplitTime
                     {
                         Time = TimeSpan.FromSeconds(splitTime.SplitTime / 100),
-                        Number = splitTime.Id.SplitTimeControl.TimingControl.Id,
                         PassedCount = splitTime.Id.PassedCount,
                         Ordinal = ordinal,
                     });

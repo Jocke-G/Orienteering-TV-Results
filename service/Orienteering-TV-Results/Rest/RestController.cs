@@ -65,5 +65,12 @@ namespace OrienteeringTvResults.Rest
             var competitionClass = _results.ClassHasNewResults(competitionClassId, lastCheckTime);
             return new JsonResult(competitionClass);
         }
+
+        [HttpGet("finish/{limit}")]
+        public JsonResult GetFinish(int limit)
+        {
+            var results = _results.Finish(limit);
+            return new JsonResult(results);
+        }
     }
 }

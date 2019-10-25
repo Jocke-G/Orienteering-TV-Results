@@ -12,5 +12,6 @@ namespace OrienteeringTvResults.Model
         bool ClassHasNewResults(int competitionClassId, DateTime lastCheckTime);
         CompetitionClass GetClass(int competitionCLassId);
         CompetitionClass GetClass(string shortName);
+        IList<Result> Finish(int limit);
     }
 }
