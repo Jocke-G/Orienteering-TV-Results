@@ -5,6 +5,8 @@ export const MQTT_SUBSCRIPTIONS = 'MQTT_SUBSCRIPTIONS';
 export const MESSAGE_RECEIVED = 'MESSAGE_RECEIVED';
 export const SUBSCRIBE_CLASS = 'SUBSCRIBE_CLASS';
 export const UNSUBSCRIBE_CLASS = 'UNSUBSCRIBE_CLASS';
+export const SUBSCRIBE_FINISH = 'SUBSCRIBE_FINISH';
+export const UNSUBSCRIBE_FINISH = 'UNSUBSCRIBE_FINISH';
 export const PUBLISH_MQTT = 'PUBLISH_MQTT';
 
 export interface setMqttStatusAction {
@@ -30,6 +32,14 @@ export interface subscribeClassAction {
 export interface unsubscribeClassAction {
   type: typeof UNSUBSCRIBE_CLASS,
   className: string,
+}
+
+export interface subscribeFinishAction {
+  type: typeof SUBSCRIBE_FINISH,
+}
+
+export interface unsubscribeFinishAction {
+  type: typeof UNSUBSCRIBE_FINISH,
 }
 
 export interface publishMessageAction {
@@ -76,6 +86,18 @@ export function unsubscribeClass(className:string): unsubscribeClassAction {
   return {
     type: UNSUBSCRIBE_CLASS,
     className: className,
+  }
+}
+
+export function subscribeFinish(): subscribeFinishAction {
+  return {
+    type: SUBSCRIBE_FINISH,
+  }
+}
+
+export function unsubscribeFinish(): unsubscribeFinishAction {
+  return {
+    type: UNSUBSCRIBE_FINISH,
   }
 }
 

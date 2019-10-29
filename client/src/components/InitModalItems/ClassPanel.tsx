@@ -7,6 +7,7 @@ import { fetchClasses } from '../../store/classes/actions';
 
 export interface OwnProps {
   selectClass: (className:string) => void;
+  selectFinish: () => void;
 }
 
 type StateProps = {
@@ -53,6 +54,10 @@ class ClassPanel extends Component<Props, State> {
       this.props.selectClass(this.state.selectedClass.ShortName);
   }
 
+  onSelectFinish = () => {
+    this.props.selectFinish();
+  }
+
   render() {
     let error = this.props.error;
     return(
@@ -78,6 +83,7 @@ class ClassPanel extends Component<Props, State> {
             :
             <Fragment></Fragment>
             }
+            <button onClick={this.onSelectFinish}>Välj målgångar</button>
         </Fragment>
         }
       </div>

@@ -12,7 +12,8 @@ import { Action } from './store/results/actions';
 import { hasConfiguration } from './store/configuration/reducers';
 import InitModal from './components/InitModal';
 import LayoutRoot from './components/Layout/LayoutRoot';
-import ClassResultView from './components/ClassResultView';
+import ClassResultView from './components/ResultViews/ClassResultView';
+import FinishView from './components/ResultViews/FinishView';
 
 export interface OwnProps {
 }
@@ -55,11 +56,15 @@ class App extends Component<Props, State> {
   }
 
   selectLayout = (layoutName:string) => {
-    this.props.history.push(`/layout/${layoutName}`)
+    this.props.history.push(`/layout/${layoutName}`);
   }
 
   selectClass = (className:string) => {
-    this.props.history.push(`/class/${className}`)
+    this.props.history.push(`/class/${className}`);
+  }
+
+  selectFinish = () => {
+    this.props.history.push("/finish");
   }
 
   renderClassResults = (match:Match<any>|null) => {
@@ -76,16 +81,21 @@ class App extends Component<Props, State> {
     return(<LayoutRoot layoutName={ match.params.layoutName }/>);
   }
 
+  renderFinish = () => {
+    return(<FinishView/>);
+  }
+
   render() {
     return(
     <Fragment>
-      <InitModal selectLayout={this.selectLayout} selectClass={this.selectClass} show={this.state.modalVisible} />
+      <InitModal selectLayout={this.selectLayout} selectFinish={this.selectFinish} selectClass={this.selectClass} show={this.state.modalVisible} />
       {!this.props.hasConfiguration?
       <p><i>Hämtar konfiguration</i></p>
       :
       <Fragment>
         <Route exact path="/layout/:layoutName" children={({ match }) => this.renderLayout(match)} />
         <Route exact path="/class/:className" children={({ match }) => this.renderClassResults(match)}/>
+        <Route exact path="/finish" children = {this.renderFinish()}/>
       </Fragment>
     }
     </Fragment>

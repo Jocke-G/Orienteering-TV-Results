@@ -17,6 +17,7 @@ WORKDIR /app/
 COPY Model/. ./Model/
 COPY OlaDatabase/. ./OlaDatabase/
 COPY OlaAdapter/. ./OlaAdapter/
+COPY OlaDapper/. ./OlaDapper/
 COPY MeosDatabase/. ./MeosDatabase/
 COPY MeosAdapter/. ./MeosAdapter/
 COPY Orienteering-TV-Results/. ./Orienteering-TV-Results/

@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import { connect , } from "react-redux";
-import { ClassResult } from '../store/results/reducers';
 
-type AppProps = {
+import { ClassResult } from '../../store/results/reducers';
+
+type Props = {
   result: ClassResult
   index: number;
 }
 
-class ClassResultsView extends Component<AppProps> {
+class ClassCompetitorResultComponent extends Component<Props> {
 
   getStartTimeString = ():string => {
     let dateObj = new Date(this.props.result.StartTime);
@@ -64,5 +64,4 @@ class ClassResultsView extends Component<AppProps> {
   }
 }
 
-export default connect(
-)(ClassResultsView);
+export default ClassCompetitorResultComponent;

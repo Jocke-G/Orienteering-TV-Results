@@ -1,6 +1,7 @@
 import React, { Component, Dispatch, CSSProperties } from 'react';
 import { connect } from "react-redux";
 import { ThunkDispatch } from 'redux-thunk';
+
 import { Action, } from '../store/results/actions';
 import IntegrationConfigurationPanel from './InitModalItems/IntegrationConfigurationPanel';
 import ClassPanel from './InitModalItems/ClassPanel';
@@ -10,6 +11,7 @@ import LayoutPanel from './InitModalItems/LayoutPanel';
 export interface OwnProps {
   show: boolean,
   selectClass: (className:string) => void;
+  selectFinish: () => void;
   selectLayout: (layoutName:string) => void;
 }
 
@@ -25,8 +27,13 @@ interface State {
 }
 
 class InitModal extends Component<Props, State> {
+
   selectClass = (className:string) => {
     this.props.selectClass(className);
+  }
+
+  selectFinish = () => {
+    this.props.selectFinish();
   }
 
   selectLayout = (layoutName:string) => {
@@ -67,7 +74,7 @@ class InitModal extends Component<Props, State> {
           <hr />
           <LayoutPanel selectLayout={this.selectLayout} />
           <hr />
-          <ClassPanel selectClass={this.selectClass} />
+          <ClassPanel selectClass={this.selectClass} selectFinish={this.selectFinish} />
           <hr />
           <MqttStatusPanel />
         </div>

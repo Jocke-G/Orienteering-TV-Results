@@ -1,10 +1,10 @@
 import React, { Component, Dispatch, Fragment } from 'react';
 import { connect } from "react-redux";
-import { getResults, ClassResults } from '../store/results/reducers';
-import { RouteComponentProps, withRouter } from 'react-router';
 import { ThunkDispatch } from 'redux-thunk';
-import { Action, fetchClass } from '../store/results/actions';
-import { subscribeClass, unsubscribeClass } from '../store/mqtt/actions';
+
+import { getResults, ClassResults } from '../../store/results/reducers';
+import { Action, fetchClass } from '../../store/results/actions';
+import { subscribeClass, unsubscribeClass } from '../../store/mqtt/actions';
 import ClassResultsTable from './ClassResultTable';
 
 export interface OwnProps {
@@ -21,9 +21,10 @@ interface DispatchProps {
   unsubscribeClass: (className:string) => void;
 }
 
-type Props = RouteComponentProps<{}> & StateProps & DispatchProps & OwnProps
+type Props = StateProps & DispatchProps & OwnProps
 
 class ClassResultsView extends Component<Props> {
+
   constructor(props:Props) {
     super(props);
     props.subscribeClass(props.class);
@@ -40,9 +41,9 @@ class ClassResultsView extends Component<Props> {
     }
     return (
       <Fragment>
-        <ClassResultsTable id={"header"} class={this.props.results} results={this.props.results.Results.slice(0, 4)} />
+        <ClassResultsTable id={"header"} class={this.props.results} results={this.props.results.Results.slice(0, 5)} />
         {this.props.results.Results.length >= 5?
-          <ClassResultsTable id={"scroll"} results={this.props.results.Results.slice(4)} />
+          <ClassResultsTable id={"scroll"} class={this.props.results} results={this.props.results.Results.slice(5)} />
         :null}
       </Fragment>
     );
@@ -63,6 +64,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<Acti
   }
 }
 
-export default withRouter(
-  connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ClassResultsView)
-);
+export default connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)(ClassResultsView);

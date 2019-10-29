@@ -1,20 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import { ClassResults, ClassResult } from '../store/results/reducers';
+
+import { ClassResults, ClassResult } from '../../store/results/reducers';
 import ClassCompetitorResultComponent from './ClassCompetitorResultComponent';
 
-export interface OwnProps {
+export interface Props {
   id: string,
-  class?: ClassResults,
+  class: ClassResults,
   results: ClassResult[],
 }
-
-type StateProps = {
-}
-
-interface DispatchProps {
-}
-
-type Props = StateProps & DispatchProps & OwnProps
 
 class ClassResultsTable extends Component<Props> {
   render() {
@@ -35,7 +28,7 @@ class ClassResultsTable extends Component<Props> {
 	        <col className="ordinal" />
 		      <col className="time" />
         </colgroup>
-        {this.props.class?
+        {this.props.id === 'header'?
         <thead>
           <tr className="thead_1">
 	          <th colSpan={3}>Preliminära Liveresultat { this.props.class.ShortName }</th>
@@ -51,12 +44,10 @@ class ClassResultsTable extends Component<Props> {
             {this.props.class.SplitControls.map((item, key) =>
               <Fragment key={key}>
                 <th>#</th>
-                {/* <th align="right">Passertid</th> */}
                 <th>Tid</th>
               </Fragment>
             )}
             <th align="right">#</th>
-            {/* <th align="right">Passertid</th> */}
             <th align="right">Tid</th>
           </tr>
         </thead>

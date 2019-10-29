@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { ThunkDispatch } from 'redux-thunk';
 import { Action, fetchLayout } from '../../store/layouts/actions';
 import { Layout, getLayout } from '../../store/layouts/reducers';
-import ClassResultView from '../ClassResultView';
+import ClassResultView from '../ResultViews/ClassResultView';
 
 export interface OwnProps {
   layoutName: string,
