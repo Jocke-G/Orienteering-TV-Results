@@ -10,6 +10,7 @@ export interface LayoutRow {
 }
 
 export interface LayoutCell {
+  CellType: string,
   ClassName: string,
 }
 

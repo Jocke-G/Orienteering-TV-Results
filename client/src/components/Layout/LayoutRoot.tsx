@@ -5,6 +5,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { Action, fetchLayout } from '../../store/layouts/actions';
 import { Layout, getLayout } from '../../store/layouts/reducers';
 import ClassResultView from '../ResultViews/ClassResultView';
+import FinishView from '../ResultViews/FinishView';
 
 export interface OwnProps {
   layoutName: string,
@@ -50,11 +51,12 @@ class LayoutRoot extends Component<Props, State> {
       }
 
       for (let cell in this.state.cells) {
+
         let div = this.state.cells[cell].current;
         if(div === null)
           return;
 
-        if(this.state.scrollDown && div.scrollTop + div.clientHeight < div.scrollHeight)
+        if(this.state.scrollDown && Math.ceil(div.scrollTop + div.clientHeight) < div.scrollHeight)
         {
           needsLongerScroll = true;
           div.scrollTop += 4;
@@ -99,7 +101,15 @@ class LayoutRoot extends Component<Props, State> {
               let key = rowKey + "-" +colKey;
               let cells = this.state.cells;
               cells[key] = React.createRef();
-              let cellDiv = <div ref={this.state.cells[key]} style={style} key={key}><ClassResultView class={cell.ClassName} /></div>;
+              let cellDiv = null;
+              switch(cell.CellType) {
+                case 'Finish':
+                  cellDiv = <div ref={this.state.cells[key]} style={style} key={key}><FinishView /></div>;
+                  break;
+                case 'Class':
+                  cellDiv = <div ref={this.state.cells[key]} style={style} key={key}><ClassResultView class={cell.ClassName} /></div>;
+                  break;
+                }
                 return(
               cellDiv
             )

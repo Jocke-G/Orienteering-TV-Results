@@ -17,18 +17,23 @@ class IndependentResultsTable extends Component<Props> {
 	        <col className="club" />
           <col className="class" />
 		      <col className="time" />
-		      <col className="time" />
           <col className="ordinal" />
+		      <col className="time" />
         </colgroup>
         {this.props.id === 'header'?
+        
         <thead>
-          <tr>
+          <tr className="thead_1">
+	          <th colSpan={3}>Senaste målgångar</th>
+            <th colSpan={3}>Mål</th>
+          </tr>
+          <tr className="thead_2">
             <th>Namn</th>
             <th>Klubb</th>
             <th>Klass</th>
             <th>Passertid</th>
-            <th>Måltid</th>
-            <th>Prel. plac.</th>
+            <th>#</th>
+            <th>Tid</th>
           </tr>
         </thead>
         :null}

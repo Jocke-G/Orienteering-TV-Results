@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace LayoutRestService.Controllers
 {
     [ApiController]
-    [EnableCors]
+    [EnableCors("defaultCorsPolicy")]
     public class LayoutController : ControllerBase
     {
         private readonly ILogger<LayoutController> _logger;

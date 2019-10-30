@@ -35,15 +35,15 @@ class CompetitorResultComponent extends Component<Props> {
             case 'Passed':
               return (
                 <Fragment>
-                  <td align='right'>{ this.toSplitTime(this.props.result.TotalTime) }</td>
                   <td align='right'>{ this.props.result.Ordinal }</td>
+                  <td align='right'>{ this.toSplitTime(this.props.result.TotalTime) }</td>
                 </Fragment>
               );
             case 'Finished':
               return (
                 <Fragment>
-                  <td align='right'>{ this.toSplitTime(this.props.result.TotalTime) }</td>
                   <td align='right'>({ this.props.result.Ordinal })</td>
+                  <td align='right'>{ this.toSplitTime(this.props.result.TotalTime) }</td>
                 </Fragment>
               );
             case 'NotFinishedYet':
