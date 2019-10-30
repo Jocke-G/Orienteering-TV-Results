@@ -2,11 +2,12 @@ using LayoutRestService.Dapper;
 using LayoutRestService.Models.Configuration;
 using LayoutRestService.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 
 namespace LayoutRestService
 {
@@ -35,9 +36,10 @@ namespace LayoutRestService
 
             Initializer.Initialize(services, settings.Database);
 
-            services.AddControllers().AddJsonOptions(options => {
-                options.JsonSerializerOptions.PropertyNamingPolicy = null;
-            });
+            services
+                .AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped<ILayoutService, LayoutService>();
 
@@ -55,7 +57,7 @@ namespace LayoutRestService
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -70,14 +72,9 @@ namespace LayoutRestService
                 c.RoutePrefix = string.Empty;
             });
 
-            app.UseRouting();
-
             app.UseCors(DefaultCorsPolicy);
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseMvc();
         }
     }
 }
