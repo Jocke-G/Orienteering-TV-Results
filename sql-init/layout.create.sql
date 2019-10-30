@@ -22,6 +22,7 @@ CREATE TABLE `layout_cell` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `row_id` int(11) DEFAULT NULL,
   `ordinal` int(11) NOT NULL,
+  `cell_type` varchar(255) DEFAULT NULL,
   `class_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `IX_CELL_ROW_ORDINAL` (`row_id`,`ordinal`),

@@ -71,6 +71,7 @@ namespace LayoutRestService.Services
         {
             return new LayoutCell
             {
+                CellType = entity.CellType,
                 ClassName = entity.ClassName,
             };
         }

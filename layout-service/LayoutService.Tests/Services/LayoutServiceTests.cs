@@ -73,12 +73,14 @@ namespace LayoutRestService.UnitTests.Services
                                     new LayoutCellEntity
                                     {
                                         Ordinal = 1,
-                                        ClassName = "D10"
+                                        CellType = "Class",
+                                        ClassName = "D10",
                                     },
                                     new LayoutCellEntity
                                     {
                                         Ordinal = 2,
-                                        ClassName = "D12"
+                                        CellType = "Class",
+                                        ClassName = "D12",
                                     },
                                 },
                             },
@@ -90,12 +92,14 @@ namespace LayoutRestService.UnitTests.Services
                                     new LayoutCellEntity
                                     {
                                         Ordinal = 1,
-                                        ClassName = "H10"
+                                        CellType = "Class",
+                                        ClassName = "H10",
                                     },
                                     new LayoutCellEntity
                                     {
                                         Ordinal = 2,
-                                        ClassName = "H12"
+                                        CellType = "Class",
+                                        ClassName = "H12",
                                     },
                                 },
                             },
@@ -107,9 +111,13 @@ namespace LayoutRestService.UnitTests.Services
             var actual = target.GetLayoutByName("TV1");
 
             Assert.Equal("TV1", actual.Name);
+            Assert.Equal("Class", actual.Rows[0].Cells[0].CellType);
             Assert.Equal("D10", actual.Rows[0].Cells[0].ClassName);
+            Assert.Equal("Class", actual.Rows[0].Cells[1].CellType);
             Assert.Equal("D12", actual.Rows[0].Cells[1].ClassName);
+            Assert.Equal("Class", actual.Rows[1].Cells[0].CellType);
             Assert.Equal("H10", actual.Rows[1].Cells[0].ClassName);
+            Assert.Equal("Class", actual.Rows[1].Cells[1].CellType);
             Assert.Equal("H12", actual.Rows[1].Cells[1].ClassName);
         }
 

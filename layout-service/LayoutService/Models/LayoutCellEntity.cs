@@ -11,6 +11,8 @@ namespace LayoutRestService.Models
         public int RowId { get; internal set; }
         public LayoutRowEntity Row { get; set; }
         public int Ordinal { get; set; }
+        [Column("cell_type")]
+        public string CellType { get; set; }
         [Column("class_name")]
         public string ClassName { get; set; }
     }

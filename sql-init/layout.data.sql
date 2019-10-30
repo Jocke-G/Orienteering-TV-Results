@@ -40,8 +40,11 @@ VALUES (1, 1),
 (12, 1),
 (12, 2);
 
-INSERT INTO `layout_cell`(`row_id`, `ordinal`, `class_name`)
-VALUES (1, 1, "D10"),
-(1, 2, "D12"),
-(2, 1, "H10"),
-(2, 2, "H12");
+INSERT INTO `layout_cell`(`row_id`, `ordinal`, `cell_type`, `class_name`)
+VALUES (1, 1, "Class", "D10"),
+(1, 2, "Class", "D12"),
+(2, 1, "Class", "H10"),
+(2, 2, "Class", "H12"),
+(3, 1, "Finish", NULL),
+(4, 1, "Class", "D16"),
+(4, 2, "Class", "H16");

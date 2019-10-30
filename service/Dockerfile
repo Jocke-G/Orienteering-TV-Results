@@ -6,6 +6,7 @@ COPY *.sln .
 COPY Model/*.csproj ./Model/
 COPY OlaDatabase/*.csproj ./OlaDatabase/
 COPY OlaAdapter/*.csproj ./OlaAdapter/
+COPY OlaDapper/*.csproj ./OlaDapper/
 COPY MeosDatabase/*.csproj ./MeosDatabase/
 COPY MeosAdapter/*.csproj ./MeosAdapter/
 COPY Orienteering-TV-Results/*.csproj ./Orienteering-TV-Results/

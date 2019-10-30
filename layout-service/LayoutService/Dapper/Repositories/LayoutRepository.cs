@@ -26,9 +26,20 @@ namespace LayoutRestService.Dapper.Repositories
 
         public LayoutEntity GetByName(string name)
         {
-            var sql = "SELECT layout.id AS Id, layout.name AS Name, layout_row.id AS Id, layout_cell.id AS Id, layout_cell.class_name AS ClassName FROM layout LEFT JOIN layout_row ON layout_row.layout_id = layout.id LEFT JOIN layout_cell ON layout_cell.row_id = layout_row.id WHERE name = @name";
+            var sql = @"SELECT layout.id,
+layout.name,
+layout_row.id,
+layout_cell.id,
+layout_cell.cell_type AS CellType,
+layout_cell.class_name AS ClassName
+FROM layout
+LEFT JOIN layout_row
+    ON layout_row.layout_id = layout.id
+LEFT JOIN layout_cell
+    ON layout_cell.row_id = layout_row.id
+WHERE name = @name";
             var param = new { name };
-            var splitOn = "Id,Id";
+            var splitOn = "id,id";
 
             LayoutEntity layoutEntry = null;
 
@@ -40,14 +51,15 @@ namespace LayoutRestService.Dapper.Repositories
                 }
 
                 var existingRow = layoutEntry.Rows.SingleOrDefault(x => x.Id == layoutRow.Id);
-                if(existingRow != null)
+
+                if (existingRow == null)
                 {
-                    existingRow.Cells.Add(layoutCell);
-                } else
-                {
-                    layoutRow.Cells.Add(layoutCell);
+                    existingRow = layoutRow;
                     layoutEntry.Rows.Add(layoutRow);
                 }
+
+                if(layoutCell != null)
+                    layoutRow.Cells.Add(layoutCell);
 
                 return layoutEntry;
             },
