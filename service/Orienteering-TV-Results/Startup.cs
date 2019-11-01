@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +11,8 @@ namespace OrienteeringTvResults
 {
     internal class Startup
     {
+        private readonly string DefaultCorsPolicy = "defaultCorsPolicy";
+
         public void ConfigureServices(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder()
@@ -24,8 +25,8 @@ namespace OrienteeringTvResults
             services.AddSingleton<MqttHostedService>();
             services.AddSingleton<ResultsAdapter>();
 
-            var settings = configuration.Get<ApplicationConfiguration>();
-            if (settings.EnablePollService)
+            var applicationConfiguration = configuration.Get<ApplicationConfiguration>();
+            if (applicationConfiguration.EnablePollService)
             {
                 services.AddSingleton<IHostedService, PollHostedService>();
             }
@@ -35,16 +36,17 @@ namespace OrienteeringTvResults
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "Orienteering TV Results", Version = "v1" });
-            });
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            services.AddCors(o => o.AddPolicy(DefaultCorsPolicy, builder =>
             {
                 builder.AllowAnyOrigin()
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Orienteering TV Results", Version = "v1" });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -53,21 +55,16 @@ namespace OrienteeringTvResults
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
             });
-            app.UseCors("MyPolicy");
 
-            var option = new RewriteOptions();
-            option.AddRedirect("^$", "swagger");
-            app.UseRewriter(option);
+            app.UseCors(DefaultCorsPolicy);
+
             app.UseMvc();
         }
     }

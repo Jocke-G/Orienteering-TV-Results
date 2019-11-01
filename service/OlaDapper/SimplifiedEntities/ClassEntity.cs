@@ -1,7 +1,7 @@
 ﻿using OrienteeringTvResults.OlaDapper.Entities;
 using System.Collections.Generic;
 
-namespace OlaDapper.Entities
+namespace OlaDapper.SimplifiedEntities
 {
     public class ClassEntity
     {

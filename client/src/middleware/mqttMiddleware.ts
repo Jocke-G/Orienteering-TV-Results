@@ -4,7 +4,7 @@ import { Configuration } from '../store/configuration/reducers';
 import { CONFIGURATION_RECEIVED } from '../store/configuration/actions';
 import { ClassResults } from '../store/results/reducers';
 import { classResultsReceived, } from '../store/results/actions';
-import { setMqttStatus, reportMessageReceived, PUBLISH_MQTT, SUBSCRIBE_CLASS, mqttSubscriptionTopics, UNSUBSCRIBE_CLASS } from '../store/mqtt/actions';
+import { setMqttStatus, reportMessageReceived, PUBLISH_MQTT, SUBSCRIBE_CLASS, mqttSubscriptionTopics, UNSUBSCRIBE_CLASS, SUBSCRIBE_FINISH, UNSUBSCRIBE_FINISH } from '../store/mqtt/actions';
 import { RootState } from '../reducers/rootReducer';
 import { getSubscriptions } from '../store/mqtt/reducers';
 
@@ -44,8 +44,17 @@ export const reduxMqttMiddleware = () => ({dispatch, getState }: MiddlewareAPI<D
     return `Results/Class/${className}`;
   }
 
-  let addSubscription = (className:string) => {
+  let addClassSubscription = (className:string) => {
     let topic = createClassTopic(className);
+    addSubscription(topic);
+  }
+
+  let addFinishSubscription = () => {
+    let topic = 'Results/Finish';
+    addSubscription(topic);
+  }
+
+  let addSubscription = (topic:string) => {
     if(client !== undefined && client.isConnected()) {
       client.subscribe(topic);
     }
@@ -53,8 +62,17 @@ export const reduxMqttMiddleware = () => ({dispatch, getState }: MiddlewareAPI<D
     dispatch(mqttSubscriptionTopics(topics))
   }
 
-  let removeSubscription = (className:string) => {
+  let removeClassSubscription = (className:string) => {
     let topic = createClassTopic(className);
+    removeSubscription(topic);
+  }
+
+  let removeFinishSubscription = () => {
+    let topic = 'Results/Finish';
+    removeSubscription(topic);
+  }
+
+  let removeSubscription = (topic:string) => {
     if(client !== undefined && client.isConnected()) {
       client.unsubscribe(topic);
     }
@@ -95,10 +113,16 @@ export const reduxMqttMiddleware = () => ({dispatch, getState }: MiddlewareAPI<D
           connect();
           return next(action);
         case SUBSCRIBE_CLASS:
-          addSubscription(action.className);
+          addClassSubscription(action.className);
           return next(action);
         case UNSUBSCRIBE_CLASS:
-          removeSubscription(action.className);
+          removeClassSubscription(action.className);
+          return next(action);
+        case SUBSCRIBE_FINISH:
+          addFinishSubscription()
+          return next(action);
+        case UNSUBSCRIBE_FINISH:
+          removeFinishSubscription()
           return next(action);
         case PUBLISH_MQTT:
           let message = new Message(action.message);

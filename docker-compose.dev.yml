@@ -32,7 +32,6 @@ services:
     environment:
       - 'mqtt:host=mosquitto'
       - 'mqtt:clientId=ResultsService'
-      - 'system=ola' # ola meos
 
       - 'ola:database:server=mysql'
       - 'ola:database:database=ola'
@@ -40,11 +39,6 @@ services:
       - 'ola:database:password=secret'
       - 'ola:eventid=1'
       - 'ola:eventraceid=1'
-
-      - 'meos:database:server=mysql'
-      - 'meos:database:database=ola'
-      - 'meos:database:username=TvService'
-      - 'meos:database:password=secret'
     ports:
       - '8080:80'
     volumes:

@@ -22,7 +22,7 @@ export const fetchClass = (className:string): ThunkAction<Promise<void>, RootSta
   const state:RootState = getState();
 
   const conf = getConfiguration(state);
-  const classUrl = `http://${conf.results_rest_host}:${conf.results_rest_port}/api/classes/${ className }`;
+  const classUrl = `http://${conf.results_rest_host}:${conf.results_rest_port}/classes/${ className }`;
   fetch(classUrl, {
       method: "GET",
       headers: {}
@@ -46,7 +46,7 @@ export const fetchFinish = (limit:number): ThunkAction<Promise<void>, RootState,
   const state:RootState = getState();
 
   const conf = getConfiguration(state);
-  const url = `http://${conf.results_rest_host}:${conf.results_rest_port}/api/finish/${ limit }`;
+  const url = `http://${conf.results_rest_host}:${conf.results_rest_port}/finish/${ limit }`;
   fetch(url, {
       method: "GET",
       headers: {}

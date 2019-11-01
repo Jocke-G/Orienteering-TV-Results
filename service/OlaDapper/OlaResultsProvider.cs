@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MySql.Data.MySqlClient;
-using OlaDapper.Entities;
+using OlaDapper.SimplifiedEntities;
 using OlaDapper.Repositories;
 using OlaDapper.Translators;
 using OrienteeringTvResults.Common.Calculators;
@@ -27,16 +27,6 @@ namespace OrienteeringTvResults.OlaDapper
             _databaseConfiguration = olaConfiguration.Database;
         }
 
-        public IList<Competition> GetCompetitions()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Competition GetCompetition(int competitionId)
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<CompetitionClass> GetClasses()
         {
             using(var connection = new MySqlConnection(_databaseConfiguration.GetConnectionString()))
@@ -47,11 +37,6 @@ namespace OrienteeringTvResults.OlaDapper
                     .GetByEventRaceIdAndEventId(_eventRaceId, _eventId)
                     .ToContracts();
             }
-        }
-
-        public IList<CompetitionClass> GetClassesChangedSince(DateTime since)
-        {
-            throw new NotImplementedException();
         }
 
         public CompetitionClass GetClass(int competitionClassId)

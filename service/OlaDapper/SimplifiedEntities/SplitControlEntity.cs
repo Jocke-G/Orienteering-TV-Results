@@ -1,4 +1,4 @@
-﻿namespace OlaDapper.Entities
+﻿namespace OlaDapper.SimplifiedEntities
 {
     public class SplitControlEntity
     {

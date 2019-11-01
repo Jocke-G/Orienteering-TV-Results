@@ -27,7 +27,7 @@ export const fetchClasses = (): ThunkAction<Promise<void>, RootState, {}, Action
   const state:RootState = getState();
 
   const conf = getConfiguration(state);
-  const classUrl = `http://${conf.results_rest_host}:${conf.results_rest_port}/api/classes`;
+  const classUrl = `http://${conf.results_rest_host}:${conf.results_rest_port}/classes`;
   dispatch(requestingClasses());
   fetch(classUrl, {
       method: "GET",

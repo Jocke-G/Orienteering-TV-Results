@@ -5,10 +5,10 @@ using System;
 
 namespace OrienteeringTvResults.Rest
 {
-    [Route("api")]
-    [EnableCors("MyPolicy")]
+    [EnableCors("defaultCorsPolicy")]
     [ApiController]
-    public class CompetitionsController : Controller
+    public class CompetitionsController
+        : Controller
     {
         private IResultsProvider _results;
 
@@ -17,31 +17,10 @@ namespace OrienteeringTvResults.Rest
             _results = adapter.Processor;
         }
 
-        [HttpGet("competitions")]
-        public JsonResult GetCompetitions()
-        {
-            var competitions = _results.GetCompetitions();
-            return new JsonResult(competitions);
-        }
-
-        [HttpGet("competitions/{competitionId}")]
-        public JsonResult Competition(int competitionId)
-        {
-            var competition = _results.GetCompetition(competitionId);
-            return new JsonResult(competition);
-        }
-
         [HttpGet("classes")]
         public JsonResult GetClasses()
         {
             var competitionClasses = _results.GetClasses();
-            return new JsonResult(competitionClasses);
-        }
-
-        [HttpGet("classesSince/{since}")]
-        public JsonResult GetClassesChangedSince(DateTime since)
-        {
-            var competitionClasses = _results.GetClassesChangedSince(since);
             return new JsonResult(competitionClasses);
         }
 
@@ -59,7 +38,7 @@ namespace OrienteeringTvResults.Rest
             return new JsonResult(competitionClass);
         }
 
-        [HttpGet("classhasnewresults/{competitionClassId}/{lastCheckTime}")]
+        [HttpGet("classHasNewResults/{competitionClassId}/{lastCheckTime}")]
         public JsonResult ClassHasNewResults(int competitionClassId, DateTime lastCheckTime)
         {
             var competitionClass = _results.ClassHasNewResults(competitionClassId, lastCheckTime);

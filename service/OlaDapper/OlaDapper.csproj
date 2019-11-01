@@ -9,7 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
-    <PackageReference Include="MySqlConnector" Version="0.60.2" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
+    <PackageReference Include="MySqlConnector" Version="0.60.3" />
   </ItemGroup>
 
   <ItemGroup>

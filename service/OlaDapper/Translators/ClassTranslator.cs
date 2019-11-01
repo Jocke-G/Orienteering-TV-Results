@@ -1,4 +1,4 @@
-﻿using OlaDapper.Entities;
+﻿using OlaDapper.SimplifiedEntities;
 using OrienteeringTvResults.Model;
 using OrienteeringTvResults.OlaDapper.Entities;
 using System.Collections.Generic;

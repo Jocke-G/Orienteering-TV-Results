@@ -11,18 +11,10 @@ using Newtonsoft.Json.Serialization;
 
 namespace LayoutRestService
 {
-    public class Startup
+    internal class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         private readonly string DefaultCorsPolicy = "defaultCorsPolicy";
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder()
@@ -35,13 +27,12 @@ namespace LayoutRestService
             var settings = configuration.Get<ApplicationConfiguration>();
 
             Initializer.Initialize(services, settings.Database);
+            services.AddScoped<ILayoutService, LayoutService>();
 
             services
                 .AddMvc()
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddScoped<ILayoutService, LayoutService>();
 
             services.AddCors(o => o.AddPolicy(DefaultCorsPolicy, builder =>
             {
@@ -65,7 +56,6 @@ namespace LayoutRestService
             }
 
             app.UseSwagger();
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");

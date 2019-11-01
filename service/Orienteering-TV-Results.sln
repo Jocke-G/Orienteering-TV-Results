@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orienteering-TV-Results", "Orienteering-TV-Results\Orienteering-TV-Results.csproj", "{AD4B9E17-A35C-4BBD-8C94-BF4328339860}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlaAdapter", "OlaAdapter\OlaAdapter.csproj", "{D7076797-D304-4783-8A49-98E33523A3B4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlaDatabase", "OlaDatabase\OlaDatabase.csproj", "{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Model\Common.csproj", "{3E4B84D4-BE88-4623-99CD-547D786C5B16}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0A7E95E7-F98D-4B3F-A6C9-7964E12756CD}"
@@ -16,17 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlaAdapter.IntegrationTests", "OlaAdapter.Tests\OlaAdapter.IntegrationTests.csproj", "{935618EA-53CB-4DAA-82CD-12E694DE6385}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orienteering-TV-Results.Tests", "Orienteering-TV-Results.Tests\Orienteering-TV-Results.Tests.csproj", "{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeosAdapter", "MeosAdapter\MeosAdapter.csproj", "{EBB40C9A-E941-4DE1-A0A9-21752BDC37F6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeosDatabase", "MeosDatabase\MeosDatabase.csproj", "{97C4070C-9CCE-4E63-AA32-C632EA09314A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeosAdapter.IntegrationTests", "MeosAdapter.IntegrationTests\MeosAdapter.IntegrationTests.csproj", "{C25DEE6D-482C-4755-8996-9F273E829920}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OlaDapper", "OlaDapper\OlaDapper.csproj", "{3545C77C-826A-40B7-932B-060C8160A6CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OlaDapper", "OlaDapper\OlaDapper.csproj", "{3545C77C-826A-40B7-932B-060C8160A6CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,38 +26,14 @@ Global
 		{AD4B9E17-A35C-4BBD-8C94-BF4328339860}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD4B9E17-A35C-4BBD-8C94-BF4328339860}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD4B9E17-A35C-4BBD-8C94-BF4328339860}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7076797-D304-4783-8A49-98E33523A3B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7076797-D304-4783-8A49-98E33523A3B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7076797-D304-4783-8A49-98E33523A3B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7076797-D304-4783-8A49-98E33523A3B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{394B4CB5-EA2A-4621-97D2-AE6A5B323A2F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E4B84D4-BE88-4623-99CD-547D786C5B16}.Release|Any CPU.Build.0 = Release|Any CPU
-		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{935618EA-53CB-4DAA-82CD-12E694DE6385}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE8A3C2B-1E62-44D2-A7E7-57526ECDBBFF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EBB40C9A-E941-4DE1-A0A9-21752BDC37F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EBB40C9A-E941-4DE1-A0A9-21752BDC37F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EBB40C9A-E941-4DE1-A0A9-21752BDC37F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EBB40C9A-E941-4DE1-A0A9-21752BDC37F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97C4070C-9CCE-4E63-AA32-C632EA09314A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97C4070C-9CCE-4E63-AA32-C632EA09314A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97C4070C-9CCE-4E63-AA32-C632EA09314A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97C4070C-9CCE-4E63-AA32-C632EA09314A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C25DEE6D-482C-4755-8996-9F273E829920}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C25DEE6D-482C-4755-8996-9F273E829920}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C25DEE6D-482C-4755-8996-9F273E829920}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C25DEE6D-482C-4755-8996-9F273E829920}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3545C77C-826A-40B7-932B-060C8160A6CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3545C77C-826A-40B7-932B-060C8160A6CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3545C77C-826A-40B7-932B-060C8160A6CC}.Release|Any CPU.ActiveCfg = Release|Any CPU

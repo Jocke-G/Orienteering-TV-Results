@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using OlaDapper.Entities;
+using OlaDapper.SimplifiedEntities;
 using OrienteeringTvResults.OlaDapper.Entities;
 using System;
 using System.Collections.Generic;

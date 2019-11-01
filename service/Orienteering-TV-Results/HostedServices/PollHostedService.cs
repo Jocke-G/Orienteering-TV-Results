@@ -36,6 +36,7 @@ namespace OrienteeringTvResults
             {
                 try
                 {
+                    bool anyChanged = false;
                     Logger.LogInfo("Poll database...");
                     var competitionClasses = _results.Processor.GetClasses();
                     Logger.LogInfo($"Found {competitionClasses.Count} classes");
@@ -49,6 +50,7 @@ namespace OrienteeringTvResults
                         bool resultsChanged = _results.Processor.ClassHasNewResults(competitionClass.Id, lastCheckTime);
                         if (resultsChanged)
                         {
+                            anyChanged = true;
                             Logger.LogInfo($"Fetching results for {competitionClass.ShortName}");
                             var results = _results.Processor.GetClass(competitionClass.Id);
                             await MqttPublisher.PublishAsync(results);
@@ -61,6 +63,13 @@ namespace OrienteeringTvResults
                             Logger.LogInfo("No new results found");
                         }
                     }
+
+                    if(anyChanged)
+                    {
+                        var finish = _results.Processor.Finish(50);
+                        await MqttPublisher.PublishAsync(finish);
+                    }
+
                     var memoryUsed = GC.GetTotalMemory(false);
 
                     Logger.LogInfo($"Memory usage: { +memoryUsed / 1024 / 1024 } MB");
