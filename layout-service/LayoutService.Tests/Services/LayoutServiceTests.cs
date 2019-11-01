@@ -1,4 +1,5 @@
-using LayoutRestService.Models;
+using LayoutRestService.Contracts;
+using LayoutRestService.Model.Entities;
 using LayoutRestService.RepositoryInterfaces;
 using LayoutRestService.Services;
 using Moq;
@@ -130,6 +131,49 @@ namespace LayoutRestService.UnitTests.Services
             var actual = target.GetLayoutByName("TV0");
 
             Assert.Null(actual);
+        }
+
+        [Fact]
+        public void TestSaveOrUpdate_LayoutDontExists_SaveNewLayout()
+        {
+            _layoutRepositoryMock
+                .Setup(x => x.GetByName(It.IsAny<string>()))
+                .Returns<string>(name => null)
+                .Verifiable("Did not get old entity from database");
+
+            _layoutRepositoryMock
+                .Setup(x => x.Create(It.IsAny<LayoutEntity>()))
+                .Returns<LayoutEntity>(entity => entity)
+                .Verifiable("Did not create entity in database");
+
+            var target = CreateTarget();
+
+            Layout layout = new Layout("TV2");
+            var actual = target.SaveOrUpdate(layout);
+
+            _layoutRepositoryMock.Verify();
+        }
+
+        [Fact]
+        public void TestSaveOrUpdate_LayoutExists_UpdateLayout()
+        {
+            _layoutRepositoryMock
+                .Setup(x => x.GetByName(It.IsAny<string>()))
+                .Returns<string>(name => new LayoutEntity { Name = name, })
+                .Verifiable("Did not get old entity from database");
+
+            _layoutRepositoryMock
+                .Setup(x => x.Update(It.IsAny<LayoutEntity>()))
+                .Returns<LayoutEntity>(entity => entity)
+                .Verifiable("Did not update entity in database");
+
+            var target = CreateTarget();
+
+            Layout layout = new Layout("TV1");
+
+            target.SaveOrUpdate(layout);
+
+            _layoutRepositoryMock.Verify();
         }
 
         private ILayoutService CreateTarget()

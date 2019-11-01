@@ -1,5 +1,5 @@
 ﻿using LayoutRestService.EntityFramework;
-using LayoutRestService.Models;
+using LayoutRestService.Model.Entities;
 using System.Collections.Generic;
 
 namespace LayoutRestService.IntegrationTests

@@ -35,10 +35,18 @@ namespace LayoutRestService.Controllers
         {
             var layout = _service.GetLayoutByName(name);
             if(layout == null)
-            {
                 return NotFound();
-            }
+
             return Ok(layout);
+        }
+
+        [HttpPut("layouts/{name}")]
+        public ActionResult<Layout> PutByName(string name, Layout layout)
+        {
+            if (name != layout.Name)
+                return BadRequest();
+
+            return Ok(_service.SaveOrUpdate(layout));
         }
     }
 }

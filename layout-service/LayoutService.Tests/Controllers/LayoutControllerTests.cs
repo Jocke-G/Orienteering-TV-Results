@@ -77,6 +77,34 @@ namespace LayoutRestService.UnitTests.Controllers
             Assert.IsType<NotFoundResult>(actual.Result);
         }
 
+        [Fact]
+        public void TestPutLayout_LayoutNameDontMatch_ReturnBadRequest()
+        {
+            var target = CreateTarget();
+
+            Layout layout = new Layout("TV2");
+            var actual = target.PutByName("TV1", layout);
+
+            Assert.IsType<BadRequestResult>(actual.Result);
+        }
+
+        [Fact]
+        public void TestPutLayout_LayoutIsOk_ReturnOk()
+        {
+            _layoutServiceMock
+                .Setup(x => x.SaveOrUpdate(It.IsAny<Layout>()))
+                .Returns<Layout>(x => x);
+
+            var target = CreateTarget();
+
+            Layout layout = new Layout("TV1");
+            var actual = target.PutByName("TV1", layout);
+
+            var result = Assert.IsType<OkObjectResult>(actual.Result);
+            var value = Assert.IsType<Layout>(result.Value);
+            Assert.Equal("TV1", value.Name);
+        }
+
         private LayoutController CreateTarget()
         {
             var mockLogger = new Mock<ILogger<LayoutController>>();

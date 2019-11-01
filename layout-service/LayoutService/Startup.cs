@@ -1,5 +1,5 @@
 using LayoutRestService.EntityFramework;
-using LayoutRestService.Models.Configuration;
+using LayoutRestService.Model.Configuration;
 using LayoutRestService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;

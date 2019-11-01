@@ -1,5 +1,5 @@
 ﻿using LayoutRestService.EntityFramework.Repositories;
-using LayoutRestService.Models.Configuration;
+using LayoutRestService.Model.Configuration;
 using LayoutRestService.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

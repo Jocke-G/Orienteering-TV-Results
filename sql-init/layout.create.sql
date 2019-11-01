@@ -1,6 +1,6 @@
 CREATE DATABASE `layout`;
 CREATE USER 'layout-service'@'%' IDENTIFIED BY 'secret';
-GRANT CREATE,ALTER,SELECT,INSERT,UPDATE ON layout.* TO 'layout-service'@'%';
+GRANT CREATE,ALTER,SELECT,INSERT,UPDATE,DELETE ON layout.* TO 'layout-service'@'%';
 
 USE `layout`;
 CREATE TABLE `layout` (

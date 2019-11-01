@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LayoutRestService.Models
+namespace LayoutRestService.Model.Entities
 {
     [Table("layout_row")]
     public class LayoutRowEntity
@@ -10,7 +10,7 @@ namespace LayoutRestService.Models
         [Column("layout_id")]
         public int LayoutId { get; internal set; }
         public LayoutEntity Layout { get; set; }
-        public ICollection<LayoutCellEntity> Cells { get; set; }
+        public IEnumerable<LayoutCellEntity> Cells { get; set; }
         public int Ordinal { get; set; }
 
         public LayoutRowEntity()

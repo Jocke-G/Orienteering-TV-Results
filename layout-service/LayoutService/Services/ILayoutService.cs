@@ -7,5 +7,6 @@ namespace LayoutRestService.Services
     {
         IList<Layout> GetLayouts();
         Layout GetLayoutByName(string name);
+        Layout SaveOrUpdate(Layout layout);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LayoutRestService.Models.Configuration
+namespace LayoutRestService.Model.Configuration
 {
     public class DatabaseConfiguration
     {

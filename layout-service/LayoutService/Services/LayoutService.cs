@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LayoutRestService.Contracts;
-using LayoutRestService.Models;
 using LayoutRestService.RepositoryInterfaces;
+using LayoutRestService.Translators;
 
 namespace LayoutRestService.Services
 {
@@ -17,8 +17,10 @@ namespace LayoutRestService.Services
 
         public IList<Layout> GetLayouts()
         {
-            var entities = _layoutRepository.GetAll();
-            return ToContracts(entities);
+            return _layoutRepository
+                .GetAll()
+                .ToContracts()
+                .ToList();
         }
 
         public Layout GetLayoutByName(string name)
@@ -27,53 +29,24 @@ namespace LayoutRestService.Services
             if (entity == null)
                 return null;
 
-            return ToContract(entity);
+            return entity.ToContract();
         }
 
-        private IList<Layout> ToContracts(IList<LayoutEntity> entities)
+        public Layout SaveOrUpdate(Layout layout)
         {
-            return entities.Select(entity => ToContract(entity)).ToList();
-        }
+            var existingLayout = _layoutRepository.GetByName(layout.Name);
 
-        private Layout ToContract(LayoutEntity entity)
-        {
-            return new Layout
+            if(existingLayout == null)
             {
-                Name = entity.Name,
-                Rows = ToContracts(entity.Rows),
-            };
-        }
+                return _layoutRepository
+                    .Create(layout.ToEntity())
+                    .ToContract();
+            }
 
-        private IList<LayoutRow> ToContracts(ICollection<LayoutRowEntity> entities)
-        {
-            return entities
-                .OrderBy(x => x.Ordinal)
-                .Select(entity => ToContract(entity))
-                .ToList();
-        }
-
-        private LayoutRow ToContract(LayoutRowEntity entity)
-        {
-            return new LayoutRow {
-                Cells = ToContracts(entity.Cells)
-            };
-        }
-
-        private IList<LayoutCell> ToContracts(ICollection<LayoutCellEntity> entities)
-        {
-            return entities
-                .OrderBy(x => x.Ordinal)
-                .Select(entity => ToContract(entity))
-                .ToList();
-        }
-
-        private LayoutCell ToContract(LayoutCellEntity entity)
-        {
-            return new LayoutCell
-            {
-                CellType = entity.CellType,
-                ClassName = entity.ClassName,
-            };
+            existingLayout.Rows = layout.Rows.ToEntities();
+            return _layoutRepository
+                .Update(existingLayout)
+                .ToContract();
         }
     }
 }

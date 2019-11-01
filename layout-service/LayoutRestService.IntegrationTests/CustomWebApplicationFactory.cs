@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 
 namespace LayoutRestService.IntegrationTests
 {
@@ -16,20 +15,17 @@ namespace LayoutRestService.IntegrationTests
         {
             builder.ConfigureServices(services =>
             {
-                // Remove the app's ApplicationDbContext registration.
-                var descriptor = services.SingleOrDefault(
-                    d => d.ServiceType ==
-                        typeof(DbContextOptions<AppDbContext>));
+                // Create a new service provider.
+                var serviceProvider = new ServiceCollection()
+                    .AddEntityFrameworkInMemoryDatabase()
+                    .BuildServiceProvider();
 
-                if (descriptor != null)
+                // Add a database context (ApplicationDbContext) using an in-memory 
+                // database for testing.
+                services.AddDbContext<AppDbContext>(options =>
                 {
-                    services.Remove(descriptor);
-                }
-
-                // Add ApplicationDbContext using an in-memory database for testing.
-                services.AddDbContext<AppDbContext>((options, context) =>
-                {
-                    context.UseInMemoryDatabase("InMemoryDbForTesting");
+                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+                    options.UseInternalServiceProvider(serviceProvider);
                 });
 
                 // Build the service provider.
@@ -54,8 +50,7 @@ namespace LayoutRestService.IntegrationTests
                     }
                     catch (Exception ex)
                     {
-                        logger.LogError(ex, "An error occurred seeding the " +
-                            "database with test messages. Error: {Message}", ex.Message);
+                        logger.LogError(ex, "An error occurred seeding the database. Error: {Message}", ex.Message);
                     }
                 }
             });

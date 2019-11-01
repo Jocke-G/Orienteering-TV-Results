@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using LayoutRestService.Models;
+using LayoutRestService.Model.Entities;
 using LayoutRestService.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +16,14 @@ namespace LayoutRestService.EntityFramework.Repositories
             _context = context;
         }
 
-        public IList<LayoutEntity> GetAll()
+        public LayoutEntity Create(LayoutEntity layout)
+        {
+            var result = _context.Add(layout);
+            _context.SaveChanges();
+            return result.Entity;
+        }
+
+        public IEnumerable<LayoutEntity> GetAll()
         {
             return _context
                 .Layouts
@@ -30,6 +37,13 @@ namespace LayoutRestService.EntityFramework.Repositories
                 .Include(x => x.Rows)
                 .ThenInclude(x => x.Cells)
                 .SingleOrDefault(x => x.Name == name);
+        }
+
+        public LayoutEntity Update(LayoutEntity layoutEntity)
+        {
+            var result = _context.Update(layoutEntity);
+            _context.SaveChanges();
+            return result.Entity;
         }
     }
 }
