@@ -55,7 +55,5 @@ services:
       - 'results_rest_port=8080'
       - 'layouts_rest_host=results'
       - 'layouts_rest_port=8081'
-    volumes:
-      - './config/client.json:/usr/share/nginx/html/config.json'
     ports:
       - '80:80'
