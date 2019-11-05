@@ -43,8 +43,7 @@ namespace LayoutRestService.Controllers
         [HttpPut("layouts/{name}")]
         public ActionResult<Layout> PutByName(string name, Layout layout)
         {
-            if (name != layout.Name)
-                return BadRequest();
+            layout.Name = name;
 
             return Ok(_service.SaveOrUpdate(layout));
         }

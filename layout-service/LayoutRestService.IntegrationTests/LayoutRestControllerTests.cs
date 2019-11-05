@@ -76,7 +76,6 @@ namespace LayoutRestService.IntegrationTests
         public async Task TestPutLayout_NewLayout_LayoutIsReturned()
         {
             var layout = new JObject(
-                new JProperty("Name", "TV14"),
                 new JProperty("Rows",
                     new JArray(
                         new JObject(

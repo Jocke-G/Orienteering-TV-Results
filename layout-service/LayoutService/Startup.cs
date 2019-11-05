@@ -11,7 +11,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace LayoutRestService
 {
-    internal class Startup
+    public class Startup
     {
         private readonly string DefaultCorsPolicy = "defaultCorsPolicy";
 
