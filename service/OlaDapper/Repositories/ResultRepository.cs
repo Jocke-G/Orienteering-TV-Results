@@ -67,10 +67,10 @@ results.totalTime,
 results.modifyDate,
 
 #SplitTimes
-splittimes.splitTimeControlId,
+splitTimes.splitTimeControlId,
 splitTimes.passedTime,
 splitTimes.splitTime,
-splittimes.passedCount
+splitTimes.passedCount
 
 FROM results
 INNER JOIN entries
@@ -85,8 +85,8 @@ INNER JOIN eventClasses
     ON eventClasses.eventClassId = raceClasses.eventClassId
 
 #SplitTimes
-LEFT JOIN splittimes
-	ON splittimes.resultRaceIndividualNumber = results.resultId
+LEFT JOIN splitTimes
+	ON splitTimes.resultRaceIndividualNumber = results.resultId
 
 WHERE eventClasses.eventId = @eventId 
     AND raceClasses.eventRaceId = @eventRaceId
@@ -138,13 +138,13 @@ INNER JOIN eventClasses
     ON eventClasses.eventClassId = raceClasses.eventClassId
 
 #SplitTimes
-LEFT JOIN splittimes
-    ON splittimes.resultRaceIndividualNumber = results.resultId
+LEFT JOIN splitTimes
+    ON splitTimes.resultRaceIndividualNumber = results.resultId
 
 WHERE eventClasses.eventId = 3
     AND raceClasses.eventRaceId = 3
     AND eventClasses.eventClassId = 127
-    AND(results.modifyDate > @lastCheckTime OR splittimes.modifyDate > @lastCheckTime)";
+    AND(results.modifyDate > @lastCheckTime OR splitTimes.modifyDate > @lastCheckTime)";
 
             var param = new
             {

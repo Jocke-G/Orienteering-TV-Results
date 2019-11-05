@@ -66,7 +66,17 @@ namespace OrienteeringTvResults.OlaDapper
             else
             {
                 var results = resultRepository.GetWithSplitTimes(_eventRaceId, _eventId, classContract.Id);
-                var resultContracts = results.ToContractsWithSplitTimes(classContract.Courses.Single());
+
+                IList<Result> resultContracts;
+                if (classContract.Courses.Count == 1 && classContract.Courses.Single().SplitControls.Count > 0)
+                {
+                    resultContracts = results.ToContractsWithSplitTimes(classContract.Courses.Single());
+                }
+                else
+                {
+                    resultContracts = results.ToContracts();
+
+                }
 
                 if (!classContract.NoTimePresentation)
                 {
