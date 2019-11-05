@@ -43,5 +43,6 @@ const classes = (state : State = initialState, action: Action): State => {
 
 export default classes;
 
+export const isFetching = (state:RootState):boolean => state.classes.requesting;
 export const getClasses = (state:RootState):Class[]|undefined => state.classes.classes;
 export const getError = (state:RootState):Error|null => state.classes.error;

@@ -2,7 +2,7 @@ import React, { Component, Dispatch, Fragment, FormEvent } from 'react';
 import { connect } from "react-redux";
 import { ThunkDispatch } from 'redux-thunk';
 import { Action } from '../../store/results/actions';
-import { getClasses, Class, getError } from '../../store/classes/reducers';
+import { getClasses, Class, getError, isFetching } from '../../store/classes/reducers';
 import { fetchClasses } from '../../store/classes/actions';
 
 export interface OwnProps {
@@ -11,6 +11,7 @@ export interface OwnProps {
 }
 
 type StateProps = {
+  isFetchingClasses: boolean,
   classes?: Class[],
   error: Error|null,
 }
@@ -30,6 +31,10 @@ class ClassPanel extends Component<Props, State> {
   constructor(props:Props) {
     super(props);
     this.state = {};
+    if(props.classes == null && !props.isFetchingClasses)
+    {
+      props.fetch();
+    }
   }
 
   componentDidUpdate() {
@@ -80,9 +85,7 @@ class ClassPanel extends Component<Props, State> {
               </select>
               <button onClick={this.onSelectClass}>Välj klass</button>
             </Fragment>
-            :
-            <Fragment></Fragment>
-            }
+            :null}
             <button onClick={this.onSelectFinish}>Välj målgångar</button>
         </Fragment>
         }
@@ -93,6 +96,7 @@ class ClassPanel extends Component<Props, State> {
 
 const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
   return {
+    isFetchingClasses: isFetching(state),
     classes: getClasses(state),
     error: getError(state),
   }

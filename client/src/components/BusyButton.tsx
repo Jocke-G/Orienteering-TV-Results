@@ -8,7 +8,7 @@ type StateProps = {
 }
 
 interface DispatchProps {
-  onClick: (event:FormEvent) => void,
+  onClick: (event:FormEvent<HTMLButtonElement>) => void,
 }
 
 type Props = StateProps & DispatchProps & OwnProps
@@ -21,7 +21,7 @@ class BusyButton extends Component<Props> {
         {props.isBusy ?
           <span>Hämtar...</span>
           :
-          <span>Hämta</span>
+          <span>{props.children}</span>
         }
       </button>
     );

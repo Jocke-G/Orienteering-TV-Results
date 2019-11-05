@@ -27,12 +27,12 @@ class ClassCompetitorResultComponent extends Component<Props> {
         <td>{ this.props.result.FirstName } { this.props.result.LastName }</td>
         <td>{ this.props.result.Club }</td>
         <td>{ this.getStartTimeString() }</td>
-        {this.props.result.SplitTimes.map((item, key) => 
+        {this.props.result.SplitTimes ? this.props.result.SplitTimes.map((item, key) => 
           <Fragment key={key}>
             <td>{item.Ordinal}</td>
             <td>{this.toSplitTime(item.Time)}</td>
           </Fragment>
-        )}
+        ):null}
           {(() => {
           switch(this.props.result.Status) {
             case 'Passed':

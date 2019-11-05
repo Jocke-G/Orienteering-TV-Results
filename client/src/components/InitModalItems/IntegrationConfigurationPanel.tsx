@@ -41,7 +41,7 @@ class IntegrationConfigurationPanel extends Component<Props> {
             <p>Results REST: <a href={ `http://${this.props.configuration.results_rest_host}:${this.props.configuration.results_rest_port}` } rel="noopener noreferrer" target="_blank">{`http://${this.props.configuration.results_rest_host}:${this.props.configuration.results_rest_port}`}</a></p>
           </Fragment>
         }
-        <BusyButton isBusy={props.isFetching} onClick={this.onClick}></BusyButton>
+        <BusyButton isBusy={props.isFetching} onClick={this.onClick}>Hämta inställningar</BusyButton>
       </div>
     )
   }

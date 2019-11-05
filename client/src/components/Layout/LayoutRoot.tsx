@@ -2,7 +2,7 @@ import React, { Component, Dispatch, Fragment, CSSProperties, RefObject } from '
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from 'react-router';
 import { ThunkDispatch } from 'redux-thunk';
-import { Action, fetchLayout } from '../../store/layouts/actions';
+import { Action, requestLayout } from '../../store/layouts/actions';
 import { Layout, getLayout } from '../../store/layouts/reducers';
 import ClassResultView from '../ResultViews/ClassResultView';
 import FinishView from '../ResultViews/FinishView';
@@ -16,7 +16,7 @@ type StateProps = {
 }
 
 interface DispatchProps {
-  fetchLayout: (layoutName:string) => void;
+  requestLayout: (layoutName:string) => void;
 }
 
 type Props = RouteComponentProps<{}> & StateProps & DispatchProps & OwnProps
@@ -39,7 +39,7 @@ class LayoutRoot extends Component<Props, State> {
       scrollDown: true,
       scrollWait: 0,
     }
-    props.fetchLayout(this.props.layoutName);
+    props.requestLayout(this.props.layoutName);
   }
 
   componentDidMount() {
@@ -130,7 +130,7 @@ const mapStateToProps = (state: any, ownProps: OwnProps): StateProps => {
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any> & Dispatch<Action>, ownProps: OwnProps): DispatchProps => {
   return {
-    fetchLayout: (layoutName:string) => dispatch(fetchLayout(layoutName)),
+    requestLayout: (layoutName:string) => dispatch(requestLayout(layoutName)),
   }
 }
 

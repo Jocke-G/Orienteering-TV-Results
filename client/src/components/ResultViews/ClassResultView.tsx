@@ -31,6 +31,15 @@ class ClassResultsView extends Component<Props> {
     props.fetchClass(props.class);
   }
 
+  componentDidUpdate(prevProps:Props) {
+    if(prevProps.class !== this.props.class)
+    {
+      this.props.unsubscribeClass(prevProps.class);
+      this.props.subscribeClass(this.props.class);
+      this.props.fetchClass(this.props.class);
+    }
+  }
+
   componentWillUnmount() {
     this.props.unsubscribeClass(this.props.class)
   }
