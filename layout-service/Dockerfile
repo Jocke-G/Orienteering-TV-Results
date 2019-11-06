@@ -4,14 +4,18 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
 WORKDIR /src
-COPY ["LayoutService/LayoutRestService.csproj", "LayoutService/"]
-RUN dotnet restore "LayoutService/LayoutRestService.csproj"
+COPY ["DataAccess/DataAccess.csproj", "DataAccess/"]
+COPY ["Logic/Logic.csproj", "Logic/"]
+COPY ["Model/Model.csproj", "Model/"]
+COPY ["Rest/Rest.csproj", "Rest/"]
+COPY ["ServiceBooter/ServiceBooter.csproj", "ServiceBooter/"]
+RUN dotnet restore "ServiceBooter/ServiceBooter.csproj"
 COPY . .
-WORKDIR "/src/LayoutService"
-RUN dotnet build "LayoutRestService.csproj" -c Release -o /app/build
+WORKDIR "/src/ServiceBooter"
+RUN dotnet build "ServiceBooter.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "LayoutRestService.csproj" -c Release -o /app/publish
+RUN dotnet publish "ServiceBooter.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
