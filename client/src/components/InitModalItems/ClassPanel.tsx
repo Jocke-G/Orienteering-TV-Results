@@ -31,14 +31,10 @@ class ClassPanel extends Component<Props, State> {
   constructor(props:Props) {
     super(props);
     this.state = {};
-    if(props.classes == null && !props.isFetchingClasses)
-    {
-      props.fetch();
-    }
   }
 
   componentDidUpdate() {
-    if(!this.state.selectedClass && this.props.classes) {
+    if(this.state.selectedClass == null && this.props.classes && this.props.classes.length > 0) {
       this.setState((state:Readonly<State>, props: Readonly<Props>) => ({
         selectedClass: props.classes ? props.classes[0] : undefined,
       }));

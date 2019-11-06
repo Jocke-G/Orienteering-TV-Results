@@ -15,5 +15,6 @@ namespace LayoutRestService.Model.Entities
         public string CellType { get; set; }
         [Column("class_name")]
         public string ClassName { get; set; }
+        public string Options { get; set; }
     }
 }

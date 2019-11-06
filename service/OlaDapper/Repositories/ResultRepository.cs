@@ -19,28 +19,28 @@ namespace OrienteeringTvResults.OlaDapper.Repositories
 
         public IList<ResultEntity> Get(int eventId, int eventRaceId, int eventClassId)
         {
-            var sql = @"SELECT persons.firstName,
-persons.familyName,
-results.runnerStatus,
-results.modifyDate,
-organisations.shortName AS club,
-results.startTime,
-results.finishTime,
-results.totalTime
-FROM results
-INNER JOIN entries
-    ON entries.entryID = results.EntryId
-INNER JOIN persons
-    ON entries.competitorId = persons.personId
-INNER JOIN organisations
-    ON persons.defaultOrganisationId = organisations.organisationId
-INNER JOIN raceClasses
-    ON raceClasses.raceClassId = results.raceClassId
-INNER JOIN eventClasses
-    ON eventClasses.eventClassId = raceClasses.eventClassId
-WHERE eventClasses.eventId = @eventId 
-    AND raceClasses.eventRaceId = @eventRaceId
-    AND eventClasses.eventClassId = @eventClassId";
+            var sql = @"SELECT Persons.firstName,
+Persons.familyName,
+Results.runnerStatus,
+Results.modifyDate,
+Organisations.shortName AS club,
+Results.startTime,
+Results.finishTime,
+Results.totalTime
+FROM Results
+INNER JOIN Entries
+    ON Entries.entryID = Results.EntryId
+INNER JOIN Persons
+    ON Entries.competitorId = Persons.personId
+INNER JOIN Organisations
+    ON Persons.defaultOrganisationId = Organisations.organisationId
+INNER JOIN RaceClasses
+    ON RaceClasses.raceClassId = Results.raceClassId
+INNER JOIN EventClasses
+    ON EventClasses.eventClassId = RaceClasses.eventClassId
+WHERE EventClasses.eventId = @eventId 
+    AND RaceClasses.eventRaceId = @eventRaceId
+    AND EventClasses.eventClassId = @eventClassId";
 
             var param = new
             {
@@ -56,41 +56,41 @@ WHERE eventClasses.eventId = @eventId
 
         public IList<ResultEntity> GetWithSplitTimes(int eventId, int eventRaceId, int eventClassId)
         {
-            var sql = @"SELECT persons.firstName,
-persons.familyName,
-organisations.shortName AS club,
-results.resultId,
-results.runnerStatus,
-results.startTime,
-results.finishTime,
-results.totalTime,
-results.modifyDate,
+            var sql = @"SELECT Persons.firstName,
+Persons.familyName,
+Organisations.shortName AS club,
+Results.resultId,
+Results.runnerStatus,
+Results.startTime,
+Results.finishTime,
+Results.totalTime,
+Results.modifyDate,
 
 #SplitTimes
-splitTimes.splitTimeControlId,
-splitTimes.passedTime,
-splitTimes.splitTime,
-splitTimes.passedCount
+SplitTimes.splitTimeControlId,
+SplitTimes.passedTime,
+SplitTimes.splitTime,
+SplitTimes.passedCount
 
-FROM results
-INNER JOIN entries
-    ON entries.entryID = results.EntryId
-INNER JOIN persons
-    ON entries.competitorId = persons.personId
-INNER JOIN organisations
-    ON persons.defaultOrganisationId = organisations.organisationId
-INNER JOIN raceClasses
-    ON raceClasses.raceClassId = results.raceClassId
-INNER JOIN eventClasses
-    ON eventClasses.eventClassId = raceClasses.eventClassId
+FROM Results
+INNER JOIN Entries
+    ON Entries.entryID = Results.EntryId
+INNER JOIN Persons
+    ON Entries.competitorId = Persons.personId
+INNER JOIN Organisations
+    ON Persons.defaultOrganisationId = Organisations.organisationId
+INNER JOIN RaceClasses
+    ON RaceClasses.RaceClassId = Results.raceClassId
+INNER JOIN EventClasses
+    ON EventClasses.eventClassId = RaceClasses.eventClassId
 
 #SplitTimes
-LEFT JOIN splitTimes
-	ON splitTimes.resultRaceIndividualNumber = results.resultId
+LEFT JOIN SplitTimes
+	ON SplitTimes.ResultRaceIndividualNumber = Results.resultId
 
-WHERE eventClasses.eventId = @eventId 
-    AND raceClasses.eventRaceId = @eventRaceId
-    AND eventClasses.eventClassId = @eventClassId";
+WHERE EventClasses.eventId = @eventId 
+    AND RaceClasses.eventRaceId = @eventRaceId
+    AND EventClasses.eventClassId = @eventClassId";
 
             var param = new
             {
@@ -125,26 +125,26 @@ WHERE eventClasses.eventId = @eventId
         public bool HasNewResults(int eventId, int eventRaceId, int eventClassId, DateTime lastCheckTime)
         {
             var sql = @"SELECT COUNT(*) AS Count
-FROM results
-INNER JOIN entries
-    ON entries.entryID = results.EntryId
-INNER JOIN persons
-    ON entries.competitorId = persons.personId
-INNER JOIN organisations
-    ON persons.defaultOrganisationId = organisations.organisationId
-INNER JOIN raceClasses
-    ON raceClasses.raceClassId = results.raceClassId
-INNER JOIN eventClasses
-    ON eventClasses.eventClassId = raceClasses.eventClassId
+FROM Results
+INNER JOIN Entries
+    ON Entries.entryID = Results.EntryId
+INNER JOIN Persons
+    ON Entries.competitorId = Persons.personId
+INNER JOIN Organisations
+    ON Persons.defaultOrganisationId = Organisations.organisationId
+INNER JOIN RaceClasses
+    ON RaceClasses.raceClassId = Results.raceClassId
+INNER JOIN EventClasses
+    ON EventClasses.eventClassId = RaceClasses.eventClassId
 
 #SplitTimes
-LEFT JOIN splitTimes
-    ON splitTimes.resultRaceIndividualNumber = results.resultId
+LEFT JOIN SplitTimes
+    ON SplitTimes.ResultRaceIndividualNumber = Results.resultId
 
-WHERE eventClasses.eventId = 3
-    AND raceClasses.eventRaceId = 3
-    AND eventClasses.eventClassId = 127
-    AND(results.modifyDate > @lastCheckTime OR splitTimes.modifyDate > @lastCheckTime)";
+WHERE EventClasses.eventId = 3
+    AND RaceClasses.eventRaceId = 3
+    AND EventClasses.eventClassId = 127
+    AND(Results.modifyDate > @lastCheckTime OR SplitTimes.modifyDate > @lastCheckTime)";
 
             var param = new
             {
@@ -166,33 +166,33 @@ WHERE eventClasses.eventId = 3
 
         public IList<ResultEntity> GetFinish(int eventRaceId, int eventId, int limit)
         {
-            var sql = @"SELECT persons.firstName,
-persons.familyName,
-results.runnerStatus,
-results.modifyDate,
-organisations.shortName AS club,
-eventclasses.shortName AS className,
-results.finishTime,
-results.startTime,
-(unix_timestamp(results.finishTime)-unix_timestamp(results.startTime)) * 100 AS totalTime,
+            var sql = @"SELECT Persons.firstName,
+Persons.familyName,
+Results.runnerStatus,
+Results.modifyDate,
+Organisations.shortName AS club,
+EventClasses.shortName AS className,
+Results.finishTime,
+Results.startTime,
+(unix_timestamp(Results.finishTime)-unix_timestamp(Results.startTime)) * 100 AS totalTime,
 (CASE
-    WHEN ISNULL(results.finishTime) OR runnerStatus='notValid' THEN NULL
-    ELSE (SELECT COUNT(*) FROM results r2 WHERE results.raceClassId=r2.raceClassId AND r2.totalTime > 0 AND r2.totalTime < (results.totalTime) AND r2.runnerStatus NOT IN ('notValid'))+1
+    WHEN ISNULL(Results.finishTime) OR runnerStatus='notValid' THEN NULL
+    ELSE (SELECT COUNT(*) FROM Results r2 WHERE Results.raceClassId=r2.raceClassId AND r2.totalTime > 0 AND r2.totalTime < (Results.totalTime) AND r2.runnerStatus NOT IN ('notValid'))+1
     END
 ) AS Ordinal
-FROM results
-INNER JOIN entries
-    ON entries.entryID = results.EntryId
-INNER JOIN persons
-    ON entries.competitorId = persons.personId
-INNER JOIN organisations
-	ON persons.defaultOrganisationId = organisations.organisationId
-INNER JOIN raceClasses
-	ON raceClasses.raceClassId = results.raceClassId
-INNER JOIN eventClasses
-	ON eventClasses.eventClassId = raceClasses.eventClassId
-WHERE eventClasses.eventId = 3
-    AND raceClasses.eventRaceId = 3
+FROM Results
+INNER JOIN Entries
+    ON Entries.entryID = Results.EntryId
+INNER JOIN Persons
+    ON Entries.competitorId = Persons.personId
+INNER JOIN Organisations
+	ON Persons.defaultOrganisationId = Organisations.organisationId
+INNER JOIN RaceClasses
+	ON RaceClasses.raceClassId = Results.raceClassId
+INNER JOIN EventClasses
+	ON EventClasses.eventClassId = RaceClasses.eventClassId
+WHERE EventClasses.eventId = 3
+    AND RaceClasses.eventRaceId = 3
     AND finishTime > 0
    ORDER BY finishTime DESC LIMIT 0, 50;";
 

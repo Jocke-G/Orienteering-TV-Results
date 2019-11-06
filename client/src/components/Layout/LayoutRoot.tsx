@@ -89,7 +89,7 @@ class LayoutRoot extends Component<Props, State> {
 
     return (
       <div style={wrapperStyle} className='wrapper'>
-        {props.layout.Rows.map((row, rowKey) => 
+        {props.layout.Rows ? props.layout.Rows.map((row, rowKey) => 
         <Fragment key={rowKey}>
           {row.Cells.map((cell, colKey) => {
               var style:CSSProperties = {
@@ -107,7 +107,7 @@ class LayoutRoot extends Component<Props, State> {
                   cellDiv = <div ref={this.state.cells[key]} style={style} key={key}><FinishView /></div>;
                   break;
                 case 'Class':
-                  cellDiv = <div ref={this.state.cells[key]} style={style} key={key}><ClassResultView class={cell.ClassName} /></div>;
+                  cellDiv = <div ref={this.state.cells[key]} style={style} key={key}><ClassResultView class={cell.ClassName} options={cell.Options} /></div>;
                   break;
                 }
                 return(
@@ -116,7 +116,7 @@ class LayoutRoot extends Component<Props, State> {
           }
           )}
         </Fragment>
-        )}
+        ):null}
       </div>
     );
   }

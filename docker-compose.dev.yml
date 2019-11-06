@@ -6,9 +6,6 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: supersecret
-      MYSQL_DATABASE: OLA
-      MYSQL_USER: TvService
-      MYSQL_PASSWORD: secret
     ports:
       - '3306:3306'
     volumes:
@@ -35,7 +32,7 @@ services:
 
       - 'ola:database:server=mysql'
       - 'ola:database:database=ola'
-      - 'ola:database:username=TvService'
+      - 'ola:database:username=ola-results-service'
       - 'ola:database:password=secret'
       - 'ola:eventid=1'
       - 'ola:eventraceid=1'

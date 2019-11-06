@@ -17,6 +17,11 @@ export interface LayoutRow {
 export interface LayoutCell {
   CellType: string,
   ClassName: string,
+  Options?: LayoutCellOptions;
+}
+
+export interface LayoutCellOptions {
+  ShowStartTime: boolean,
 }
 
 export interface State {

@@ -21,7 +21,7 @@ services:
 
       - 'ola:database:server=192.168.10.136'
       - 'ola:database:database=ola'
-      - 'ola:database:username=TvService'
+      - 'ola:database:username=ola-results-service'
       - 'ola:database:password=secret'
       - 'ola:eventid=1'
       - 'ola:eventraceid=1'

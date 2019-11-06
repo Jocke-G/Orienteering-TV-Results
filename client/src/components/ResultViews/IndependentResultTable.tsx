@@ -42,7 +42,7 @@ class IndependentResultsTable extends Component<Props> {
             <CompetitorResultComponent index={key} key={key} result={item} />
           ):
           <tr>
-            <td colSpan={4}>
+            <td colSpan={6}>
               <i>Inga stämplingar ännu</i>
             </td>
           </tr>

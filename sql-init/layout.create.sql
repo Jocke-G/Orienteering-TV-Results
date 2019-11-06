@@ -24,6 +24,7 @@ CREATE TABLE `layout_cell` (
   `ordinal` int(11) NOT NULL,
   `cell_type` varchar(255) DEFAULT NULL,
   `class_name` varchar(255) DEFAULT NULL,
+  `options` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `IX_CELL_ROW_ORDINAL` (`row_id`,`ordinal`),
   CONSTRAINT `FK_CELL_ROW` FOREIGN KEY (`row_id`) REFERENCES `layout_row` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION

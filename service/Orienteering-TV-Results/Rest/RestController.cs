@@ -25,10 +25,13 @@ namespace OrienteeringTvResults.Rest
         }
 
         [HttpGet("classes/{shortName}")]
-        public JsonResult GetClasses(string shortName)
+        public ActionResult<CompetitionClass> GetClasses(string shortName)
         {
             var competitionClass = _results.GetClass(shortName);
-            return new JsonResult(competitionClass);
+            if(competitionClass == null)
+                return NotFound();
+
+            return Ok(competitionClass);
         }
 
         [HttpGet("classById/{competitionClassId}")]

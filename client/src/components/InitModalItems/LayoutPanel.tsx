@@ -52,7 +52,7 @@ class LayoutsPanel extends Component<Props, State> {
         "Finish"
       ],
     };
-    if(props.classes == null && !props.isRequestingLayouts)
+    if(props.layouts == null && !props.isRequestingLayouts)
     {
       props.requestLayouts();
     }
@@ -137,7 +137,7 @@ class LayoutsPanel extends Component<Props, State> {
         row.Cells.push(
           {
             CellType:"Class",
-            ClassName:"",
+            ClassName: this.props.classes && this.props.classes.length > 0? this.props.classes[0].ShortName : "",
           });
         }
       }
@@ -153,7 +153,7 @@ class LayoutsPanel extends Component<Props, State> {
     layout.Rows.forEach((row) => {
       row.Cells.push({
         CellType:"Class",
-        ClassName:"",
+        ClassName: this.props.classes && this.props.classes.length > 0? this.props.classes[0].ShortName : "",
       });
     });
     this.props.updateLayout(layout);
@@ -170,6 +170,22 @@ class LayoutsPanel extends Component<Props, State> {
     })
     this.props.updateLayout(layout);
   }
+
+  handleShowStartTimeChange = (event: FormEvent<HTMLInputElement>) => {
+    let layout = this.props.layout;
+    if(layout == null)
+      return;
+
+      let arrKey = event.currentTarget.id.split("-");
+      let cell = layout.Rows[parseInt(arrKey[1])].Cells[parseInt(arrKey[2])];
+      let options = cell.Options;
+      options = {
+        ...options,
+        ShowStartTime:event.currentTarget.checked,
+      }
+      cell.Options = options;
+      this.props.updateLayout(layout);
+    }
 
   render() {
     let props = this.props;
@@ -200,7 +216,7 @@ class LayoutsPanel extends Component<Props, State> {
           <p>Layout: </p>
           <table>
             <tbody>
-            {props.layout.Rows.map((row, rowKey) => 
+            {props.layout.Rows? props.layout.Rows.map((row, rowKey) => 
             <tr key={rowKey}>
               {row.Cells.map((cell, cellKey) =>
                 <td key={cellKey}>
@@ -217,16 +233,23 @@ class LayoutsPanel extends Component<Props, State> {
                   {
                     cell.CellType === "Class" && this.props.classes?
                   <Fragment>
-                  <br />
-                  <select
-                    onChange={this.handleClassChange}
-                    value={cell.ClassName}
-                    id={`selectType-${rowKey}-${cellKey}`}
-                  >
+                    <br />
+                    <select
+                      onChange={this.handleClassChange}
+                      value={cell.ClassName}
+                      id={`selectType-${rowKey}-${cellKey}`}
+                    >
                     { this.props.classes.map((item, key) => 
                       <option key={key} value={item.ShortName}>{item.ShortName}</option>
                     )}
-                  </select>
+                    </select><br />
+                    <input
+                      type={"checkbox"}
+                      id={`showStartTime-${rowKey}-${cellKey}`}
+                      checked={cell.Options && cell.Options.ShowStartTime}
+                      onChange={this.handleShowStartTimeChange}
+                    />
+                    Starttid
                   </Fragment>
                   :null}
                 </td>
@@ -242,9 +265,9 @@ class LayoutsPanel extends Component<Props, State> {
               :null}
               </td>
             </tr>
-            )}
+            ):null}
             <tr>
-              {props.layout.Rows != null ? props.layout.Rows[0].Cells.map((cell, key) =>
+              {props.layout.Rows != null && props.layout.Rows.length > 0 ? props.layout.Rows[0].Cells.map((cell, key) =>
                 <td
                   key={key}
                 >

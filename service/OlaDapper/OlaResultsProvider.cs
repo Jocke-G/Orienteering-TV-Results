@@ -97,6 +97,9 @@ namespace OrienteeringTvResults.OlaDapper
                 var resultRepository = new ResultRepository(connection);
 
                 var classEntity = classRepository.GetWithSplitControls(_eventId, _eventRaceId, shortName);
+                if(classEntity == null) {
+                    return null;
+                }
 
                 var classContract = classEntity.ToContract();
                 classContract.Results = GetResults(classEntity, resultRepository);

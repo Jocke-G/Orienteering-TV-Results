@@ -19,14 +19,14 @@ namespace OlaDapper.Repositories
         public IList<ClassEntity> GetByEventRaceIdAndEventId(int eventRaceId, int eventId)
         {
             string sql = @"
-SELECT eventClasses.eventCLassId AS Id,
-    eventClasses.shortName,
-    eventClasses.noTimePresentation
-FROM raceClasses
-LEFT JOIN eventClasses
-    ON eventClasses.eventClassId = raceClasses.eventClassId
-WHERE raceClasses.eventRaceId = @eventRaceId
-    AND eventClasses.eventId = @eventId; ";
+SELECT EventClasses.eventCLassId AS Id,
+    EventClasses.shortName,
+    EventClasses.noTimePresentation
+FROM RaceClasses
+LEFT JOIN EventClasses
+    ON EventClasses.eventClassId = RaceClasses.eventClassId
+WHERE RaceClasses.eventRaceId = @eventRaceId
+    AND EventClasses.eventId = @eventId; ";
             var param = new {
                 eventRaceId = eventRaceId,
                 eventId = eventId,
@@ -39,15 +39,15 @@ WHERE raceClasses.eventRaceId = @eventRaceId
         public ClassEntity GetByEventIdAndEventRaceIdAndEventClassId(int eventId, int eventRaceId, int eventClassId)
         {
             string sql = @"
-SELECT eventClasses.eventCLassId AS Id,
-    eventClasses.shortName,
-    eventClasses.noTimePresentation
-FROM raceClasses
-LEFT JOIN eventClasses
-    ON eventClasses.eventClassId = raceClasses.eventClassId
-WHERE raceClasses.eventRaceId = @eventRaceId
-    AND eventClasses.eventId = @eventId
-    AND eventClasses.eventClassId = @eventClassId";
+SELECT EventClasses.eventCLassId AS Id,
+    EventClasses.shortName,
+    EventClasses.noTimePresentation
+FROM RaceClasses
+LEFT JOIN EventClasses
+    ON EventClasses.eventClassId = RaceClasses.eventClassId
+WHERE RaceClasses.eventRaceId = @eventRaceId
+    AND EventClasses.eventId = @eventId
+    AND EventClasses.eventClassId = @eventClassId";
             var param = new
             {
                 eventRaceId = eventRaceId,
@@ -61,35 +61,35 @@ WHERE raceClasses.eventRaceId = @eventRaceId
         public ClassEntity GetWithSplitControls(int eventId, int eventRaceId, int eventClassId)
         {
             string sql = @"
-SELECT eventClasses.eventCLassId AS Id,
-    eventClasses.shortName,
-    eventClasses.noTimePresentation,
-    courses.courseId,
-    courses.name,
-    controls.controlId,
-    splitTimeControls.splitTimeControlId,
-    splitTimeControls.name
-FROM raceClasses
-LEFT JOIN eventClasses
-    ON eventClasses.eventClassId = raceClasses.eventClassId
+SELECT EventClasses.eventCLassId AS Id,
+    EventClasses.shortName,
+    EventClasses.noTimePresentation,
+    Courses.courseId,
+    Courses.name,
+    Controls.controlId,
+    SplitTimeControls.splitTimeControlId,
+    SplitTimeControls.name
+FROM RaceClasses
+LEFT JOIN EventClasses
+    ON EventClasses.eventClassId = RaceClasses.eventClassId
 
 #Courses
-LEFT JOIN raceClassCourses
-	ON raceClassCourses.raceClassId = raceClasses.raceClassId
-LEFT JOIN courses
-	ON courses.courseId = raceClassCourses.courseId
+LEFT JOIN RaceClassCourses
+	ON RaceClassCourses.raceClassId = RaceClasses.raceClassId
+LEFT JOIN Courses
+	ON Courses.courseId = RaceClassCourses.courseId
 
 #Controls
-LEFT JOIN coursesWaypointControls
-	ON coursesWaypointControls.courseId = courses.courseId
-LEFT JOIN controls
-	ON controls.controlId = coursesWaypointControls.controlId
-LEFT JOIN splitTimeControls
-	ON splitTimeControls.timingControl = controls.controlId
+LEFT JOIN CoursesWayPointControls
+	ON CoursesWayPointControls.courseId = courses.courseId
+LEFT JOIN Controls
+	ON Controls.controlId = CoursesWayPointControls.controlId
+LEFT JOIN SplitTimeControls
+	ON SplitTimeControls.timingControl = Controls.controlId
 
-WHERE raceClasses.eventRaceId = @eventRaceId
-    AND eventClasses.eventId = @eventId
-    AND eventClasses.eventClassId = @eventClassId";
+WHERE RaceClasses.eventRaceId = @eventRaceId
+    AND EventClasses.eventId = @eventId
+    AND EventClasses.eventClassId = @eventClassId";
             var param = new
             {
                 eventRaceId = eventRaceId,
@@ -114,35 +114,35 @@ WHERE raceClasses.eventRaceId = @eventRaceId
         public ClassEntity GetWithSplitControls(int eventId, int eventRaceId, string shortName)
         {
             string sql = @"
-SELECT eventClasses.eventCLassId AS Id,
-    eventClasses.shortName,
-    eventClasses.noTimePresentation,
-    courses.courseId,
-    courses.name,
-    controls.controlId,
-    splitTimeControls.splitTimeControlId,
-    splitTimeControls.name
-FROM raceClasses
-LEFT JOIN eventClasses
-    ON eventClasses.eventClassId = raceClasses.eventClassId
+SELECT EventClasses.eventCLassId AS Id,
+    EventClasses.shortName,
+    EventClasses.noTimePresentation,
+    Courses.courseId,
+    Courses.name,
+    Controls.controlId,
+    SplitTimeControls.splitTimeControlId,
+    SplitTimeControls.name
+FROM RaceClasses
+LEFT JOIN EventClasses
+    ON EventClasses.eventClassId = RaceClasses.eventClassId
 
 #Courses
-LEFT JOIN raceClassCourses
-	ON raceClassCourses.raceClassId = raceClasses.raceClassId
-LEFT JOIN courses
-	ON courses.courseId = raceClassCourses.courseId
+LEFT JOIN RaceClassCourses
+	ON RaceClassCourses.raceClassId = RaceClasses.raceClassId
+LEFT JOIN Courses
+	ON Courses.courseId = RaceClassCourses.courseId
 
 #Controls
-LEFT JOIN coursesWaypointControls
-	ON coursesWaypointControls.courseId = courses.courseId
-LEFT JOIN controls
-	ON controls.controlId = coursesWaypointControls.controlId
-LEFT JOIN splitTimeControls
-	ON splitTimeControls.timingControl = controls.controlId
+LEFT JOIN CoursesWayPointControls
+	ON CoursesWayPointControls.courseId = Courses.courseId
+LEFT JOIN Controls
+	ON Controls.controlId = CoursesWayPointControls.controlId
+LEFT JOIN SplitTimeControls
+	ON SplitTimeControls.timingControl = Controls.controlId
 
-WHERE raceClasses.eventRaceId = @eventRaceId
-    AND eventClasses.eventId = @eventId
-    AND eventClasses.shortName = @shortName";
+WHERE RaceClasses.eventRaceId = @eventRaceId
+    AND EventClasses.eventId = @eventId
+    AND EventClasses.shortName = @shortName";
             var param = new
             {
                 eventRaceId = eventRaceId,
@@ -170,13 +170,13 @@ WHERE raceClasses.eventRaceId = @eventRaceId
                 currentClassEntity = classEntity;
 
             var currentCourse = currentClassEntity.Courses.SingleOrDefault(x => x.CourseId == courseEntity.CourseId);
-            if (currentCourse == null)
+            if (currentCourse == null && courseEntity != null)
             {
                 currentCourse = courseEntity;
                 currentClassEntity.Courses.Add(currentCourse);
             }
 
-            if(controlEntity.Name != null)
+            if(controlEntity != null && controlEntity.Name != null)
             {
                 currentCourse.SplitControls.Add(controlEntity);
             }

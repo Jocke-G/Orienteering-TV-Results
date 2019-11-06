@@ -1,5 +1,6 @@
 ﻿using LayoutRestService.Contracts;
 using LayoutRestService.Model.Entities;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,6 +22,7 @@ namespace LayoutRestService.Translators
             {
                 CellType = entity.CellType,
                 ClassName = entity.ClassName,
+                Options = entity.Options != null? JsonConvert.DeserializeObject<ClassResultOptions>(entity.Options):new ClassResultOptions(),
             };
         }
 
@@ -42,6 +44,7 @@ namespace LayoutRestService.Translators
             {
                 CellType = contract.CellType,
                 ClassName = contract.ClassName,
+                Options = JsonConvert.SerializeObject(contract.Options),
             };
         }
     }

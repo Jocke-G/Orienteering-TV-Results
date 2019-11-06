@@ -6,9 +6,11 @@ import { getResults, ClassResults } from '../../store/results/reducers';
 import { Action, fetchClass } from '../../store/results/actions';
 import { subscribeClass, unsubscribeClass } from '../../store/mqtt/actions';
 import ClassResultsTable from './ClassResultTable';
+import { LayoutCellOptions } from '../../store/layouts/reducers';
 
 export interface OwnProps {
   class: string,
+  options?: LayoutCellOptions,
 }
 
 type StateProps = {
@@ -50,9 +52,9 @@ class ClassResultsView extends Component<Props> {
     }
     return (
       <Fragment>
-        <ClassResultsTable id={"header"} class={this.props.results} results={this.props.results.Results.slice(0, 5)} />
+        <ClassResultsTable id={"header"} class={this.props.results} results={this.props.results.Results.slice(0, 5)} options={this.props.options} />
         {this.props.results.Results.length >= 5?
-          <ClassResultsTable id={"scroll"} class={this.props.results} results={this.props.results.Results.slice(5)} />
+          <ClassResultsTable id={"scroll"} class={this.props.results} results={this.props.results.Results.slice(5)} options={this.props.options} />
         :null}
       </Fragment>
     );

@@ -2,11 +2,13 @@ import React, { Component, Fragment } from 'react';
 
 import { ClassResults, ClassResult } from '../../store/results/reducers';
 import ClassCompetitorResultComponent from './ClassCompetitorResultComponent';
+import { LayoutCellOptions } from '../../store/layouts/reducers';
 
 export interface Props {
   id: string,
   class: ClassResults,
   results: ClassResult[],
+  options?: LayoutCellOptions,
 }
 
 class ClassResultsTable extends Component<Props> {
@@ -15,38 +17,40 @@ class ClassResultsTable extends Component<Props> {
       <table id={this.props.id} className="result">
 	      <colgroup>
           <col className="name" />
-	        <col className="club" />
+          {this.props.options && this.props.options.ShowStartTime?
+  	        <col className="club" />
+          :null}
 		      <col className="time" />
-          {this.props.class? this.props.class.SplitControls.map((item, key) => 
+          {this.props.class.SplitControls? this.props.class.SplitControls.map((item, key) => 
           <Fragment key={key}>
             <col className="ordinal" />
-            {/* <col class=""time""> */}
             <col className="splitTime" />
           </Fragment>
-            ):<Fragment />
-            }
+            ):null}
 	        <col className="ordinal" />
 		      <col className="time" />
         </colgroup>
         {this.props.id === 'header'?
         <thead>
           <tr className="thead_1">
-	          <th colSpan={3}>Preliminära Liveresultat { this.props.class.ShortName }</th>
-            {this.props.class.SplitControls.map((item, key) => 
+	          <th colSpan={2+Number(this.props.options&&this.props.options.ShowStartTime)}>Preliminära Liveresultat { this.props.class.ShortName }</th>
+            {this.props.class.SplitControls? this.props.class.SplitControls.map((item, key) => 
               <th key={key} colSpan={2}>{item.Name}</th>
-            )}
+              ):null}
             <th colSpan={2}>Mål</th>
           </tr>
           <tr className="thead_2">
             <th align="left">Namn</th>
             <th align="left">Klubb</th>
+            {this.props.options && this.props.options.ShowStartTime?
             <th align="left">Starttid</th>
-            {this.props.class.SplitControls.map((item, key) =>
+            :null}
+            {this.props.class.SplitControls? this.props.class.SplitControls.map((item, key) => 
               <Fragment key={key}>
                 <th>#</th>
                 <th>Tid</th>
               </Fragment>
-            )}
+            ):null}
             <th align="right">#</th>
             <th align="right">Tid</th>
           </tr>
@@ -59,7 +63,7 @@ class ClassResultsTable extends Component<Props> {
             <ClassCompetitorResultComponent index={key} key={key} result={item} />
           ):
           <tr>
-            <td colSpan={4}>
+            <td colSpan={4+Number(this.props.options&&this.props.options.ShowStartTime)+(this.props.class.SplitControls?this.props.class.SplitControls.length*2:0)}>
               <i>Inga stämplingar ännu</i>
             </td>
           </tr>
