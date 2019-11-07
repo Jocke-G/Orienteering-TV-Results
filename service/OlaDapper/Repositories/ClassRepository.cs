@@ -81,7 +81,7 @@ LEFT JOIN Courses
 
 #Controls
 LEFT JOIN CoursesWayPointControls
-	ON CoursesWayPointControls.courseId = courses.courseId
+	ON CoursesWayPointControls.courseId = Courses.courseId
 LEFT JOIN Controls
 	ON Controls.controlId = CoursesWayPointControls.controlId
 LEFT JOIN SplitTimeControls

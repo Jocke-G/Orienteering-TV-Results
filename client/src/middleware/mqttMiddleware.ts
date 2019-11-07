@@ -2,8 +2,8 @@ import { MiddlewareAPI, AnyAction, Dispatch } from 'redux';
 import { Client, Message } from 'paho-mqtt';
 import { Configuration } from '../store/configuration/reducers';
 import { CONFIGURATION_RECEIVED } from '../store/configuration/actions';
-import { ClassResults } from '../store/results/reducers';
-import { classResultsReceived, } from '../store/results/actions';
+import { ClassResults, IndependentResult } from '../store/results/reducers';
+import { classResultsReceived, finishResultsReceived, } from '../store/results/actions';
 import { setMqttStatus, reportMessageReceived, PUBLISH_MQTT, SUBSCRIBE_CLASS, mqttSubscriptionTopics, UNSUBSCRIBE_CLASS, SUBSCRIBE_FINISH, UNSUBSCRIBE_FINISH } from '../store/mqtt/actions';
 import { RootState } from '../reducers/rootReducer';
 import { getSubscriptions } from '../store/mqtt/reducers';
@@ -100,6 +100,9 @@ export const reduxMqttMiddleware = () => ({dispatch, getState }: MiddlewareAPI<D
     if (msg.destinationName.match(gi)) {
       let obj: ClassResults = JSON.parse(msg.payloadString);
       dispatch(classResultsReceived(obj))
+    } else if(msg.destinationName === "Results/Finish") {
+      let obj: IndependentResult[] = JSON.parse(msg.payloadString);
+      dispatch(finishResultsReceived(obj));
     } else {
       console.log(`Message received on unhandled topic: ${msg.destinationName}`)
     }

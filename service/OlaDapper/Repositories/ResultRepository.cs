@@ -141,9 +141,9 @@ INNER JOIN EventClasses
 LEFT JOIN SplitTimes
     ON SplitTimes.ResultRaceIndividualNumber = Results.resultId
 
-WHERE EventClasses.eventId = 3
-    AND RaceClasses.eventRaceId = 3
-    AND EventClasses.eventClassId = 127
+WHERE EventClasses.eventId = @eventId
+    AND RaceClasses.eventRaceId = @eventRaceId
+    AND EventClasses.eventClassId = @eventClassId
     AND(Results.modifyDate > @lastCheckTime OR SplitTimes.modifyDate > @lastCheckTime)";
 
             var param = new
@@ -191,8 +191,8 @@ INNER JOIN RaceClasses
 	ON RaceClasses.raceClassId = Results.raceClassId
 INNER JOIN EventClasses
 	ON EventClasses.eventClassId = RaceClasses.eventClassId
-WHERE EventClasses.eventId = 3
-    AND RaceClasses.eventRaceId = 3
+WHERE EventClasses.eventId = @eventId
+    AND RaceClasses.eventRaceId = @eventRaceId
     AND finishTime > 0
    ORDER BY finishTime DESC LIMIT 0, 50;";
 
