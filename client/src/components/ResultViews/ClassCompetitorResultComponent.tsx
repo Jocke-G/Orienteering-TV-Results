@@ -1,10 +1,12 @@
 import React, { Component, Fragment } from 'react';
 
 import { ClassResult } from '../../store/results/reducers';
+import { LayoutCellOptions } from '../../store/layouts/reducers';
 
 type Props = {
-  result: ClassResult
-  index: number;
+  result: ClassResult,
+  index: number,
+  options?: LayoutCellOptions,
 }
 
 class ClassCompetitorResultComponent extends Component<Props> {
@@ -26,7 +28,9 @@ class ClassCompetitorResultComponent extends Component<Props> {
       <tr className= { this.props.index % 2 === 0 ? "trDark" : ""}>
         <td>{ this.props.result.FirstName } { this.props.result.LastName }</td>
         <td>{ this.props.result.Club }</td>
-        <td>{ this.getStartTimeString() }</td>
+        {this.props.options && this.props.options.ShowStartTime?
+          <td>{ this.getStartTimeString() }</td>
+        :null}
         {this.props.result.SplitTimes ? this.props.result.SplitTimes.map((item, key) => 
           <Fragment key={key}>
             <td>{item.Ordinal}</td>

@@ -60,7 +60,7 @@ class ClassResultsTable extends Component<Props> {
         }
         <tbody>
           {this.props.results.length > 0? this.props.results.map((item, key) =>
-            <ClassCompetitorResultComponent index={key} key={key} result={item} />
+            <ClassCompetitorResultComponent index={key} key={key} result={item} options={this.props.options} />
           ):
           <tr>
             <td colSpan={4+Number(this.props.options&&this.props.options.ShowStartTime)+(this.props.class.SplitControls?this.props.class.SplitControls.length*2:0)}>
