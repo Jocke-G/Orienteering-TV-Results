@@ -12,7 +12,6 @@ services:
       - './sql-init:/docker-entrypoint-initdb.d'
   mosquitto:
     image: eclipse-mosquitto
-    restart: always
     volumes:
       - './config/mosquitto.conf:/mosquitto/config/mosquitto.conf'
     ports:
@@ -22,7 +21,6 @@ services:
     build:
       context: ./service
       dockerfile: Dockerfile
-    restart: always
     depends_on:
       - mysql
       - mosquitto
@@ -44,7 +42,6 @@ services:
     build:
       context: ./layout-service
       dockerfile: Dockerfile
-    restart: always
     depends_on:
       - mysql
     environment:
@@ -58,7 +55,6 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
-    restart: always
     depends_on:
       - mosquitto
     environment:

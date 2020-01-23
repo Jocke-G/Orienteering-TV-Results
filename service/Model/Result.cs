@@ -72,6 +72,9 @@ namespace OrienteeringTvResults.Model
                 }
             }
 
+            if (SplitTimes == null)
+                return thisIsSamePosition;
+
             var lastCommonSplit = GetLastCommonSplit(other);
             if(lastCommonSplit != null)
             {
